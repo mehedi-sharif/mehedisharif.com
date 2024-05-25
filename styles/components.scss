@@ -130,5 +130,32 @@ body {
 
 // content style
 .content {
-  @apply prose max-w-none hover:prose-a:opacity-70 dark:prose-invert;
+  @apply prose max-w-none dark:prose-invert hover:prose-a:opacity-70;
+}
+
+.form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #fff;
+  input {
+    width: 200px;
+    outline: 0;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+  }
+  #incorrect {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
 }

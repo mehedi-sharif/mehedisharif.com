@@ -11,6 +11,10 @@
     {
       "name": "Contact",
       "url": "/contact"
+    },
+    {
+      "name": "Timeline",
+      "url": "/timeline"
     }
   ],
   "footer": [
