@@ -1,4 +1,4 @@
-import { dateFormat } from "@lib/utils/dateFormat";
+import dateFormat from "@lib/utils/dateFormat";
 import { shortcodes } from "@shortcodes/all";
 import { MDXRemote } from "next-mdx-remote";
 import Image from "next/image";

@@ -1,6 +1,6 @@
 import Base from "@layouts/Baseof";
 import TimelineSkeleton from "@layouts/components/TimelineSkeleton";
-import { dateFormat } from "@lib/utils/dateFormat";
+import dateFormat from "@lib/utils/dateFormat";
 import cryptoJs from "crypto-js";
 import { useEffect, useRef, useState } from "react";
 import { CiEdit } from "react-icons/ci";
