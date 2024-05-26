@@ -1,4 +1,3 @@
-"use client";
 import Base from "@layouts/Baseof";
 import TimelineSkeleton from "@layouts/components/TimelineSkeleton";
 import { dateFormat } from "@lib/utils/dateFormat";
@@ -370,9 +369,3 @@ const Timeline = () => {
 };
 
 export default Timeline;
-
-export const getServerSideProps = async () => {
-  return {
-    props: {},
-  };
-};
