@@ -1,0 +1,19 @@
+{
+  "main": [
+    {
+      "name": "linkedin",
+      "icon": "FaLinkedin",
+      "link": "https://linkedin.com/in/mehedisharif/"
+    },
+    {
+      "name": "github",
+      "icon": "FaGithub",
+      "link": "https://github.com/mehedi-sharif/"
+    },
+    {
+      "name": "twitter",
+      "icon": "FaTwitter",
+      "link": "https://twitter.com/mehedi_titas/"
+    }
+  ]
+}

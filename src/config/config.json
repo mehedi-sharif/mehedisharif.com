@@ -1,0 +1,61 @@
+{
+  "site": {
+    "title": "Mehedi Sharif",
+    "base_url": "https://mehedisharif.com/",
+    "base_path": "/",
+    "trailing_slash": false,
+    "favicon": "/images/favicon.png",
+    "logo": "/images/logo-dark.png",
+    "logo_darkmode": "/images/logo-light.png",
+    "logo_width": "217",
+    "logo_height": "50",
+    "logo_text": "Mehedi Sharif"
+  },
+
+  "bio": {
+    "name": "Mehedi Sharif Titas",
+    "designation": "Founder at Themefisher",
+    "image": "/images/author.png",
+    "description": "Serial Entrepreneur, Code Lover, Designer, Open Source Enthusiastic, Optimus Prime, Biker....",
+    "email": "mehedi@themefisher.com",
+    "phone": "+8801672506744",
+    "address": "Shyamoli, Dhaka, Bangladesh",
+    "map_link": "https://goo.gl/maps/Nq6gUVFVozBzXz1w5",
+    "formsubmit_endpoint": "mehedi@themefisher.com"
+  },
+
+  "settings": {
+    "search": true,
+    "sticky_header": true,
+    "theme_switcher": true,
+    "default_theme": "system",
+    "pagination": 1,
+    "summary_length": 200,
+    "blog_folder": "blog"
+  },
+
+  "params": {
+    "contact_form_action": "#",
+    "tag_manager_id": "",
+    "copyright": "Copyright © 2024 Mehedi sharif"
+  },
+
+  "navigation_button": {
+    "enable": true,
+    "label": "Get Started",
+    "link": "https://github.com/zeon-studio/astroplate"
+  },
+
+  "metadata": {
+    "meta_author": "Mehedi sharif",
+    "meta_image": "/images/og-image.png",
+    "meta_description": "Mehedi sharif"
+  },
+
+  "call_to_action": {
+    "title": "found something interesting in me?? let’s have a conversation...",
+    "subtitle": "hey look **at_here**",
+    "button_link": "/contact",
+    "button_label": "Contact With Me"
+  }
+}

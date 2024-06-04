@@ -1,0 +1,31 @@
+---
+import Divider from "@/components/Divider.astro";
+import Logo from "@/components/Logo.astro";
+import Social from "@/components/Social.astro";
+import ThemeSwitcher from "@/components/ThemeSwitcher.astro";
+import menu from "@/config/menu.json";
+import social from "@/config/social.json";
+
+const { footer }: { footer: { name: string; url: string }[] } = menu;
+---
+
+<footer class="mx-auto max-w-[1460px]">
+  <div class="container mx-auto">
+    <Divider />
+    <div
+      class="flex flex-col items-center justify-between py-14 text-center lg:flex-row"
+    >
+      <div class="order-1 my-6 inline-block translate-y-2.5 lg:order-0 lg:my-0">
+        <Logo />
+      </div>
+
+      <div class="order-0 lg:order-1">
+        <ThemeSwitcher />
+      </div>
+
+      <div class="order-last mt-4 lg:mt-0">
+        <Social source={social.main} className="social-icons" />
+      </div>
+    </div>
+  </div>
+</footer>

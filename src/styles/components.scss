@@ -1,0 +1,249 @@
+b,
+strong {
+  @apply font-semibold;
+}
+body {
+  @apply overflow-x-hidden;
+}
+
+.container {
+  @apply mx-auto px-2 sm:px-4;
+  .container {
+    padding: 0 !important;
+  }
+}
+
+// bio
+.bio {
+  height: calc(100vh - 16px);
+  @apply flex flex-col items-center justify-center overflow-hidden;
+  zoom: 1.29;
+  @screen sm {
+    zoom: 1;
+  }
+  .bio-inner {
+    @apply relative z-10 mx-auto my-0 h-screen w-full overflow-y-auto rounded-none border py-8 px-5 dark:border-darkmode-border sm:my-6 sm:h-[755px] sm:w-80 sm:rounded-lg;
+    &::-webkit-scrollbar {
+      @apply hidden;
+    }
+  }
+  .social-icons li {
+    @apply mx-1 inline-block last:mr-0;
+    a {
+      @apply block h-[46px] w-[46px] after:top-[1px] after:left-[1px] after:h-[44px] after:w-[44px];
+      @apply bg-gray-100 text-primary duration-100 after:hidden hover:opacity-80;
+      svg {
+        @apply h-[46px] transition-none;
+      }
+    }
+  }
+}
+
+// section style
+.section {
+  @apply py-16;
+  &-title {
+    @apply text-base capitalize md:text-h3 lg:text-h4;
+    strong {
+      @apply relative inline-block pr-16;
+      &::before {
+        content: "";
+        @apply absolute right-0 top-1/2 w-12 border-t-2 border-black dark:invert;
+      }
+    }
+    &-center strong {
+      @apply pr-0;
+      &::before {
+        @apply hidden;
+      }
+    }
+  }
+}
+
+// post style
+.post-card {
+  @apply relative rounded-xl border transition duration-200 ease-out dark:border-darkmode-border;
+  &::after,
+  &::before {
+    content: "";
+    @apply absolute -rotate-45 border bg-white dark:border-darkmode-border dark:bg-darkmode-body;
+    transition: border 0.3s;
+    height: 18px;
+    width: 18px;
+    top: calc(50% - 9px);
+  }
+  &::before {
+    left: -9px;
+    @apply border-l-0 border-t-0;
+    border-bottom-right-radius: 4px;
+  }
+  &::after {
+    right: -9px;
+    @apply border-r-0 border-b-0;
+    border-top-left-radius: 4px;
+  }
+  &:hover {
+    @apply border-dark dark:border-slate-600;
+    &::after,
+    &::before {
+      @apply border-dark bg-white dark:border-slate-600 dark:bg-darkmode-body;
+    }
+  }
+}
+
+// form style
+.form-inputs * {
+  @apply mb-4 leading-9 sm:mb-5 sm:leading-10;
+}
+
+.social-icons {
+  li {
+    @apply mx-2 inline-block last:mr-0;
+    a {
+      @apply relative z-10 block h-[48px] w-[48px] overflow-hidden rounded-full bg-primary text-center text-white transition-all delay-100 after:absolute after:top-[2px] after:left-[2px] after:-z-10 after:h-[44px] after:w-[44px] after:scale-0 after:rounded-full after:bg-white after:transition-all after:duration-[250ms] hover:text-primary hover:after:scale-100 dark:invert;
+      svg {
+        @apply m-auto h-9;
+      }
+    }
+  }
+}
+
+// svg animation
+.animate-svg {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+}
+.triggerAnimation .animate-svg {
+  animation: dash 4s ease forwards;
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.fadeUp {
+  transform: translateY(-10px);
+}
+.animateEl {
+  transform: translateY(0);
+  transition: 0.25s;
+}
+
+// content style
+.content {
+  @apply prose max-w-none dark:prose-invert hover:prose-a:opacity-70;
+}
+
+.form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  input {
+    width: 200px;
+    outline: 0;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+  }
+  #incorrect {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+}
+
+#incorrectInput {
+  color: red;
+  opacity: 0.8;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.timeline-form-input {
+  @apply rounded-md border-border bg-body focus:border-border focus:ring-0 dark:bg-darkmode-body;
+}
+
+/* Skeleton Loading Styles */
+.skeleton-loader {
+  opacity: 0.7;
+  animation: skeleton-loader-animation 1s infinite alternate;
+}
+
+@keyframes skeleton-loader-animation {
+  0% {
+    background-color: hsl(200, 20%, 80%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+/* Apply skeleton effect to specific elements */
+.skeleton-loader-text {
+  width: 100%;
+  height: 1rem;
+  border-radius: 0.25rem;
+  background-color: hsl(200, 20%, 80%);
+}
+
+.skeleton-loader-heading {
+  width: 50%;
+  height: 1.25rem;
+  border-radius: 0.25rem;
+  background-color: hsl(200, 20%, 80%);
+}
+
+.skeleton-loader-image {
+  width: 100%;
+  height: 10rem;
+  border-radius: 0.5rem;
+  background-color: hsl(200, 20%, 80%);
+}
+
+/* CSS for the modal animation */
+.modal-show {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-hide {
+  opacity: 0;
+  pointer-events: none; /* Disable pointer events when hidden */
+  transition: opacity 0.3s ease-in-out;
+}
+
+// modal image animation
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.3s ease-in-out;
+}

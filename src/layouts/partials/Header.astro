@@ -1,0 +1,17 @@
+---
+import HeaderNav from "@/helpers/HeaderNav";
+
+export interface ChildNavigationLink {
+  name: string;
+  url: string;
+}
+
+export interface NavigationLink {
+  name: string;
+  url: string;
+  hasChildren?: boolean;
+  children?: ChildNavigationLink[];
+}
+---
+
+<HeaderNav client:load />

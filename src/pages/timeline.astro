@@ -1,0 +1,9 @@
+---
+import Base from "@/layouts/Base.astro";
+import TimelineEvents from "../layouts/helpers/TimelineEvents";
+const secretKey = import.meta.env.SECRET_KEY;
+---
+
+<Base>
+  <TimelineEvents secretKey={secretKey} client:load />
+</Base>

@@ -1,0 +1,57 @@
+---
+import Divider from "@/components/Divider.astro";
+import ScrollAnimationSection from "@/helpers/ScrollAnimationSection";
+import { markdownify } from "@/lib/utils/textConverter";
+import { getEntry } from "astro:content";
+const CTA = await getEntry("sections", "call-to-action");
+const { enable, title, description, button } = CTA.data;
+---
+
+{
+  enable && (
+    <section class="relative mx-auto max-w-[1460px]">
+      <div class="container">
+        <Divider />
+        <div class="section mx-auto overflow-hidden text-center md:w-[75%] lg:w-[80%] xl:w-[62%] 2xl:w-[58%]">
+          <div class="before:content[' '] after:content[' '] relative mb-8 inline-flex items-center justify-center before:absolute before:left-full before:top-1/2 before:mx-4 before:bg-black before:px-8  before:py-px after:absolute after:right-full after:top-1/2 after:mx-4 after:bg-black after:px-8 after:py-px dark:before:bg-white dark:after:bg-white">
+            <svg
+              class="dark:invert"
+              height={28}
+              width={28}
+              viewBox="0 0 38 38"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_173_28)">
+                <path
+                  d="M35.682 2.56496C35.34 3.03996 35.017 3.41996 34.96 3.41996C34.884 3.41996 34.238 3.21096 33.478 2.96396C29.982 1.76696 26.79 1.57696 24.415 2.43196C22.097 3.28696 19.551 5.45296 17.898 8.01796L17.195 9.11996H15.2C13.034 9.10096 11.248 8.91096 8.77798 8.43596C7.65698 8.20796 7.06798 8.16996 6.78298 8.30296C6.30798 8.53096 4.44598 11.704 3.13498 14.516C1.53898 17.955 -0.133023 23.769 0.0379773 25.251C0.113977 25.878 1.42498 26.562 3.87598 27.265C6.44098 27.987 7.82798 28.177 10.83 28.177C13.794 28.158 17.271 27.607 17.879 27.056C18.05 26.904 18.468 25.897 18.81 24.833C19.152 23.769 19.665 22.249 19.969 21.451L20.52 20.007L21.717 20.178C23.142 20.368 24.111 20.558 27.037 21.223C28.994 21.679 29.26 21.774 29.26 22.116C29.26 22.344 28.918 25.251 28.5 28.595C28.082 31.939 27.74 34.865 27.74 35.093C27.74 36.024 29.089 36.67 29.64 36.005C29.773 35.834 30.077 34.162 30.324 32.243C30.552 30.343 30.932 27.284 31.16 25.46C32.376 15.637 34.01 9.84196 36.955 4.82596C37.525 3.85696 38 2.92596 38 2.77396C38 2.31796 37.297 1.70996 36.765 1.70996C36.404 1.70996 36.119 1.93796 35.682 2.56496ZM31.122 4.57896C32.851 5.05396 33.82 5.45296 33.82 5.69996C33.82 5.81396 33.611 6.30796 33.364 6.80196C32.3 8.94896 31.084 12.863 30.229 16.929C29.868 18.62 29.621 19.456 29.469 19.418C23.009 17.955 21.166 17.67 18.107 17.67H15.789L16.283 16.473C17.157 14.288 18.943 10.697 19.836 9.32896C22.781 4.78796 26.315 3.28696 31.122 4.57896ZM9.76598 10.925C10.621 11.077 12.35 11.286 13.604 11.362L15.903 11.495L15.295 12.92C12.73 18.81 11.97 20.786 11.97 21.489C11.97 22.401 12.293 23.199 13.186 24.529C13.642 25.194 13.794 25.612 13.68 25.726C13.414 25.992 8.32198 25.954 6.83998 25.669C6.15598 25.555 4.90198 25.213 4.04698 24.947C2.18498 24.358 2.24198 24.548 3.02098 21.565C3.85698 18.354 5.71898 13.984 7.40998 11.248C7.84698 10.545 7.77098 10.545 9.76598 10.925ZM18.05 20.007C18.05 20.121 16.511 24.396 16.454 24.472C16.264 24.643 15.713 24.149 15.124 23.256C13.984 21.546 14.25 20.558 16.017 20.14C16.644 19.988 18.05 19.893 18.05 20.007Z"
+                  fill="black"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_173_28">
+                  <rect width="38" height="38" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            <h2
+              class="section-title section-title-center ml-3 text-center h5"
+              set:html={markdownify(description)}
+            />
+          </div>
+
+          <h3 class="mb-10 text-[1.5rem] font-semibold capitalize md:text-h1">
+            {title}
+          </h3>
+          {button.enable && (
+            <a href={button.link} class="btn">
+              {button.label}
+            </a>
+          )}
+        </div>
+      </div>
+
+      <ScrollAnimationSection client:load />
+    </section>
+  )
+}
