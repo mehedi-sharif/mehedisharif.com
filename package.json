@@ -1,20 +1,19 @@
 {
-  "name": "astroplate",
-  "version": "3.4.5",
-  "description": "Astro and Tailwindcss boilerplate",
+  "name": "mehedisharif.com",
+  "version": "2.0.0",
+  "description": "Astro and Tailwindcss based",
   "author": "zeon.studio",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "packageManager": "yarn@1.22.19",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "format": "prettier -w ./src",
-    "generate-json": "node scripts/jsonGenerator.js",
-    "remove-darkmode": "node scripts/removeDarkmode.js && yarn format"
+    "format": "prettier -w ./src"
   },
   "dependencies": {
     "@astrojs/mdx": "^2.3.0",
+    "@astrojs/netlify": "^5.2.1",
     "@astrojs/react": "^3.3.0",
     "@astrojs/rss": "^4.0.5",
     "@astrojs/sitemap": "^3.1.2",
