@@ -2,6 +2,7 @@
 dist/
 .output/
 .json/
+.netlify/
 
 # dependencies
 node_modules/
