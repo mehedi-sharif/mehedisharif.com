@@ -246,10 +246,11 @@ const TimelineEvents = ({ secretKey }) => {
                     </button>
                   </ul>
                   <div
-                    className={`fixed top-0 left-0 z-[99999] h-screen w-screen backdrop-blur backdrop-brightness-75 ${addEventForm || editEvent
-                      ? "visible opacity-100"
-                      : "invisible opacity-0"
-                      }`}
+                    className={`fixed top-0 left-0 z-[99999] h-screen w-screen backdrop-blur backdrop-brightness-75 ${
+                      addEventForm || editEvent
+                        ? "visible opacity-100"
+                        : "invisible opacity-0"
+                    }`}
                   >
                     <span
                       className="absolute top-0 left-0 -z-[1] h-full w-full"
@@ -285,10 +286,11 @@ const TimelineEvents = ({ secretKey }) => {
                             ) : (
                               <div>
                                 <div
-                                  className={`mb-4 flex ${editEvent
-                                    ? "justify-between"
-                                    : "justify-end"
-                                    } `}
+                                  className={`mb-4 flex ${
+                                    editEvent
+                                      ? "justify-between"
+                                      : "justify-end"
+                                  } `}
                                 >
                                   {editEvent && (
                                     <button
@@ -331,13 +333,13 @@ const TimelineEvents = ({ secretKey }) => {
                                     onChange={(e) =>
                                       addEventForm
                                         ? setNewEvent({
-                                          ...newEvent,
-                                          date: e.target.value,
-                                        })
+                                            ...newEvent,
+                                            date: e.target.value,
+                                          })
                                         : setEditEvent({
-                                          ...editEvent,
-                                          date: e.target.value,
-                                        })
+                                            ...editEvent,
+                                            date: e.target.value,
+                                          })
                                     }
                                   />
                                   <input
@@ -353,13 +355,13 @@ const TimelineEvents = ({ secretKey }) => {
                                     onChange={(e) =>
                                       addEventForm
                                         ? setNewEvent({
-                                          ...newEvent,
-                                          heading: e.target.value,
-                                        })
+                                            ...newEvent,
+                                            heading: e.target.value,
+                                          })
                                         : setEditEvent({
-                                          ...editEvent,
-                                          heading: e.target.value,
-                                        })
+                                            ...editEvent,
+                                            heading: e.target.value,
+                                          })
                                     }
                                   />
                                   <textarea
@@ -375,13 +377,13 @@ const TimelineEvents = ({ secretKey }) => {
                                     onChange={(e) =>
                                       addEventForm
                                         ? setNewEvent({
-                                          ...newEvent,
-                                          description: e.target.value,
-                                        })
+                                            ...newEvent,
+                                            description: e.target.value,
+                                          })
                                         : setEditEvent({
-                                          ...editEvent,
-                                          description: e.target.value,
-                                        })
+                                            ...editEvent,
+                                            description: e.target.value,
+                                          })
                                     }
                                   />
                                   <ImageUploader
@@ -417,7 +419,9 @@ const TimelineEvents = ({ secretKey }) => {
         </div>
       )}
       {modalImage && (
-        <div className={`fixed inset-0 z-[100000] flex items-center justify-center bg-black bg-opacity-75 ${modalImage ? 'animate-fade-in' : 'animate-fade-out'}`}>
+        <div
+          className={`fixed inset-0 z-[100000] flex items-center justify-center bg-black bg-opacity-75 ${modalImage ? "animate-fade-in" : "animate-fade-out"}`}
+        >
           <button
             className="absolute top-4 right-4 text-white"
             onClick={() => setModalImage(null)}
@@ -427,7 +431,7 @@ const TimelineEvents = ({ secretKey }) => {
           <img
             src={modalImage}
             alt="Full Size"
-            className={`max-w-full max-h-full rounded ${modalImage ? 'animate-fade-in' : 'animate-fade-out'}`}
+            className={`max-w-full max-h-full rounded ${modalImage ? "animate-fade-in" : "animate-fade-out"}`}
           />
         </div>
       )}

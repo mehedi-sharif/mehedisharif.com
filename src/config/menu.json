@@ -15,6 +15,10 @@
     {
       "name": "Timeline",
       "url": "/timeline"
+    },
+    {
+      "name": "Email Verifier",
+      "url": "/email-verifier"
     }
   ],
   "footer": [
