@@ -88,7 +88,7 @@ const EmailVerifierForm = ({ apiKey }: { apiKey: string }) => {
         ) : (
           <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center gap-y-6'>
             <input
-              className='timeline-form-input w-[80%]'
+              className='timeline-form-input w-[95%] md:w-[80%]'
               type="email"
               placeholder="Enter the email address"
               value={email}
