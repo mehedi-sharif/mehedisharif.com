@@ -66,29 +66,38 @@ const EmailVerifierForm = ({ apiKey }: { apiKey: string }) => {
   const remainingVerifications = dailyLimit - verificationCount;
 
   return (
-    <div className='border border-border/50 p-8 rounded-lg'>
+    <div className='border border-border/50 rounded-lg'>
       {remainingVerifications > 0 ? (
+
         verificationResult ? (
           <div className='text-center space-y-4'>
-            <h3 className='text-h5'>Email Validation Result</h3>
-            <div className='space-y-3 text-sm'>
-              <p>Result: <span className={`capitalize ${verificationResult.status === 'valid' ? 'text-green-600' : 'text-red-600'}`}>{verificationResult.status}</span></p>
-              <p>Role: <span className={verificationResult.is_role_account ? 'text-green-600' : 'text-red-600'}>{verificationResult.is_role_account ? 'Yes' : 'No'}</span></p>
-              <p>Free: <span className={verificationResult.is_free_email ? 'text-green-600' : 'text-red-600'}>{verificationResult.is_free_email ? 'Yes' : 'No'}</span></p>
-              <p>Disposable: <span className={verificationResult.is_disposable ? 'text-red-600' : 'text-green-600'}>{verificationResult.is_disposable ? 'Yes' : 'No'}</span></p>
-              <p>Spamtrap: <span className={verificationResult.is_spamtrap ? 'text-red-600' : 'text-green-600'}>{verificationResult.is_spamtrap ? 'Yes' : 'No'}</span></p>
-              <p>User: {verificationResult.username}</p>
-              <p>Domain: {verificationResult.domain}</p>
-              <p>Email: {verificationResult.email}</p>
+            <div className='pb-4 pt-6 border-b border-border/30 '>
+              <h3 className='text-base'>Email Validation Result</h3>
             </div>
-            <button onClick={handleVerifyAnother} className='btn btn-effect-0'>
-              Verify Another Email
-            </button>
+            <div className='text-sm'>
+              <div className="space-y-4 text-gray-600 dark:text-gray-300">
+                <p>Result: <span className={`capitalize ${verificationResult.status === 'valid' ? 'text-green-600' : 'text-red-600'}`}>{verificationResult.status}</span></p>
+                <p>Role: <span className={verificationResult.is_role_account ? 'text-green-600' : 'text-red-600'}>{verificationResult.is_role_account ? 'Yes' : 'No'}</span></p>
+                <p>Free: <span className={verificationResult.is_free_email ? 'text-green-600' : 'text-red-600'}>{verificationResult.is_free_email ? 'Yes' : 'No'}</span></p>
+                <p>Disposable: <span className={verificationResult.is_disposable ? 'text-red-600' : 'text-green-600'}>{verificationResult.is_disposable ? 'Yes' : 'No'}</span></p>
+                <p>Spamtrap: <span className={verificationResult.is_spamtrap ? 'text-red-600' : 'text-green-600'}>{verificationResult.is_spamtrap ? 'Yes' : 'No'}</span></p>
+
+                <p>User: <span className='text-light'>{verificationResult.username}</span></p>
+                <p>Domain: <span className='text-light'>{verificationResult.domain}</span></p>
+                <p>Email: <span className='text-light'>{verificationResult.email}</span></p>
+              </div>
+            </div>
+
+            <div className="pb-8 pt-4">
+              <button onClick={handleVerifyAnother} className='btn btn-effect-0'>
+                Verify Another Email
+              </button>
+            </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center gap-y-6'>
+          <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center gap-y-6 p-8'>
             <input
-              className='timeline-form-input w-[95%] md:w-[80%]'
+              className='timeline-form-input w-[95%] md:w-[80%] placeholder:text-center'
               type="email"
               placeholder="Enter the email address"
               value={email}

@@ -25,11 +25,56 @@ if (process.env.NODE_ENV === "development") {
 const database = "mehedisharif";
 const collection = "dailyAPICount";
 
+const getDhakaDate = () => {
+  return new Date()
+    .toLocaleString("en-CA", {
+      timeZone: "Asia/Dhaka",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .split(",")[0]; // Format: YYYY-MM-DD
+};
+
+// Simulate a different date for testing
+// Return the current date + 1 day
+// const getDhakaDate = () => {
+//   const simulatedDate = new Date();
+//   simulatedDate.setDate(simulatedDate.getDate() + 1);
+//   return simulatedDate
+//     .toLocaleString("en-CA", {
+//       timeZone: "Asia/Dhaka",
+//       year: "numeric",
+//       month: "2-digit",
+//       day: "2-digit",
+//     })
+//     .split(",")[0]; // Format: YYYY-MM-DD
+// };
+
 export const GET: APIRoute = async () => {
   try {
     const client = await clientPromise;
     const db = client.db(database);
     const dailyAPICountData = await db.collection(collection).findOne({});
+
+    const todayDate = getDhakaDate();
+
+    if (dailyAPICountData?.date !== todayDate) {
+      // Reset count if the date in the database doesn't match the current date
+      await db
+        .collection(collection)
+        .updateOne(
+          { type: "verificationCount" },
+          { $set: { count: 0, date: todayDate } },
+          { upsert: true },
+        );
+      return new Response(JSON.stringify(0), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
     return new Response(JSON.stringify(dailyAPICountData?.count || 0), {
       headers: {
         "Content-Type": "application/json",
@@ -54,8 +99,7 @@ export const POST: APIRoute = async () => {
     const client = await clientPromise;
     const db = client.db(database);
 
-    const now = new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" });
-    const todayDate = now.split(",")[0];
+    const todayDate = getDhakaDate();
     const existingDocument = await db
       .collection(collection)
       .findOne({ date: todayDate });
@@ -68,9 +112,7 @@ export const POST: APIRoute = async () => {
         throw new Error("Failed to update daily count");
       }
     } else {
-      await db
-        .collection(collection)
-        .insertOne({ date: todayDate, count: 1, timestamp: now });
+      await db.collection(collection).insertOne({ date: todayDate, count: 1 });
     }
 
     return new Response(JSON.stringify({ message: "Daily count updated" }), {
