@@ -1,0 +1,11 @@
+{
+  "media": {
+    "root": "public/images",
+    "public": "public"
+  },
+  "content": {
+    "root": "src/pages"
+  },
+  "themeConfig": [],
+  "arrangement": {}
+}
