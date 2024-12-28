@@ -21,9 +21,18 @@ One of the main reasons I started this blog is to test and experience the CMS I�
 
 ### Tech behind my website
 
-This blog is powered by a simple yet efficient tech stack. Github version control, Astro as the static site generator, Netlify to handle hosting and make deployments seamless (my absolute favorite) . Cloudflare secure and speedy DNS service To manage everything, I’m using my own Git-based CMS—a tool .
+This blog is powered by a simple yet efficient tech stack. \
+[Astro]() as the static site generator (my absolute favorite) , 
 
-It’s a straightforward setup, but it’s exactly what I need to keep things lightweight, fast, and easy to manage!
+[Github]() version control, \
+[Netlify]() to handle hosting and make deployments seamless ,\
+[Cloudflare]() secure and speedy DNS service To manage everything, \
+CMS: I’m using my own Git-based CMS—a tool (I will release that very soon ....)
+
+It’s a straightforward setup, but it’s exactly what I need to keep things lightweight, fast, and easy to manage!\
+Due .\
+****\
+Another interesting fact: with a size of just 300KB, my website proudly qualifies as a member of the [512KB Club](https://512kb.club).
 
 ### Let’s Connect
 
