@@ -1,33 +1,30 @@
 ---
-title: "Hello World - Tales from a Young Serial Entrepreneur's Odyssey"
-meta_title: ""
-description: "this is meta description"
-date: 2023-03-19T18:00:00.000+00:00
-image: ""
-categories: ["Application", "Data"]
-author: "John Doe"
-tags: ["nextjs", "tailwind"]
+title: 'Hello World : My Personal Digital Library'
+meta_title: First Post
+description: Hello World
+date: '2024-12-26T18:00:00.000Z'
+image: ''
+categories:
+  - Application
+  - Data
+author: Mehedi Sharif
+tags:
+  - astro
+  - tailwind
 draft: false
 ---
+I’m thrilled to introduce my new website—a personal space where I’ll document my thoughts, experiences, and insights. Over the past 12 years, I’ve ventured into entrepreneurship, embraced mindfulness practices, and dived into books and courses that have shaped my journey.
 
-Hey there, and welcome to my website ! I'm Mehedi , just a regular guy who once tapped away at a keyboard as a developer but now finds himself engulfed in the thrilling world of entrepreneurship. But enough about me; let's dive into what this blog is all about.
+Along the way, I’ve built and grown several ventures, including [Themefisher.com](http://Themefisher.com), a marketplace for high-quality website themes; [GetHugoThemes.com](http://GetHugoThemes.com), a platform dedicated to Hugo-based themes; [StaticHunt](https://statichunt.com "Google"), a directory of free static themes; and [UIHut.com](http://UIHut.com), 26k resources for UI/UX design assets. Each of these projects has taught me invaluable lessons that I’ll be sharing here.
 
-You see, life as a serial entrepreneur is like navigating uncharted waters – filled with unexpected discoveries, storms, and breathtaking sunsets. I wanted to create a space where I can share my experiences with you as I journey through the realms of marketing, business life, meditation, and growth hacking. Trust me, it's quite the adventure!
+One of the main reasons I started this blog is to test and experience the CMS I’m building.I want to ensure that my CMS is practical, user-friendly, and reliable in real-life scenarios. What better way to do that than by making this site my playground?
 
-Now, I don't want you to think I'm some sort of guru you should follow blindly. Far from it! I'm just a young entrepreneur learning the ropes and enjoying the challenges that come with building ventures like [Themefisher](https://themefisher.com "Themefisher"), [Gethugothemes](https://gethugothemes.com "Gethugothemes"), and [Statichunt](https://Statichunt.com "Statichunt"). I thought it'd be fun to document my journey and share it with you, hoping that you might find a nugget of wisdom, a chuckle, or even inspiration along the way.
+### Tech behind my website
 
-So, what can you expect from this blog? Well, think of it as a travelogue of a young entrepreneur's odyssey. Here, you'll find stories about:
+This blog is powered by a simple yet efficient tech stack. Github version control, Astro as the static site generator, Netlify to handle hosting and make deployments seamless (my absolute favorite) . Cloudflare secure and speedy DNS service To manage everything, I’m using my own Git-based CMS—a tool .
 
-1. Navigating the ever-evolving world of marketing, with its twists, turns, and hidden treasures.
-2. Chronicles of my entrepreneurial escapades, including the victories, the setbacks, and the lessons learned.
-3. Glimpses into the day-to-day life of running a business, the challenges, and the joys.
-4. Meditation and mindfulness adventures to help maintain balance and focus amidst the chaos of entrepreneurship.
-5. Hacking our way through growth, discovering tricks and strategies to scale businesses faster and more efficiently.
+It’s a straightforward setup, but it’s exactly what I need to keep things lightweight, fast, and easy to manage!
 
-So, grab a cup of coffee (or tea, if that's your thing), and join me on this wild ride. I hope my stories can provide you with some entertainment, maybe even a few lessons learned, but most importantly, a sense of camaraderie as we navigate the exhilarating world of entrepreneurship together.
+### Let’s Connect 
 
-Once again, welcome to blog, and happy reading!
-
-## Tech behind my website
-
-This website runs on Next.js, which I've used as a static site generator .The CMS part, I've got Forestry handling things (as long as they keep offering support , as they are closing soon ). Site hosted on Vercel (my absolute favorite), and Cloudflare's got my back with a secure and speedy DNS service. 😊🌐
+I’m most active on [X](https://www.notion.so/Hello-World-1695f5f81ff38080838ac20fc659efc0?pvs=21), [LinkedIn](https://www.notion.so/Hello-World-1695f5f81ff38080838ac20fc659efc0?pvs=21), and via email at \[mehedi at themefisher.com]. Feel free to reach out—I’d love to hear from you!
