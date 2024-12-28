@@ -37,7 +37,7 @@ const HeaderNav = () => {
                 <>
                   {/* Light mode logo */}
                   <img
-                    src={logo}
+                    srcSet={`${logo} 1x, ${logo} 2x`}
                     className={`inline-block ${theme_switcher && 'dark:hidden'}`}
                     width={parseInt(logo_width.replace("px", ""))}
                     height={parseInt(logo_height.replace("px", ""))}
@@ -51,7 +51,7 @@ const HeaderNav = () => {
                   {/* Dark mode logo */}
                   {theme_switcher && (
                     <img
-                      src={logo_darkmode}
+                      srcSet={`${logo_darkmode} 1x, ${logo_darkmode} 2x`}
                       className="hidden dark:inline-block"
                       width={parseInt(logo_width.replace("px", ""))}
                       height={parseInt(logo_height.replace("px", ""))}
@@ -98,7 +98,7 @@ const HeaderNav = () => {
                   <>
                     {/* Dark mode logo */}
                     <img
-                      src={logo_darkmode}
+                      srcSet={`${logo_darkmode} 1x, ${logo_darkmode} 2x`}
                       className={`inline-block ${theme_switcher && 'dark:hidden'}`}
                       width={parseInt(logo_width.replace("px", ""))}
                       height={parseInt(logo_height.replace("px", ""))}
@@ -111,7 +111,7 @@ const HeaderNav = () => {
                     {/* Light mode logo */}
                     {theme_switcher && (
                       <img
-                        src={logo}
+                        srcSet={`${logo} 1x, ${logo} 2x`}
                         className="hidden dark:inline-block"
                         width={parseInt(logo_width.replace("px", ""))}
                         height={parseInt(logo_height.replace("px", ""))}
