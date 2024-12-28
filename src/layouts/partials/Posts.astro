@@ -52,14 +52,14 @@ const posts = await getSinglePage(BLOG_FOLDER);
                   class="rounded-lg"
                 />
               ) : (
-                <p class="mb-3 pt-1 text-sm text-gray-400 lg:mb-1">
+                <p class="mb-3 pt-1 text-sm text-dark/80 dark:text-light lg:mb-1">
                   {dateFormat(post.data.date, "dd MMM, yyyy")}
                 </p>
               )}
             </div>
             <div class="basis-11/12 lg:basis-4/6">
               {post.data.image && (
-                <p class="mb-1 pt-1 text-sm text-gray-400">
+                <p class="mb-1 pt-1 text-sm text-dark/80 dark:text-light">
                   {dateFormat(post.data.date, "dd MMM, yyyy")}
                 </p>
               )}
