@@ -3,7 +3,7 @@ title: "Hello World - Tales from a Young Serial Entrepreneur's Odyssey"
 meta_title: ""
 description: "this is meta description"
 date: 2023-03-19T18:00:00.000+00:00
-image: "/images/image-placeholder.png"
+image: ""
 categories: ["Application", "Data"]
 author: "John Doe"
 tags: ["nextjs", "tailwind"]
