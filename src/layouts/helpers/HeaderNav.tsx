@@ -67,7 +67,7 @@ const HeaderNav = () => {
 
 
 
-            <button type="button" onClick={toggle} aria-label="menu">
+            <button id="menu" onClick={toggle} aria-label="menu">
               <svg
                 className="menu-toggler dark:invert"
                 viewBox="0 0 100 100"
