@@ -96,10 +96,11 @@ const HeaderNav = () => {
                 {logo || logo_darkmode ? (
                   <>
                     <img
+                      srcSet={`${logo_darkmode} 1x, ${logo_darkmode.replace('.png', '@2x.png')} 2x, ${logo.replace('.png', '@3x.png')} 3x`}
                       src={logo_darkmode}
-                      className={`inline-block ${theme_switcher && "dark:hidden"}`}
-                      // width={parseInt(logo_width.replace("px", "")) * 2}
-                      // height={parseInt(logo_height.replace("px", "")) * 2}
+                      className={`inline-block ${theme_switcher && 'dark:hidden'}`}
+                      width={parseInt(logo_width.replace("px", ""))}
+                      height={parseInt(logo_height.replace("px", ""))}
                       alt={title}
                       style={{
                         height: logo_height,
@@ -108,10 +109,11 @@ const HeaderNav = () => {
                     />
                     {theme_switcher && (
                       <img
+                        srcSet={`${logo} 1x, ${logo.replace('.png', '@2x.png')} 2x, ${logo.replace('.png', '@3x.png')} 3x`}
                         src={logo}
                         className="hidden dark:inline-block"
-                        // width={parseInt(logo_width.replace("px", "")) * 2}
-                        // height={parseInt(logo_height.replace("px", "")) * 2}
+                        width={parseInt(logo_width.replace("px", ""))}
+                        height={parseInt(logo_height.replace("px", ""))}
                         alt={title}
                         style={{
                           height: logo_height,
@@ -139,8 +141,8 @@ const HeaderNav = () => {
 
               <button
                 className="order-1 md:order-2"
-                type="button"
                 onClick={toggle}
+                aria-label="menu"
               >
                 <svg
                   className="menu-toggler active light dark:invert"
