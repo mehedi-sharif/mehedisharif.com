@@ -1,19 +1,15 @@
 ---
 import config from "@/config/config.json";
-import ImageMod from "./ImageMod.astro";
+import { Image } from "astro:assets";
+import src from "../../../public/images/logo-dark.png";
+import srcDarkmode from "../../../public/images/logo-light.png";
 
-const { src, srcDarkmode }: { src?: string; srcDarkmode?: string } =
-  Astro.props;
 const {
-  logo,
-  logo_darkmode,
   logo_width,
   logo_height,
   logo_text,
   title,
 }: {
-  logo: string;
-  logo_darkmode: string;
   logo_width: any;
   logo_height: any;
   logo_text: string;
@@ -25,10 +21,10 @@ const { theme_switcher }: { theme_switcher: boolean } = config.settings;
 
 <a href="/" class="navbar-brand inline-block">
   {
-    src || srcDarkmode || logo || logo_darkmode ? (
+    src || srcDarkmode ? (
       <>
-        <ImageMod
-          src={src ? src : logo}
+        <Image
+          src={src}
           class={`inline-block ${theme_switcher && "dark:hidden"}`}
           width={logo_width.replace("px", "") * 2}
           height={logo_height.replace("px", "") * 2}
@@ -40,8 +36,8 @@ const { theme_switcher }: { theme_switcher: boolean } = config.settings;
           format="webp"
         />
         {theme_switcher && (
-          <ImageMod
-            src={srcDarkmode ? srcDarkmode : logo_darkmode}
+          <Image
+            src={srcDarkmode}
             class={"hidden dark:inline-block"}
             width={logo_width.replace("px", "") * 2}
             height={logo_height.replace("px", "") * 2}
