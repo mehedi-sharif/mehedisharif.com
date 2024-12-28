@@ -6,7 +6,9 @@ export interface NavigationLink {
   name: string;
   url: string;
 }
+
 const { main }: { main: NavigationLink[] } = menu;
+
 const HeaderNav = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,8 +35,8 @@ const HeaderNav = () => {
             <a href="/" className="navbar-brand inline-block">
               {logo || logo_darkmode ? (
                 <>
+                  {/* Light mode logo */}
                   <img
-                    srcSet={`${logo} 1x, ${logo.replace('.png', '@2x.png')} 2x, ${logo.replace('.png', '@3x.png')} 3x`}
                     src={logo}
                     className={`inline-block ${theme_switcher && 'dark:hidden'}`}
                     width={parseInt(logo_width.replace("px", ""))}
@@ -45,9 +47,10 @@ const HeaderNav = () => {
                       width: logo_width,
                     }}
                   />
+
+                  {/* Dark mode logo */}
                   {theme_switcher && (
                     <img
-                      srcSet={`${logo_darkmode} 1x, ${logo_darkmode.replace('.png', '@2x.png')} 2x, ${logo_darkmode.replace('.png', '@3x.png')} 3x`}
                       src={logo_darkmode}
                       className="hidden dark:inline-block"
                       width={parseInt(logo_width.replace("px", ""))}
@@ -64,8 +67,6 @@ const HeaderNav = () => {
                 logo_text || title
               )}
             </a>
-
-
 
             <button id="menu" onClick={toggle} aria-label="menu">
               <svg
@@ -95,8 +96,8 @@ const HeaderNav = () => {
               <a href="/" className="navbar-brand inline-block">
                 {logo || logo_darkmode ? (
                   <>
+                    {/* Dark mode logo */}
                     <img
-                      srcSet={`${logo_darkmode} 1x, ${logo_darkmode.replace('.png', '@2x.png')} 2x, ${logo.replace('.png', '@3x.png')} 3x`}
                       src={logo_darkmode}
                       className={`inline-block ${theme_switcher && 'dark:hidden'}`}
                       width={parseInt(logo_width.replace("px", ""))}
@@ -107,9 +108,9 @@ const HeaderNav = () => {
                         width: logo_width,
                       }}
                     />
+                    {/* Light mode logo */}
                     {theme_switcher && (
                       <img
-                        srcSet={`${logo} 1x, ${logo.replace('.png', '@2x.png')} 2x, ${logo.replace('.png', '@3x.png')} 3x`}
                         src={logo}
                         className="hidden dark:inline-block"
                         width={parseInt(logo_width.replace("px", ""))}
@@ -168,4 +169,4 @@ const HeaderNav = () => {
   )
 }
 
-export default HeaderNav
+export default HeaderNav;
