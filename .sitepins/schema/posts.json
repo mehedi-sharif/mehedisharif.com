@@ -1,0 +1,26 @@
+{
+  "file": "src/content/posts/-index.md",
+  "name": "posts",
+  "fileType": "md",
+  "fmType": "yaml",
+  "template": [
+    {
+      "label": "Title",
+      "name": "title",
+      "type": "string",
+      "value": ""
+    },
+    {
+      "label": "Meta Title",
+      "name": "meta_title",
+      "type": "string",
+      "value": ""
+    },
+    {
+      "label": "Description",
+      "name": "description",
+      "type": "string",
+      "value": ""
+    }
+  ]
+}
