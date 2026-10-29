@@ -1,0 +1,138 @@
+<animated-hills aria-hidden="true"><canvas></canvas></animated-hills>
+
+<style>
+  animated-hills {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
+  }
+  canvas { display: block; width: 100%; height: 100%; }
+</style>
+
+<script>
+  import * as THREE from 'three';
+
+  class AnimatedHills extends HTMLElement {
+    private cleanup?: () => void;
+    connectedCallback() {
+      const canvas = this.querySelector('canvas');
+      if (!canvas) return;
+      let renderer: THREE.WebGLRenderer;
+      try { renderer = new THREE.WebGLRenderer({canvas, alpha: true, antialias: true}); }
+      catch { return; }
+      renderer.setClearColor(0, 0);
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+      camera.position.set(-3, 25, 100);
+      const loader = new THREE.TextureLoader();
+      const heightMap = loader.load('/images/terrain/height.png', () => render());
+      const alphaMap = loader.load('/images/terrain/alpha.png', () => render());
+      // Reference: 200 × 200 plane, 96 × 128 subdivisions, height-map displacement.
+      const geometry = new THREE.PlaneGeometry(200, 200, 96, 128);
+      const uniforms = {
+        heightMap: {value: heightMap}, alphaMap: {value: alphaMap},
+        time: {value: 0}, amplitude: {value: 40},
+        ink: {value: new THREE.Color('#56616b')}, opacity: {value: 0.26},
+      };
+      const material = new THREE.ShaderMaterial({
+        uniforms, wireframe: true, transparent: true, depthTest: false, depthWrite: false,
+        vertexShader: `
+          uniform sampler2D heightMap;
+          uniform float time;
+          uniform float amplitude;
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            float ripple = (sin(uv.x * 50.265482 + time) + cos(uv.y * 50.265482 + time)) * 0.2;
+            vec3 displaced = position + normal * (texture2D(heightMap, uv).r * amplitude + ripple);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D alphaMap;
+          uniform vec3 ink;
+          uniform float opacity;
+          varying vec2 vUv;
+          void main() {
+            gl_FragColor = vec4(ink, texture2D(alphaMap, vUv).g * opacity);
+          }
+        `,
+      });
+      const hill = new THREE.Mesh(geometry, material);
+      hill.rotation.x = 11;
+      scene.add(hill);
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+      let frame = 0, visible = true, previous = 0, elapsed = 0;
+      let targetRotation = 0, targetAmplitude = 35;
+      let targetCameraX = 0, targetCameraY = 0;
+      let cameraX = 0, cameraY = 0;
+      let disposed = false;
+      const render = () => { if (!disposed) renderer.render(scene, camera); };
+      const tick = (stamp: number) => {
+        frame = 0;
+        if (disposed || !visible || document.hidden || reduced.matches) return;
+        const delta = Math.min((stamp - previous) / 1000, 0.05);
+        previous = stamp; elapsed += delta;
+        // Same ripple frequency as the reference's Date.now() / 200.
+        uniforms.time.value = elapsed * 5;
+        // Continuous, time-based drift stays active even without pointer input.
+        // Pointer interaction is layered on top rather than driving the animation.
+        const ease = 1 - Math.pow(0.95, delta * 60);
+        const drift = elapsed * 0.28;
+        hill.rotation.z = targetRotation + Math.sin(drift) * 0.14;
+        hill.rotation.x = 11 + Math.sin(drift * 0.7) * 0.025;
+        uniforms.amplitude.value = targetAmplitude + Math.sin(drift * 1.2) * 5;
+        cameraX += (targetCameraX + Math.sin(drift * 0.8) * 2 - cameraX) * ease;
+        cameraY += (targetCameraY + Math.sin(drift * 0.6) * 1.2 - cameraY) * ease;
+        camera.position.x = -3 + cameraX;
+        camera.position.y = 25 + cameraY;
+        render(); frame = requestAnimationFrame(tick);
+      };
+      const sync = () => {
+        cancelAnimationFrame(frame); frame = 0;
+        const dark = document.documentElement.classList.contains('dark');
+        uniforms.ink.value.set(dark ? '#ffffff' : '#56616b');
+        uniforms.opacity.value = dark ? 0.1 : 0.26;
+        if (reduced.matches) { uniforms.time.value = 0; hill.rotation.z = 0; hill.rotation.x = 11; uniforms.amplitude.value = 35; camera.position.x = -3; camera.position.y = 25; }
+        render(); previous = performance.now();
+        if (visible && !document.hidden && !reduced.matches) frame = requestAnimationFrame(tick);
+      };
+      const resize = new ResizeObserver(() => {
+        const {width, height} = this.getBoundingClientRect();
+        if (!width || !height) return;
+        renderer.setSize(width, height, false);
+        camera.aspect = width / height;
+        // Frame the same terrain within the shorter existing banner.
+        camera.position.z = width < 768 ? 130 : 75;
+        camera.updateProjectionMatrix(); sync();
+      });
+      const pointer = (event: PointerEvent) => {
+        if (event.pointerType !== 'mouse' || reduced.matches) return;
+        targetRotation = event.clientX * 0.0003;
+        const largeScreen = window.innerWidth > 1920 && window.innerHeight > 1080;
+        targetAmplitude = 35 + event.clientY * (largeScreen ? 0.01 : 0.04);
+        targetCameraX = (event.clientX / window.innerWidth * 2 - 1) * 2.86;
+        targetCameraY = -(event.clientY / window.innerHeight * 2 - 1) * 2.5;
+      };
+      const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
+      const theme = new MutationObserver(sync);
+      resize.observe(this); observer.observe(this);
+      theme.observe(document.documentElement, {attributes: true, attributeFilter: ['class']});
+      window.addEventListener('pointermove', pointer, {passive: true});
+      document.addEventListener('visibilitychange', sync);
+      reduced.addEventListener('change', sync);
+      this.cleanup = () => {
+        disposed = true; cancelAnimationFrame(frame);
+        resize.disconnect(); observer.disconnect(); theme.disconnect();
+        window.removeEventListener('pointermove', pointer);
+        document.removeEventListener('visibilitychange', sync); reduced.removeEventListener('change', sync);
+        geometry.dispose(); material.dispose(); heightMap.dispose(); alphaMap.dispose(); renderer.dispose();
+      };
+    }
+    disconnectedCallback() { this.cleanup?.(); }
+  }
+  if (!customElements.get('animated-hills')) customElements.define('animated-hills', AnimatedHills);
+</script>

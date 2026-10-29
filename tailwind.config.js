@@ -2,7 +2,8 @@ const theme = require("./src/config/theme.json");
 
 let font_base = Number(theme.fonts.font_size.base.replace("px", ""));
 let font_scale = Number(theme.fonts.font_size.scale);
-let h6 = font_scale;
+// Slightly enlarge the heading scale without changing body text.
+let h6 = font_scale * 1.1;
 let h5 = h6 * font_scale;
 let h4 = h5 * font_scale;
 let h3 = h4 * font_scale;
@@ -71,7 +72,7 @@ module.exports = {
         h6: h6 + "rem",
       },
       fontFamily: {
-        primary: ["var(--font-jakarta)", fontPrimaryType],
+        primary: ["var(--font-inter)", fontPrimaryType],
         secondary: ["var(--font-secondary)", fontSecondaryType],
       },
     },

@@ -1,4 +1,5 @@
 ---
+import HillBackground from "@/components/HillBackground.astro";
 import ImageMod from "@/components/ImageMod.astro";
 import { getEntry } from "astro:content";
 
@@ -6,23 +7,24 @@ const heroBanner = await getEntry("homepage", "-index");
 const { image, bio } = heroBanner?.data?.banner;
 ---
 
-<section class="section banner pb-0">
-  <div class="container">
+<section class="section banner relative isolate pb-0">
+  <HillBackground />
+  <div class="container relative z-10">
     <div
-      class="mb-16 flex flex-col items-center text-center md:flex-row md:text-left"
+      class="mb-16 grid grid-cols-1 items-center text-center md:grid-cols-2 md:text-left"
     >
-      <div class="mt-12 md:mt-0">
+      <div class="hero-copy relative mt-12 md:mt-0">
         <h1
-          class="order-last text-[1.5rem] font-semibold md:order-first md:text-h1 2xl:text-[2.4rem]"
+          class="order-last md:order-first"
         >
           {bio}
         </h1>
-        <p class="mt-6 max-w-2xl">I’m Mehedi, a founder and developer based in Bangladesh. I run a few companies, write code, and am now building GHL MegaMinds.</p>
+        <p class="type-lead mt-6 max-w-2xl">I’m Mehedi, a founder and developer based in Bangladesh. I run a few companies, write code, and am now building GHL MegaMinds.</p>
         <a class="btn mt-8" href="/contact">Get in touch</a>
       </div>
 
       <div
-        class="order-first mx-auto block w-1/2 text-center md:order-last md:w-[50%] lg:w-4/5 xl:w-[55%] 2xl:w-4/5"
+        class="order-first flex w-full items-center justify-center md:order-last"
       >
         <div class="relative h-[279px] w-[252px]">
           <ImageMod
@@ -57,3 +59,17 @@ const { image, bio } = heroBanner?.data?.banner;
     </div>
   </div>
 </section>
+
+<style>
+  .hero-copy::before {
+    content: "";
+    position: absolute;
+    inset: -2rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse, rgba(255,255,255,.96) 25%, rgba(255,255,255,.8) 55%, transparent 74%);
+  }
+  :global(.dark) .hero-copy::before {
+    background: radial-gradient(ellipse, rgba(16,23,37,.96) 25%, rgba(16,23,37,.8) 55%, transparent 74%);
+  }
+</style>

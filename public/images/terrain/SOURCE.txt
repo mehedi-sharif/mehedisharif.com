@@ -1,0 +1,2 @@
+Terrain height and alpha maps sourced from https://gustavobatista.dev/images/height.png
+and https://gustavobatista.dev/images/alpha.png for the requested local reference reproduction.

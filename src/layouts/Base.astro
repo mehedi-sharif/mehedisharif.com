@@ -77,8 +77,17 @@ const { title, meta_title, description, image, noindex, canonical } =
           display: "swap",
           name: fontPrimary!,
           fallback: "sans-serif",
-          cssVariable: "font-jakarta",
+          cssVariable: "font-inter",
           googleFontsURL: `https://fonts.googleapis.com/css2?family=${pf}&display=swap`,
+        },
+        {
+          src: [],
+          preload: false,
+          display: "swap",
+          name: fontSecondary!,
+          fallback: "serif",
+          cssVariable: "font-secondary",
+          googleFontsURL: `https://fonts.googleapis.com/css2?family=${sf}&display=swap`,
         },
       ]}
     />
@@ -167,7 +176,7 @@ const { title, meta_title, description, image, noindex, canonical } =
     />
     <meta name="twitter:card" content="summary_large_image" />
   </head>
-  <body class="border-y-8 border-primary font-primary dark:border-white">
+  <body class="border-b-8 border-primary font-primary dark:border-white">
     <TwSizeIndicator />
     <Header />
     <main id="main-content" class="mx-auto max-w-[1460px]">

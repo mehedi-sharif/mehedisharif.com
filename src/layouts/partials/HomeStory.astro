@@ -4,7 +4,6 @@ import homepage from "../../data/homepage.json";
 
 <section id="about" class="section">
   <div class="container">
-    <h2 class="section-title mb-10">A little <strong>about me</strong></h2>
     <div class="grid items-center gap-10 md:grid-cols-[1fr_2fr] md:gap-16">
       <img src="/images/personal/portrait.jpg" alt="Mehedi Sharif" width="724" height="1056" loading="lazy" class="mx-auto aspect-[5/6] w-full max-w-sm rounded-xl object-cover object-top" />
       <div>
@@ -20,9 +19,9 @@ import homepage from "../../data/homepage.json";
     <h2 class="section-title mb-10">I am a <strong>builder</strong></h2>
     <div class="space-y-7">
       {homepage.ventures.map((venture) => (
-        <article class="post-card grid gap-5 p-6 md:grid-cols-[1fr_2fr] md:gap-10 md:p-9">
+        <article class="relative rounded-xl border transition duration-200 ease-out hover:border-dark dark:border-darkmode-border dark:hover:border-slate-600 grid gap-5 p-6 md:grid-cols-[1fr_2fr] md:gap-10 md:p-9">
           <div>
-            <p class="mb-3 text-sm">{venture.period}</p>
+            <p class="type-label mb-3">{venture.period}</p>
             <h3 class="text-h4">{venture.url ? <a class="underline decoration-1 underline-offset-4" href={venture.url} target="_blank" rel="noopener noreferrer">{venture.name} ↗</a> : venture.name}</h3>
           </div>
           <p>{venture.description}</p>
@@ -34,11 +33,13 @@ import homepage from "../../data/homepage.json";
 <section id="values" class="section">
   <div class="container">
     <h2 class="section-title mb-10">What I <strong>believe in</strong></h2>
-    <div class="grid gap-x-10 gap-y-9 md:grid-cols-2 lg:grid-cols-3">
+    <div class="space-y-7">
       {homepage.values.map((value, index) => (
-        <article class="border-t border-border pt-6 dark:border-darkmode-border">
-          <span class="mb-4 block text-sm" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-          <h3 class="mb-4 text-h5">{value.title}</h3>
+        <article class="relative rounded-xl border transition duration-200 ease-out hover:border-dark dark:border-darkmode-border dark:hover:border-slate-600 grid gap-5 p-6 md:grid-cols-[1fr_2fr] md:gap-10 md:p-9">
+          <div>
+            <p class="type-label mb-3" aria-hidden="true">{String(index + 1).padStart(2, "0")}</p>
+            <h3 class="text-h4">{value.title}</h3>
+          </div>
           <p>{value.description}</p>
         </article>
       ))}

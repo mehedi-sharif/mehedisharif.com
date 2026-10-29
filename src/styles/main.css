@@ -10,6 +10,9 @@
   }
 }
 @layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-secondary;
+  }
   html {
     @apply text-base-sm leading-relaxed md:text-base;
   }
@@ -61,7 +64,7 @@
     @apply py-16;
   }
   .section-title {
-    @apply text-base capitalize md:text-h3 lg:text-h4;
+    @apply text-[22px] capitalize md:text-h3 lg:text-h4;
   }
   .section-title strong {
     @apply relative inline-block pr-16;
@@ -396,4 +399,134 @@
 @utility col-10 {
   flex: 0 0 auto;
   width: calc(100% * 10 / 12);
+}
+
+/* Compact signature navigation inspired by the supplied reference. */
+.signature-header-space {
+  height: 106px;
+}
+.signature-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+}
+.signature-nav {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px;
+  border: 1px solid #343a47;
+  border-radius: 5px;
+  background: #000000;
+  box-shadow: 0 4px 18px rgb(0 0 0 / 8%);
+}
+.signature-nav-brand {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+}
+.signature-nav-brand img {
+  display: block;
+  width: 160px;
+  height: auto;
+}
+.signature-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.signature-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: 3px;
+  color: #ffffff;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  transition: background-color 150ms, color 150ms;
+}
+.signature-nav-link:hover {
+  background: #222222;
+  color: #fff;
+}
+.signature-nav-contact {
+  background: #ffffff;
+  color: #000000;
+  padding-inline: 24px;
+}
+.signature-nav-contact:hover {
+  background: #f4f7f7;
+  color: #000000;
+}
+.signature-nav a:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+@media (max-width: 539px) {
+  .signature-nav {
+    gap: 4px;
+    padding: 6px;
+  }
+  .signature-nav-brand {
+    padding: 4px;
+  }
+  .signature-nav-brand img {
+    width: 104px;
+  }
+  .signature-nav-link {
+    padding: 12px 9px;
+    font-size: 11px;
+  }
+}
+@media (max-width: 359px) {
+  .signature-header-space { height: 140px; }
+  .signature-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* Typography from Type, color & spacing / Guide.dc.html.
+   Use the documented desktop/mobile sizes, not the artboard sample sizes. */
+body {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-secondary), Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: clamp(42px, calc(22px + 5vw), 92px); line-height: .96; }
+h2 { font-size: clamp(34px, calc(17.2px + 4.2vw), 76px); line-height: 1; }
+h3 { font-size: clamp(26px, calc(25.2px + .2vw), 28px); line-height: 1.1; }
+h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {
+  font-weight: inherit;
+}
+.section-title { text-transform: none; }
+.type-lead { font-size: 20px; line-height: 1.55; }
+.type-label, .signature-nav-link {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-transform: none;
+}
+@media (min-width: 768px) {
+  body { font-size: 17px; }
 }
