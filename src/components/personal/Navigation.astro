@@ -1,0 +1,53 @@
+<header
+  class="wrap relative flex items-center justify-between gap-6 [height:80px] [border-bottom:1px_solid_#1A1D16]"
+>
+  <a
+    href="#top"
+    class="d no-underline text-xl font-medium [letter-spacing:-0.02em]"
+    >Mehedi Sharif</a
+  >
+  <nav
+    class="nav flex items-center gap-9"
+    id="main-navigation"
+    aria-label="Main"
+  >
+    <a href="#about">About</a>
+    <a href="#purpose">Purpose</a>
+    <a href="#values">Values</a>
+    <a href="#connect" class="[color:#D4FF24]">Get in touch</a>
+  </nav>
+  <button
+    class="menu-btn [min-height:44px] items-center [background:none] [border:1px_solid_#3A3F30] [padding:0_16px] [color:#ECEDE4]"
+    type="button"
+    aria-label="Open menu"
+    aria-expanded="false"
+    aria-controls="main-navigation">Menu</button
+  >
+</header>
+<script>
+  const button = document.querySelector<HTMLButtonElement>(".menu-btn");
+  const nav = document.querySelector<HTMLElement>("#main-navigation");
+  function closeMenu() {
+    button?.setAttribute("aria-expanded", "false");
+    button?.setAttribute("aria-label", "Open menu");
+    nav?.removeAttribute("data-open");
+  }
+  button?.addEventListener("click", () => {
+    const open = button.getAttribute("aria-expanded") !== "true";
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    nav?.setAttribute("data-open", String(open));
+  });
+  nav
+    ?.querySelectorAll("a")
+    .forEach((link) => link.addEventListener("click", closeMenu));
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      button?.getAttribute("aria-expanded") === "true"
+    ) {
+      closeMenu();
+      button.focus();
+    }
+  });
+</script>
