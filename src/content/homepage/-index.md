@@ -1,7 +1,7 @@
 ---
 banner:
-  image: "/images/author.png"
-  image_light: "/images/author-light.png"
+  image: "/images/personal/hero-portrait.jpg"
+  image_light: "/images/personal/hero-portrait.jpg"
   bio: "I build products, and the businesses around them."
   brands:
     - name: themefisher
