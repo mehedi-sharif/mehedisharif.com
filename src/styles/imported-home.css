@@ -130,4 +130,4 @@ html { scroll-behavior:smooth; }
 /* Clearer navigation typography while preserving the compact menu. */
 .mnav a.ml,.mnav a.mc { font-size:14px;line-height:1.35;font-weight:500;letter-spacing:.01em; }
 @media (min-width:901px) { .mnav a.ml { padding-inline:16px; } }
-@media (min-width:360px) and (max-width:900px) { .mnav .section-links a.ml { font-size:13px;padding-inline:8px; } }
+@media (min-width:360px) and (max-width:900px) { .mnav .section-links a.ml { font-size:12px;padding-inline:7px; } }
