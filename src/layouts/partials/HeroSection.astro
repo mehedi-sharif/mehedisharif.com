@@ -3,7 +3,7 @@ import ImageMod from "@/components/ImageMod.astro";
 import { getEntry } from "astro:content";
 
 const heroBanner = await getEntry("homepage", "-index");
-const { image, image_light, bio } = heroBanner?.data?.banner;
+const { image, bio } = heroBanner?.data?.banner;
 ---
 
 <section class="section banner pb-0">
@@ -24,24 +24,35 @@ const { image, image_light, bio } = heroBanner?.data?.banner;
       <div
         class="order-first mx-auto block w-1/2 text-center md:order-last md:w-[50%] lg:w-4/5 xl:w-[55%] 2xl:w-4/5"
       >
-        <ImageMod
-          class="block h-[279px] w-[252px] object-cover object-center dark:hidden"
-          src={image}
-          alt="Mehedi Sharif"
-          width={504}
-          height={672}
-          format="webp"
-          loading={"eager"}
-        />
-        <ImageMod
-          class="hidden h-[279px] w-[252px] object-cover object-center dark:block"
-          src={image_light}
-          alt="Mehedi Sharif"
-          width={504}
-          height={672}
-          format="webp"
-          loading={"eager"}
-        />
+        <div class="relative h-[279px] w-[252px]">
+          <ImageMod
+            class="block dark:hidden"
+            src="/images/author.png"
+            alt=""
+            width={252}
+            height={279}
+            format="webp"
+            loading="eager"
+          />
+          <ImageMod
+            class="hidden dark:block"
+            src="/images/author-light.png"
+            alt=""
+            width={252}
+            height={279}
+            format="webp"
+            loading="eager"
+          />
+          <ImageMod
+            class="absolute left-[15px] top-[15px] h-[216px] w-[216px] rounded-full object-cover object-center"
+            src={image}
+            alt="Mehedi Sharif"
+            width={504}
+            height={672}
+            format="webp"
+            loading="eager"
+          />
+        </div>
       </div>
     </div>
   </div>
