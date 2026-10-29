@@ -1,5 +1,4 @@
 import dateFormat from "@/lib/utils/dateFormat";
-import cryptoJs from "crypto-js";
 import React, { useEffect, useRef, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -7,7 +6,7 @@ import { MdClose } from "react-icons/md";
 import ImageUploader from "./ImageUploader";
 import TimelineSkeleton from "./TimelineSkeleton";
 
-const TimelineEvents = ({ secretKey }) => {
+const TimelineEvents = () => {
   const [loading, setLoading] = useState(true);
   const [getSecret, setSecret] = useState("");
   const [timelineEvent, setTimelineEvent] = useState([]);
@@ -42,37 +41,30 @@ const TimelineEvents = ({ secretKey }) => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    const localSecret = localStorage.getItem("secret");
+    localStorage.removeItem("secret");
+    fetch("/api/timeline-session")
+      .then((response) => {
+        setForm(!response.ok);
+        if (response.ok) return fetchData();
+      })
+      .catch(() => setForm(true))
+      .finally(() => setLoading(false));
+  }, []);
 
-    if (localSecret) {
-      const secretKeyDecrypted = cryptoJs.AES.decrypt(
-        localSecret,
-        secretKey,
-      ).toString(cryptoJs.enc.Utf8);
-      if (secretKey === secretKeyDecrypted) {
-        setForm(false);
-        setLoading(false);
-        fetchData();
-      }
-    } else {
-      setLoading(false);
-      setForm(true);
-    }
-  }, [secretKey]);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (getSecret === secretKey) {
+    try {
+      const response = await fetch("/api/timeline-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: getSecret }),
+      });
+      if (!response.ok) throw new Error("Incorrect key or service unavailable");
+      setSecret("");
       setForm(false);
-      localStorage.setItem(
-        "secret",
-        cryptoJs.AES.encrypt(secretKey, secretKey).toString(),
-      );
-      setLoading(false);
-      fetchData();
-    } else {
-      document.getElementById("incorrect").innerHTML = "Incorrect Key";
+      await fetchData();
+    } catch (error) {
+      document.getElementById("incorrect").textContent = error.message;
     }
   };
 

@@ -1,33 +1,25 @@
 import type { APIRoute } from "astro";
-import { MongoClient, ObjectId, type MongoClientOptions } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
-const uri: string = import.meta.env.MONGODB_URI as string;
-const options: MongoClientOptions = {};
-
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
-if (!import.meta.env.MONGODB_URI) {
-  throw new Error("Please add your Mongo URI to .env");
-}
-
-if (process.env.NODE_ENV === "development") {
-  if (!(global as any)._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    (global as any)._mongoClientPromise = client.connect();
-  }
-  clientPromise = (global as any)._mongoClientPromise;
-} else {
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
-}
-
+export const prerender = false;
+import { secret } from "../../lib/server/runtime";
+import { authorized, sameOrigin } from "../../lib/server/timeline-auth";
 const database = "mehedisharif";
 const collection = "timeline";
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async (context) => {
+  const { request, locals } = context;
+  if (request.method !== "GET" && !sameOrigin(context))
+    return new Response(null, { status: 403 });
+  if (!(await authorized(context)))
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  let client: MongoClient | undefined;
   try {
-    const client = await clientPromise;
+    client = new MongoClient(secret(locals, "MONGODB_URI"), {
+      maxPoolSize: 1,
+      serverSelectionTimeoutMS: 5000,
+    });
+    await client.connect();
     const db = client.db(database);
     const events = await db
       .collection(collection)
@@ -48,17 +40,29 @@ export const GET: APIRoute = async () => {
         "Content-Type": "application/json",
       },
     });
+  } finally {
+    await client?.close();
   }
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async (context) => {
+  const { request, locals } = context;
+  if (request.method !== "GET" && !sameOrigin(context))
+    return new Response(null, { status: 403 });
+  if (!(await authorized(context)))
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  let client: MongoClient | undefined;
   try {
     const newEvent = await request.json();
     if (!newEvent) {
       throw new Error("Request body is empty");
     }
 
-    const client = await clientPromise;
+    client = new MongoClient(secret(locals, "MONGODB_URI"), {
+      maxPoolSize: 1,
+      serverSelectionTimeoutMS: 5000,
+    });
+    await client.connect();
     const db = client.db(database);
     const result = await db.collection(collection).insertOne(newEvent);
 
@@ -76,10 +80,18 @@ export const POST: APIRoute = async ({ request }) => {
         "Content-Type": "application/json",
       },
     });
+  } finally {
+    await client?.close();
   }
 };
 
-export const PUT: APIRoute = async ({ request }) => {
+export const PUT: APIRoute = async (context) => {
+  const { request, locals } = context;
+  if (request.method !== "GET" && !sameOrigin(context))
+    return new Response(null, { status: 403 });
+  if (!(await authorized(context)))
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  let client: MongoClient | undefined;
   try {
     const updatedEvent = await request.json();
     if (!updatedEvent || !updatedEvent.id) {
@@ -92,7 +104,11 @@ export const PUT: APIRoute = async ({ request }) => {
       throw new Error("Invalid ObjectId");
     }
 
-    const client = await clientPromise;
+    client = new MongoClient(secret(locals, "MONGODB_URI"), {
+      maxPoolSize: 1,
+      serverSelectionTimeoutMS: 5000,
+    });
+    await client.connect();
     const db = client.db(database);
     const result = await db
       .collection(collection)
@@ -125,17 +141,29 @@ export const PUT: APIRoute = async ({ request }) => {
         "Content-Type": "application/json",
       },
     });
+  } finally {
+    await client?.close();
   }
 };
 
-export const DELETE: APIRoute = async ({ request }) => {
+export const DELETE: APIRoute = async (context) => {
+  const { request, locals } = context;
+  if (request.method !== "GET" && !sameOrigin(context))
+    return new Response(null, { status: 403 });
+  if (!(await authorized(context)))
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  let client: MongoClient | undefined;
   try {
     const { id } = await request.json();
     if (!id || !ObjectId.isValid(id)) {
       throw new Error("Invalid or missing ObjectId");
     }
 
-    const client = await clientPromise;
+    client = new MongoClient(secret(locals, "MONGODB_URI"), {
+      maxPoolSize: 1,
+      serverSelectionTimeoutMS: 5000,
+    });
+    await client.connect();
     const db = client.db(database);
     const result = await db
       .collection(collection)
@@ -162,5 +190,7 @@ export const DELETE: APIRoute = async ({ request }) => {
         "Content-Type": "application/json",
       },
     });
+  } finally {
+    await client?.close();
   }
 };

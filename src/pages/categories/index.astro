@@ -3,7 +3,7 @@ import Base from "@/layouts/Base.astro";
 import { getAllTaxonomy, getTaxonomy } from "@/lib/taxonomyParser.astro";
 import { humanize } from "@/lib/utils/textConverter";
 
-const BLOG_FOLDER = "blog";
+const BLOG_FOLDER = "posts";
 
 const categories = await getTaxonomy(BLOG_FOLDER, "categories");
 const allCategories = await getAllTaxonomy(BLOG_FOLDER, "categories");

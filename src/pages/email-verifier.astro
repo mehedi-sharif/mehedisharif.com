@@ -1,8 +1,6 @@
 ---
 import EmailVerifierForm from "@/helpers/EmailVerifierForm";
 import Base from "@/layouts/Base.astro";
-
-const apiKey = import.meta.env.REOON_EMAIL_API_KEY;
 ---
 
 <Base noindex={true}>
@@ -17,7 +15,7 @@ const apiKey = import.meta.env.REOON_EMAIL_API_KEY;
 
       <div class="row justify-center items-center">
         <div class="md:col-8 lg:col-6">
-          <EmailVerifierForm apiKey={apiKey} client:load />
+          <EmailVerifierForm client:load />
         </div>
       </div>
     </div>

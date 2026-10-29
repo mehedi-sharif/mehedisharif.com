@@ -52,6 +52,7 @@ const pagesCollection = defineCollection({
 // Export collections
 export const collections = {
   blog: blogCollection,
+  posts: blogCollection,
   authors: authorsCollection,
   pages: pagesCollection,
 };

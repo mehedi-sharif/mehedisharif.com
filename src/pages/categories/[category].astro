@@ -8,7 +8,7 @@ import taxonomyFilter from "@/lib/utils/taxonomyFilter";
 
 // get static paths for all categories
 export async function getStaticPaths() {
-  const BLOG_FOLDER = "blog";
+  const BLOG_FOLDER = "posts";
   const categories = await getTaxonomy(BLOG_FOLDER, "categories");
 
   return categories.map((category) => {
@@ -21,7 +21,7 @@ export async function getStaticPaths() {
 const { category } = Astro.params;
 
 // get posts by category
-const BLOG_FOLDER = "blog";
+const BLOG_FOLDER = "posts";
 const posts = await getSinglePage(BLOG_FOLDER);
 const filterByCategories = taxonomyFilter(posts, "categories", category!);
 const sortedPosts = sortByDate(filterByCategories);

@@ -24,3 +24,9 @@ yarn.lock
 
 # ignore .astro directory
 .astro
+
+# Cloudflare build output and local secrets
+dist-cloudflare/
+.wrangler/
+.dev.vars*
+.env.*.local
