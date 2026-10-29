@@ -168,10 +168,6 @@ body {
   text-align: center;
 }
 
-.timeline-form-input {
-  @apply rounded-md border-border bg-body focus:border-border focus:ring-0 dark:bg-darkmode-body;
-}
-
 /* Skeleton Loading Styles */
 .skeleton-loader {
   opacity: 0.7;

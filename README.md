@@ -16,7 +16,7 @@ npm run build
 npm run preview
 ```
 
-The existing Netlify server adapter and secondary routes are retained.
+The homepage, blog, categories, contact, and privacy policy are retained. The timeline and email verifier have been removed. Cloudflare Pages uses a static build with no backend secrets; see `CLOUDFLARE.md`.
 
 ## Homepage
 

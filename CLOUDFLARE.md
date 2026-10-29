@@ -5,19 +5,11 @@ Output directory: `dist-cloudflare`
 Node.js: 22
 Production branch after migration: `main`
 
-The separate Astro config prerenders the homepage, blog, categories, contact, timeline UI, verifier UI, and 404 page. API routes execute in Pages Functions with Node.js compatibility. Netlify configuration remains available until cutover is verified.
+The separate Astro config builds the homepage, blog, categories, contact, privacy policy, and 404 page as static HTML. No Pages Functions or backend secrets are required. The timeline, email verifier, their API routes, and database dependencies have been removed. Existing database data is not modified.
 
-Required production secrets (copy existing values from Netlify into Pages encrypted environment variables):
+The contact form retains its existing FormSubmit integration.
 
-- `MONGODB_URI`: existing MongoDB database connection.
-- `SECRET_KEY`: existing timeline login password.
-- `REOON_EMAIL_API_KEY`: existing verification service key.
-
-Never commit these values. For local testing, use an ignored `.dev.vars` file. `npm run preview:cloudflare` serves the built site through the Cloudflare runtime.
-
-MongoDB connections are created and closed per request. The timeline uses an eight-hour HttpOnly signed session; its password is no longer embedded in page HTML. Email verification calls Reoon server-side and reserves one of the existing 20 daily verifications atomically. Reservations remain consumed if the provider fails, preventing repeated provider calls from bypassing the limit.
-
-Before changing DNS, verify the Pages URL, blog/contact pages, timeline login and database reads, and email verification with the real secrets. Do not delete the Netlify deployment before successful cutover.
+Run `npm run preview:cloudflare` to verify the built site. Before changing DNS, verify the Pages URL and retained pages. Keep the Netlify deployment available until successful cutover.
 
 Current web DNS (rollback reference):
 

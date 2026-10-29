@@ -2,6 +2,5 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "mehedisharif-com",
   "pages_build_output_dir": "./dist-cloudflare",
-  "compatibility_date": "2026-10-29",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_date": "2026-10-29"
 }
