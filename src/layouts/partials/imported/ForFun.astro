@@ -1,9 +1,23 @@
+---
+import { Image } from "astro:assets";
+import reading from "../../../assets/for-fun/reading.jpg";
+import walking from "../../../assets/for-fun/walking.jpg";
+---
 <section id="for-fun" class="wrap grid screen" style="row-gap: 40px; padding-top: 80px; padding-bottom: 80px">
     <div class="sec-head"><span class="tag">For fun</span></div>
     <div class="sec-body" style="display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); column-gap: 24px; row-gap: 24px">
       <h2 class="d h2" style="grid-column: 1 / span 6; text-decoration-line: none; padding-bottom: 16px">What I do when I’m not working</h2>
       
-      <div class="photo" style="grid-column: 1 / span 5; aspect-ratio: 5 / 4">Photo</div>
-      <div class="photo" style="grid-column: 6 / span 4; aspect-ratio: 4 / 5; align-self: end">Photo</div>
+      <div class="leisure-photo" style="grid-column: 1 / span 5; aspect-ratio: 5 / 4">
+        <Image src={reading} alt="Open book with softly turning pages" widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 620px" format="webp" loading="lazy" />
+      </div>
+      <div class="leisure-photo" style="grid-column: 6 / span 4; aspect-ratio: 4 / 5; align-self: end">
+        <Image src={walking} alt="A person walking past a silver wall, reflected on the floor" widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 500px" format="webp" loading="lazy" />
+      </div>
     </div>
   </section>
+
+<style>
+  .leisure-photo { overflow:hidden; border-radius:16px; min-width:0; }
+  .leisure-photo img { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
+</style>
