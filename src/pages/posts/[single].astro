@@ -1,6 +1,6 @@
 ---
 export const prerender = true;
-import Base from "@/layouts/Base.astro";
+import ImportedHome from "@/layouts/ImportedHome.astro";
 import PostSingle from "@/layouts/PostSingle.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
 
@@ -21,11 +21,6 @@ const { post } = Astro.props;
 const { title, meta_title, description, image } = post.data;
 ---
 
-<Base
-  title={title}
-  meta_title={meta_title}
-  description={description}
-  image={image}
->
+<ImportedHome title={meta_title || `${title} — Mehedi Sharif`} description={description} canonical={`https://mehedisharif.com/posts/${post.id}`}>
   <PostSingle post={post} />
-</Base>
+</ImportedHome>

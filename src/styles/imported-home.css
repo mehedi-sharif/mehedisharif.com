@@ -117,17 +117,18 @@ html { scroll-behavior:smooth; }
 
 /* Sun/moon theme switch, with a 44px keyboard and touch target. */
 .theme-toggle { display:inline-flex;align-items:center;gap:10px;border:0;padding:8px;background:transparent;border-radius:999px; }
-.theme-track { position:relative;display:block;width:44px;height:26px;border:1px solid var(--rule);border-radius:999px;background:var(--surface);transition:background .2s; }
-.theme-thumb { position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--ink);transition:transform .2s; }
 .theme-sun { color:var(--ink); }
 .theme-moon { color:var(--muted); }
-.dark .theme-track { background:#D4FF24;border-color:#D4FF24; }
-.dark .theme-thumb { transform:translateX(18px);background:#030407; }
 .dark .theme-sun { color:var(--muted); }
 .dark .theme-moon { color:#D4FF24; }
-@media(prefers-reduced-motion:reduce) { .theme-track,.theme-thumb { transition:none; } }
 
 /* Clearer navigation typography while preserving the compact menu. */
 .mnav a.ml,.mnav a.mc { font-size:14px;line-height:1.35;font-weight:500;letter-spacing:.01em; }
 @media (min-width:901px) { .mnav a.ml { padding-inline:16px; } }
 @media (min-width:360px) and (max-width:900px) { .mnav .section-links a.ml { font-size:12px;padding-inline:7px; } }
+
+.theme-toggle { gap:2px;padding:2px;border:1px solid var(--rule); }
+.theme-toggle svg { box-sizing:content-box;padding:10px;border-radius:50%; }
+.theme-sun { background:#D4FF24;color:#030407; }
+.dark .theme-sun { background:transparent;color:var(--muted); }
+.dark .theme-moon { background:#D4FF24;color:#030407; }

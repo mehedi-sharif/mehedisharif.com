@@ -1,6 +1,6 @@
 ---
 const homePrefix = Astro.url.pathname === "/" || Astro.url.pathname === "/dark" || Astro.url.pathname === "/dark/" ? "" : "/";
-const isBlog = Astro.url.pathname.startsWith("/blog");
+const isBlog = (Astro.url.pathname.startsWith("/blog") || Astro.url.pathname.startsWith("/posts/"));
 ---
 <header class="topbar">
   <nav class="mnav" aria-label="Main">
