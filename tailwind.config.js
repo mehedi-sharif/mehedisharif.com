@@ -71,7 +71,7 @@ module.exports = {
         h6: h6 + "rem",
       },
       fontFamily: {
-        primary: ["var(--font-inter)", fontPrimaryType],
+        primary: ["var(--font-jakarta)", fontPrimaryType],
         secondary: ["var(--font-secondary)", fontSecondaryType],
       },
     },
