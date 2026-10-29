@@ -1,4 +1,5 @@
 ---
+import ContactDrawer from "@/components/ContactDrawer.astro";
 import "@/styles/images.css";
 import "@/styles/imported-home.css";
 import { AstroFont } from "astro-font";
@@ -34,5 +35,6 @@ const { dark = false, title = "Mehedi Sharif — Founder & Builder", description
  updateLabel();
  button?.addEventListener('click',()=>{ const dark=document.documentElement.classList.toggle('dark'); try {localStorage.setItem('theme',dark?'dark':'light');} catch {} updateLabel(); window.dispatchEvent(new Event('resize')); });
 </script>
+<ContactDrawer />
 </body>
 </html>

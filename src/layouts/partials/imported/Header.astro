@@ -1,18 +1,51 @@
 ---
-const homePrefix = Astro.url.pathname === "/" || Astro.url.pathname === "/dark" || Astro.url.pathname === "/dark/" ? "" : "/";
-const isBlog = (Astro.url.pathname.startsWith("/blog") || Astro.url.pathname.startsWith("/posts/"));
+import "@/styles/navigation-tailwind.css";
+const homePrefix = ["/", "/dark", "/dark/"].includes(Astro.url.pathname) ? "" : "/";
+const isBlog = Astro.url.pathname.startsWith("/blog") || Astro.url.pathname.startsWith("/posts/");
+const links = [{label:"Home",href:homePrefix+"#top"},{label:"About",href:homePrefix+"#about"},{label:"Values",href:homePrefix+"#values"},{label:"Businesses",href:homePrefix+"#purpose"},{label:"For fun",href:homePrefix+"#for-fun"},{label:"Blog",href:"/blog"}];
 ---
-<header class="topbar">
-  <nav class="mnav" aria-label="Main">
-    <a href={homePrefix + "#top"} class="logo" aria-label="Mehedi Sharif, home"><img src="/images/logo-light.svg" width="160" height="37" alt="" /></a>
-    <div class="section-links">
-      <a class="ml" href={homePrefix + "#top"}>Home</a>
-      <a class="ml" href={homePrefix + "#about"}>About</a>
-      <a class="ml" href={homePrefix + "#values"}>Values</a>
-      <a class="ml" href={homePrefix + "#purpose"}>Businesses</a>
-      <a class="ml" href={homePrefix + "#for-fun"}>For fun</a>
-      <a class:list={["ml", { "current": isBlog }]} aria-current={isBlog ? "page" : undefined} href="/blog">Blog</a>
+<header class="site-navigation tw:fixed tw:inset-x-0 tw:top-0 tw:z-30 tw:flex tw:justify-center tw:px-3 tw:pointer-events-none">
+  <nav class="tw:pointer-events-auto tw:w-full tw:max-w-lg tw:rounded-b-lg tw:border tw:border-t-0 tw:p-2 tw:shadow-lg tw:lg:w-auto tw:lg:max-w-none" aria-label="Main">
+    <div class="tw:flex tw:items-center tw:gap-2 tw:lg:gap-4">
+      <a href={homePrefix+"#top"} class="tw:flex tw:min-h-11 tw:items-center tw:px-1 tw:lg:px-2 tw:shrink-0" aria-label="Mehedi Sharif, home"><img src="/images/logo-light.svg" width="160" height="37" class="tw:block tw:w-28 tw:h-auto tw:sm:w-36 tw:lg:w-40" alt="" /></a>
+      <div class="tw:hidden tw:lg:flex tw:items-center tw:gap-1">
+        {links.map(link => <a class="nav-item tw:inline-flex tw:min-h-11 tw:items-center tw:rounded tw:px-3 tw:text-sm tw:font-medium tw:whitespace-nowrap" href={link.href} aria-current={link.label === "Blog" && isBlog ? "page" : undefined}>{link.label}</a>)}
+      </div>
+      <a class="contact-link tw:ml-auto tw:inline-flex tw:min-h-11 tw:items-center tw:justify-center tw:rounded tw:px-3 tw:sm:px-5 tw:text-sm tw:font-medium tw:no-underline" href="/contact" aria-haspopup="dialog" aria-controls="contact-drawer">Contact</a>
+      <button class="menu-toggle tw:inline-flex tw:h-11 tw:w-11 tw:shrink-0 tw:items-center tw:justify-center tw:rounded tw:border tw:cursor-pointer tw:lg:hidden" type="button" aria-expanded="false" aria-controls="mobile-navigation" aria-label="Open menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path class="menu-open-icon" d="M4 6h16M4 12h16M4 18h16"/><path class="menu-close-icon" d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
     </div>
-    <a class="mc" href={homePrefix + "#connect"}>Contact</a>
+    <div id="mobile-navigation" class="tw:hidden tw:grid-cols-2 tw:gap-1 tw:pt-2 tw:lg:hidden">
+      {links.map(link => <a class="nav-item tw:flex tw:min-h-11 tw:items-center tw:rounded tw:px-3 tw:text-sm tw:font-medium" href={link.href} aria-current={link.label === "Blog" && isBlog ? "page" : undefined}>{link.label}</a>)}
+    </div>
   </nav>
 </header>
+<style>
+.site-navigation { font-family:Inter,system-ui,sans-serif;line-height:1.35; }
+.site-navigation nav { background:#030407;border-color:#2A2F22; }
+.site-navigation .nav-item { color:#ECEDE4;text-decoration:none; }
+.site-navigation .nav-item:hover,.site-navigation .nav-item[aria-current="page"] { color:#D4FF24;background:#12170C; }
+.site-navigation .contact-link { background:#D4FF24;color:#030407; }
+.site-navigation .contact-link:hover { background:#E2FF6B; }
+.menu-toggle { color:#ECEDE4;background:transparent;border-color:#2A2F22; }
+.menu-close-icon { display:none; }
+.menu-toggle[aria-expanded="true"] .menu-open-icon { display:none; }
+.menu-toggle[aria-expanded="true"] .menu-close-icon { display:block; }
+</style>
+<script>
+ const header = document.querySelector<HTMLElement>('.site-navigation');
+ const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
+ const panel = header?.querySelector<HTMLElement>('#mobile-navigation');
+ function setOpen(open:boolean) {
+   toggle?.setAttribute('aria-expanded',String(open));
+   toggle?.setAttribute('aria-label',open?'Close menu':'Open menu');
+   panel?.classList.toggle('tw:hidden',!open);
+   panel?.classList.toggle('tw:grid',open);
+ }
+ toggle?.addEventListener('click',()=>setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+ header?.addEventListener('click',event=>{if(event.target instanceof Element && event.target.closest('a')) setOpen(false);});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape' && toggle?.getAttribute('aria-expanded')==='true'){setOpen(false);toggle.focus();}});
+ document.addEventListener('click',event=>{if(event.target instanceof Node && !header?.contains(event.target))setOpen(false);});
+ matchMedia('(min-width:1024px)').addEventListener('change',()=>setOpen(false));
+</script>

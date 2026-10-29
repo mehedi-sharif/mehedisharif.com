@@ -1,26 +1,7 @@
 ---
 import ImportedHome from "@/layouts/ImportedHome.astro";
 import Hero from "@/partials/imported/Hero.astro";
-import ContactForm from "@/helpers/ContactForm";
-import "@/styles/contact.css";
 ---
 <ImportedHome title="Contact — Mehedi Sharif" description="Have a project or an idea? Get in touch with Mehedi Sharif." canonical="https://mehedisharif.com/contact">
-  <div aria-hidden="true" inert><Hero /></div>
-  <dialog class="contact-panel" aria-labelledby="contact-heading">
-    <a class="contact-close" href="/#connect" aria-label="Close contact form">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.5" /></svg>
-    </a>
-    <div class="contact-panel-content">
-      <h1 id="contact-heading">Let’s work<br />together.</h1>
-      <ContactForm client:load />
-    </div>
-  </dialog>
+  <Hero />
 </ImportedHome>
-<script>
-  const dialog = document.querySelector<HTMLDialogElement>('.contact-panel');
-  if (dialog && !dialog.open) dialog.showModal();
-  dialog?.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    window.location.assign('/#connect');
-  });
-</script>

@@ -17,6 +17,8 @@ class Component extends DCLogic {
     this.build();
     this.onResize = () => this.resize();
     window.addEventListener('resize', this.onResize);
+    this.observer = new ResizeObserver(this.onResize);
+    this.observer.observe(this.cv);
     this.resize();
     const tick = (now) => {
       const dt = Math.min((now - this.last) / 1000, 0.05); this.last = now;
@@ -28,6 +30,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     cancelAnimationFrame(this.raf);
     window.removeEventListener('resize', this.onResize);
+    this.observer?.disconnect();
   }
   tex(m, u, v) {
     const N = 32, x = u * N, y = (1 - v) * N;

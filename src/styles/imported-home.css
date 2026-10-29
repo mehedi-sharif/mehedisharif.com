@@ -72,7 +72,7 @@ a{color:var(--ink)}a:hover{color:var(--accent-text)}
 .mnav{padding:6px}
 .mnav a.mc{padding:10px 16px}
 .btn{min-height:48px}
-footer{flex-direction:column;align-items:flex-start !important}
+
 }
 
 /* Accent controls keep dark text in both themes. */
@@ -132,3 +132,28 @@ html { scroll-behavior:smooth; }
 .theme-sun { background:#D4FF24;color:#030407; }
 .dark .theme-sun { background:transparent;color:var(--muted); }
 .dark .theme-moon { background:#D4FF24;color:#030407; }
+
+/* Scale the terrain with wide viewports instead of holding it at 440px. */
+@media(min-width:1440px) {
+ .hero-banner { --terrain-height:clamp(440px,30.56vw,900px);min-height:calc(400px + var(--terrain-height)) !important; }
+ .hero-banner .hero-hills { height:var(--terrain-height) !important; }
+}
+
+/* Let shorter mobile/tablet copy determine the terrain position. */
+@media(max-width:900px) {
+ #top.hero-banner { min-height:0 !important; }
+ #top.hero-banner > .hero-hills {
+  position:relative !important;
+  flex:none;
+  height:300px !important;
+  margin-top:-64px;
+ }
+}
+
+/* The compact Tailwind navigation uses one row until expanded. */
+body:has(.site-navigation) { padding-top:62px; }
+html:has(.site-navigation) { scroll-padding-top:88px; }
+
+.site-footer { color:var(--muted); }
+.site-footer .footer-signature { display:block; width:130px; height:auto; }
+.site-footer .soc { flex-shrink:0; min-width:44px; min-height:44px; }

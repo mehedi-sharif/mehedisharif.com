@@ -5,7 +5,7 @@ html:has(.contact-panel[open]) { overflow:hidden; }
   height:calc(100dvh - 16px); max-height:none;
   border:0; border-radius:24px; padding:0;
   background:var(--page); color:var(--ink);
-  font-family:Inter,sans-serif; overflow-y:auto; overscroll-behavior:contain;
+  font-family:Inter,system-ui,sans-serif; overflow-y:auto; overscroll-behavior:contain;
   box-shadow:0 16px 60px rgb(0 0 0 / 15%);
 }
 .contact-panel::backdrop { background:rgb(0 0 0 / 48%); backdrop-filter:blur(12px); }
@@ -16,7 +16,7 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 }
 .contact-close:hover { background:var(--surface); }
 .contact-panel-content { padding:100px 28px 24px; }
-.contact-panel h1 { font:500 36px/1.18 Inter,sans-serif; letter-spacing:-.05em; margin:0 0 36px; }
+.contact-panel h2 { font:500 52px/1 'Cormorant Garamond',Georgia,serif; letter-spacing:-.01em; margin:0 0 36px; }
 .contact-form { display:flex; flex-direction:column; gap:24px; }
 .contact-field { display:flex; flex-direction:column; gap:10px; }
 .contact-field label { font-size:13px; line-height:1.4; }
@@ -29,7 +29,7 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 .contact-field textarea { resize:vertical; min-height:150px; }
 .contact-field input::placeholder,.contact-field textarea::placeholder { color:var(--muted); opacity:.85; }
 .contact-field input:focus,.contact-field textarea:focus { outline:2px solid var(--accent-text); outline-offset:2px; }
-.contact-submit { display:flex; align-items:center; justify-content:space-between; min-height:52px; border:0; border-radius:10px; padding:14px 18px; background:#D4FF24; color:#030407; font:500 15px/1.4 Inter,sans-serif; cursor:pointer; }
+.contact-submit { display:flex; align-items:center; justify-content:space-between; min-height:52px; border:0; border-radius:10px; padding:14px 18px; background:#D4FF24; color:#030407; font:500 16px/1.4 Inter,system-ui,sans-serif; cursor:pointer; }
 .contact-submit:hover { background:#E2FF6B; }
 .contact-submit:disabled { opacity:.6; cursor:wait; }
 .contact-status { margin:0; font-size:14px; line-height:1.5; }
@@ -39,10 +39,19 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 @media (max-width:540px) {
   .contact-panel { border-radius:20px; }
   .contact-panel-content { padding:92px 22px 24px; }
-  .contact-panel h1 { font-size:32px; margin-bottom:30px; }
+  .contact-panel h2 { font-size:44px; margin-bottom:30px; }
   .contact-close { top:20px; right:20px; }
 }
 @media (prefers-reduced-motion:no-preference) {
   .contact-panel[open] { animation:contact-enter .35s ease-out; }
+  .contact-panel[open].is-closing { animation:contact-exit .3s cubic-bezier(.4,0,1,1) both; }
+  .contact-panel[open].is-closing::backdrop { animation:contact-backdrop-exit .3s ease-out both; }
+  @keyframes contact-exit { to { opacity:0; transform:translateX(calc(100% + 16px)); } }
+  @keyframes contact-backdrop-exit { to { background:rgb(0 0 0 / 0%); backdrop-filter:blur(0); } }
   @keyframes contact-enter { from { opacity:0; transform:translateX(36px); } to { opacity:1; transform:translateX(0); } }
 }
+
+.contact-close { cursor:pointer; }
+/* Keep the drawer themed on legacy content pages as well as the new layout. */
+.contact-panel { --page:#FAFAF7;--ink:#030407;--rule:#DCDFD3;--surface:#F1F3EA;--muted:#55594E;--accent-text:#4D5E00; }
+.dark .contact-panel { --page:#030407;--ink:#ECEDE4;--rule:#23271C;--surface:#12170C;--muted:#9EA192;--accent-text:#D4FF24; }
