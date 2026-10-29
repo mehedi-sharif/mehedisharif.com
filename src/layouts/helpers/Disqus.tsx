@@ -3,10 +3,12 @@ import { DiscussionEmbed } from "disqus-react";
 import React from "react";
 
 const Disqus = ({ className }: { className?: string }) => {
-  const { disqus } = config;
+  const { disqus } = config as typeof config & {
+    disqus?: { enable: boolean; shortname: string; settings: React.ComponentProps<typeof DiscussionEmbed>["config"] };
+  };
   return (
-    <div class={className}>
-      {disqus.enable && (
+    <div className={className}>
+      {disqus?.enable && (
         <DiscussionEmbed
           shortname={disqus.shortname}
           config={disqus.settings}

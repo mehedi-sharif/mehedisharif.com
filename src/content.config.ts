@@ -1,7 +1,17 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { glob } from "astro/loaders";
+
+const loader = (name: string) =>
+  glob({
+    base: `./src/content/${name}`,
+    pattern: "**/*.{md,mdx}",
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, ""),
+  });
 
 // Post collection schema
 const blogCollection = defineCollection({
+  loader: loader("posts"),
   schema: z.object({
     title: z.string(),
     meta_title: z.string().optional(),
@@ -15,31 +25,9 @@ const blogCollection = defineCollection({
   }),
 });
 
-// Author collection schema
-const authorsCollection = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    meta_title: z.string().optional(),
-    email: z.string().optional(),
-    image: z.string().optional(),
-    description: z.string().optional(),
-    social: z
-      .array(
-        z
-          .object({
-            name: z.string().optional(),
-            icon: z.string().optional(),
-            link: z.string().optional(),
-          })
-          .optional(),
-      )
-      .optional(),
-    draft: z.boolean().optional(),
-  }),
-});
-
 // Pages collection schema
 const pagesCollection = defineCollection({
+  loader: loader("pages"),
   schema: z.object({
     title: z.string(),
     meta_title: z.string().optional(),
@@ -51,8 +39,9 @@ const pagesCollection = defineCollection({
 
 // Export collections
 export const collections = {
-  blog: blogCollection,
   posts: blogCollection,
-  authors: authorsCollection,
   pages: pagesCollection,
+  homepage: defineCollection({ loader: loader("homepage") }),
+  contact: defineCollection({ loader: loader("contact") }),
+  sections: defineCollection({ loader: loader("sections") }),
 };

@@ -30,3 +30,6 @@ dist-cloudflare/
 .wrangler/
 .dev.vars*
 .env.*.local
+
+# TypeScript incremental cache
+*.tsbuildinfo

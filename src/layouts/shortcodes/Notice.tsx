@@ -9,8 +9,8 @@ function Notice({
   children: React.ReactNode;
 }) {
   return (
-    <div class={`notice ${type}`}>
-      <div class="notice-head">
+    <div className={`notice ${type}`}>
+      <div className="notice-head">
         {type === "tip" ? (
           <svg
             width="20"
@@ -75,9 +75,9 @@ function Notice({
             />
           </svg>
         )}
-        <p class="my-0 ml-1.5">{humanize(type)}</p>
+        <p className="my-0 ml-1.5">{humanize(type)}</p>
       </div>
-      <div class="notice-body">{children}</div>
+      <div className="notice-body">{children}</div>
     </div>
   );
 }

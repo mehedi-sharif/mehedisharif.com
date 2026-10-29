@@ -1,4 +1,5 @@
 ---
+import { render } from "astro:content";
 import { getSinglePage } from "@/lib/contentParser.astro";
 import ImageMod from "./components/ImageMod.astro";
 
@@ -6,15 +7,21 @@ const COLLECTION_FOLDER = "posts";
 const { post } = Astro.props;
 
 const posts = await getSinglePage(COLLECTION_FOLDER);
-const { Content } = await post.render();
-const { title, description, author, categories = [], image, date, tags } = post.data;
+const { Content } = await render(post);
+const {
+  title,
+  description,
+  author,
+  categories = [],
+  image,
+  date,
+  tags,
+} = post.data;
 ---
 
 <section class="section">
   <div class="container mx-auto">
-    <div
-      class="rounded-xl bg-gray-100 px-3 pt-14 pb-32 text-center dark:bg-darkmode-theme-dark sm:px-8 md:px-14 md:pb-40 md:pt-20 lg:px-20"
-    >
+    <div class="rounded-xl bg-gray-100 px-3 pt-14 pb-32 text-center dark:bg-darkmode-theme-dark sm:px-8 md:px-14 md:pb-40 md:pt-20 lg:px-20">
       <!-- <div class="mb-6 flex items-center justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -33,72 +40,68 @@ const { title, description, author, categories = [], image, date, tags } = post.
       </div> -->
       <h1 class="text-base font-bold md:text-h1">{title}</h1>
     </div>
-    <div
-      class="z-10 mx-auto -mt-20 w-[95%] rounded-md border border-gray-100 bg-white px-3 py-0 dark:border-darkmode-border dark:bg-darkmode-body sm:w-4/5 md:p-10 lg:p-16"
-    >
+    <div class="z-10 mx-auto -mt-20 w-[95%] rounded-md border border-gray-100 bg-white px-3 py-0 dark:border-darkmode-border dark:bg-darkmode-body sm:w-4/5 md:p-10 lg:p-16">
       {image && <ImageMod src={image} height={713} width={950} alt={title} />}
       <div class="content mb-16 text-left">
         <Content />
       </div>
 
       <div class="border-border-default mt-10 hidden border-t pt-10">
-        {
-          categories.map((category: any) => (
-            <a href={`/categories/${category}`} class="mr-4">
-              {category}
-            </a>
-          ))
-        }
+        {categories.map((category: any) => (
+          <a href={`/categories/${category}`} class="mr-4">
+            {category}
+          </a>
+        ))}
       </div>
     </div>
 
     <div
-      class={post.length < 1
-        ? "flex justify-center pt-12 text-center"
-        : "flex justify-start pt-12 text-center"}
-    >
-      {
-        posts.map((v: any, key: number) => (
-          <a
-            href={`/posts/${v.slug}`}
-            class={
-              post.length == 1
-                ? "w-full text-center"
-                : key == 0
-                  ? "w-1/2 text-right"
-                  : key == 1
-                    ? "w-1/2 text-left"
-                    : undefined
-            }
-          >
-            <div class="mx-4">
-              {v.button == "Previous Post" ? (
-                <h4
-                  class={
-                    post.length == 1
-                      ? "flex items-center justify-center text-base font-bold"
-                      : "flex items-center justify-end text-base font-bold"
-                  }
-                >
-                  <span class="mr-4">{v.arrow}</span> {v.button}
-                </h4>
-              ) : (
-                <h4
-                  class={
-                    post.length == 1
-                      ? "flex items-center justify-center text-base font-bold"
-                      : "flex items-center justify-start text-base font-bold"
-                  }
-                >
-                  {v.button} <span class="ml-4">{v.arrow}</span>
-                </h4>
-              )}
-
-              <small class="text-lg font-normal">{v.title}</small>
-            </div>
-          </a>
-        ))
+      class={
+        post.length < 1
+          ? "flex justify-center pt-12 text-center"
+          : "flex justify-start pt-12 text-center"
       }
+    >
+      {posts.map((v: any, key: number) => (
+        <a
+          href={`/posts/${v.id}`}
+          class={
+            post.length == 1
+              ? "w-full text-center"
+              : key == 0
+                ? "w-1/2 text-right"
+                : key == 1
+                  ? "w-1/2 text-left"
+                  : undefined
+          }
+        >
+          <div class="mx-4">
+            {v.button == "Previous Post" ? (
+              <h4
+                class={
+                  post.length == 1
+                    ? "flex items-center justify-center text-base font-bold"
+                    : "flex items-center justify-end text-base font-bold"
+                }
+              >
+                <span class="mr-4">{v.arrow}</span> {v.button}
+              </h4>
+            ) : (
+              <h4
+                class={
+                  post.length == 1
+                    ? "flex items-center justify-center text-base font-bold"
+                    : "flex items-center justify-start text-base font-bold"
+                }
+              >
+                {v.button} <span class="ml-4">{v.arrow}</span>
+              </h4>
+            )}
+
+            <small class="text-lg font-normal">{v.title}</small>
+          </div>
+        </a>
+      ))}
     </div>
   </div>
 </section>

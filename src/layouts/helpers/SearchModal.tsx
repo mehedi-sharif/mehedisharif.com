@@ -1,8 +1,7 @@
-import searchData from ".json/search.json";
 import React, { useEffect, useState } from "react";
 import SearchResult, { type ISearchItem } from "./SearchResult";
 
-const SearchModal = () => {
+const SearchModal = ({ searchData }: { searchData: ISearchItem[] }) => {
   const [searchString, setSearchString] = useState("");
 
   // handle input change
@@ -123,22 +122,22 @@ const SearchModal = () => {
   }, [searchString]);
 
   return (
-    <div id="searchModal" class="search-modal">
-      <div id="searchModalOverlay" class="search-modal-overlay" />
-      <div class="search-wrapper">
-        <div class="search-wrapper-header">
+    <div id="searchModal" className="search-modal">
+      <div id="searchModalOverlay" className="search-modal-overlay" />
+      <div className="search-wrapper">
+        <div className="search-wrapper-header">
           <label
             htmlFor="searchInput"
-            class="absolute left-7 top-[calc(50%-7px)]"
+            className="absolute left-7 top-[calc(50%-7px)]"
           >
-            <span class="sr-only">search icon</span>
+            <span className="sr-only">search icon</span>
             {searchString ? (
               <svg
                 onClick={() => setSearchString("")}
                 viewBox="0 0 512 512"
                 height="18"
                 width="18"
-                class="hover:text-red-500 cursor-pointer -mt-0.5"
+                className="hover:text-red-500 cursor-pointer -mt-0.5"
               >
                 <title>close icon</title>
                 <path
@@ -151,7 +150,7 @@ const SearchModal = () => {
                 viewBox="0 0 512 512"
                 height="18"
                 width="18"
-                class="-mt-0.5"
+                className="-mt-0.5"
               >
                 <title>search icon</title>
                 <path
@@ -164,7 +163,7 @@ const SearchModal = () => {
           <input
             id="searchInput"
             placeholder="Search..."
-            class="search-wrapper-header-input"
+            className="search-wrapper-header-input"
             type="input"
             name="search"
             value={searchString}
@@ -173,8 +172,8 @@ const SearchModal = () => {
           />
         </div>
         <SearchResult searchResult={searchResult} searchString={searchString} />
-        <div class="search-wrapper-footer">
-          <span class="flex items-center">
+        <div className="search-wrapper-footer">
+          <span className="flex items-center">
             <kbd>
               <svg
                 width="14"
@@ -197,7 +196,7 @@ const SearchModal = () => {
             </kbd>
             to navigate
           </span>
-          <span class="flex items-center">
+          <span className="flex items-center">
             <kbd>
               <svg
                 width="12"

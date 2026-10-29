@@ -12,11 +12,11 @@ const Accordion = ({
   const [show, setShow] = useState(false);
 
   return (
-    <div class={`accordion ${show && "active"} ${className}`}>
-      <button class="accordion-header" onClick={() => setShow(!show)}>
+    <div className={`accordion ${show && "active"} ${className}`}>
+      <button className="accordion-header" onClick={() => setShow(!show)}>
         {title}
         <svg
-          class="accordion-icon"
+          className="accordion-icon"
           x="0px"
           y="0px"
           viewBox="0 0 512 512"
@@ -28,7 +28,7 @@ const Accordion = ({
           ></path>
         </svg>
       </button>
-      <div class="accordion-content">{children}</div>
+      <div className="accordion-content">{children}</div>
     </div>
   );
 };

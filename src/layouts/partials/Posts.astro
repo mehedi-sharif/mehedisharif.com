@@ -39,7 +39,7 @@ const posts = await getSinglePage(BLOG_FOLDER);
       posts.map((post) => (
         <div class="post-card group mt-9">
           <a
-            href={`/posts/${post.slug}`}
+            href={`/posts/${post.id}`}
             class="flex flex-wrap items-center justify-between p-6 md:px-8 lg:px-12"
           >
             <div class="basis-full lg:mr-10 lg:basis-1/6">

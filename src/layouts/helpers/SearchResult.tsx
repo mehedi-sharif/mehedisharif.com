@@ -88,7 +88,7 @@ const SearchResult = ({
     const parts = text?.split(new RegExp(`(${substring})`, "gi"));
     return parts?.map((part, index) =>
       part.toLowerCase() === substring.toLowerCase() ? (
-        <span key={index} class="underline">
+        <span key={index} className="underline">
           {part}
         </span>
       ) : (
@@ -127,13 +127,13 @@ const SearchResult = ({
   };
 
   return (
-    <div class="search-wrapper-body">
+    <div className="search-wrapper-body">
       {searchString ? (
-        <div class="search-result">
+        <div className="search-result">
           {finalResult.length > 0 ? (
             finalResult.map((result) => (
-              <div class="search-result-group" key={result.group}>
-                <p class="search-result-group-title">
+              <div className="search-result-group" key={result.group}>
+                <p className="search-result-group-title">
                   {titleify(result.group)}
                 </p>
 
@@ -141,25 +141,25 @@ const SearchResult = ({
                   <div
                     key={item.slug}
                     id="searchItem"
-                    class="search-result-item"
+                    className="search-result-item"
                   >
                     {item.frontmatter.image && (
-                      <div class="search-result-item-image">
+                      <div className="search-result-item-image">
                         <img
                           src={item.frontmatter.image}
                           alt={item.frontmatter.title}
                         />
                       </div>
                     )}
-                    <div class="search-result-item-body">
+                    <div className="search-result-item-body">
                       <a
                         href={`/${item.slug}`}
-                        class="search-result-item-title search-result-item-link"
+                        className="search-result-item-title search-result-item-link"
                       >
                         {matchUnderline(item.frontmatter.title, searchString)}
                       </a>
                       {item.frontmatter.description && (
-                        <p class="search-result-item-description">
+                        <p className="search-result-item-description">
                           {matchUnderline(
                             item.frontmatter.description,
                             searchString,
@@ -167,13 +167,13 @@ const SearchResult = ({
                         </p>
                       )}
                       {item.content && (
-                        <p class="search-result-item-content">
+                        <p className="search-result-item-content">
                           {matchContent(item.content, searchString)}
                         </p>
                       )}
-                      <div class="search-result-item-taxonomies">
+                      <div className="search-result-item-taxonomies">
                         {item.frontmatter.categories && (
-                          <div class="mr-2">
+                          <div className="mr-2">
                             <svg
                               width="14"
                               height="14"
@@ -196,7 +196,7 @@ const SearchResult = ({
                           </div>
                         )}
                         {item.frontmatter.tags && (
-                          <div class="mr-2">
+                          <div className="mr-2">
                             <svg
                               width="14"
                               height="14"
@@ -223,9 +223,9 @@ const SearchResult = ({
               </div>
             ))
           ) : (
-            <div class="search-result-empty">
+            <div className="search-result-empty">
               <svg
-                class="mx-auto"
+                className="mx-auto"
                 width="42"
                 height="42"
                 viewBox="0 0 47 47"
@@ -244,14 +244,14 @@ const SearchResult = ({
                   strokeLinecap="round"
                 ></path>
               </svg>
-              <p class="mt-4">
+              <p className="mt-4">
                 No results for &quot;<strong>{searchString}</strong>&quot;
               </p>
             </div>
           )}
         </div>
       ) : (
-        <div class="py-8 text-center">Type something to search...</div>
+        <div className="py-8 text-center">Type something to search...</div>
       )}
     </div>
   );

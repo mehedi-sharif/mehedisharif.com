@@ -2,7 +2,7 @@
 
 Build command: `npm run build:cloudflare`
 Output directory: `dist-cloudflare`
-Node.js: 22
+Node.js: 24 (set `NODE_VERSION=24` in Pages build settings)
 Production branch after migration: `main`
 
 The separate Astro config builds the homepage, blog, categories, contact, privacy policy, and 404 page as static HTML. No Pages Functions or backend secrets are required. The timeline, email verifier, their API routes, and database dependencies have been removed. Existing database data is not modified.

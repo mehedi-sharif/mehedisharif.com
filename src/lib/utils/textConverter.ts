@@ -8,7 +8,7 @@ export const slugify = (content: string) => {
 
 // markdownify
 export const markdownify = (content: string, div?: boolean) => {
-  return div ? marked.parse(content) : marked.parseInline(content);
+  return div ? marked.parse(content, { async: false }) : marked.parseInline(content, { async: false });
 };
 
 // humanize
@@ -32,8 +32,8 @@ export const titleify = (content: string) => {
 };
 
 // plainify
-export const plainify = (content: string) => {
-  const parseMarkdown: any = marked.parse(content);
+export const plainify = (content: string = "") => {
+  const parseMarkdown: any = marked.parse(content, { async: false });
   const filterBrackets = parseMarkdown.replace(/<\/?[^>]+(>|$)/gm, "");
   const filterSpaces = filterBrackets.replace(/[\r\n]\s*[\r\n]/gm, "");
   const stripHTML = htmlEntityDecoder(filterSpaces);

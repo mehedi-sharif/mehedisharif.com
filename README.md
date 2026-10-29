@@ -1,29 +1,36 @@
 # Mehedi Sharif
 
-Astro website with Tailwind CSS. The homepage recreates the supplied personal website design using native Astro components and locally hosted assets.
+Personal website built with Astro 7, Tailwind CSS 4, React 19, and TypeScript 6.
+
+TypeScript is held at 6.0.3 because the Netlify adapter’s dependency parser still requires the JavaScript compiler API removed in TypeScript 7.
 
 ## Development
 
+Use Node.js 24 (`nvm use`) and npm 11.
+
 ```sh
-npm install
+npm ci
 npm run dev
+# Check TypeScript
+npm run typecheck
 ```
 
 ## Production
 
 ```sh
 npm run build
-npm run preview
+npm run build:cloudflare
 ```
 
-The homepage, blog, categories, contact, and privacy policy are retained. The timeline and email verifier have been removed. Cloudflare Pages uses a static build with no backend secrets; see `CLOUDFLARE.md`.
+The default build targets Netlify. Cloudflare Pages uses static HTML in `dist-cloudflare`; see [CLOUDFLARE.md](CLOUDFLARE.md). The homepage, posts, categories, contact, privacy policy, and 404 page are retained. The contact form uses FormSubmit. No database or backend secrets are required.
 
-## Homepage
+## Homepage and styling
 
-- `src/pages/index.astro` composes the homepage.
-- `src/components/personal/` contains navigation, hero, about, values, purpose, personal life, contact, and footer components.
-- `src/layouts/Personal.astro` provides homepage metadata and shared styles.
-- `src/styles/personal.css` contains the design typography, shared styles, and responsive overrides; layouts use Tailwind utilities.
-- `public/images/personal/` contains the extracted artwork, portrait, Archivo font, and its original license notice.
+- `src/pages/index.astro` composes the restored original design with current personal content.
+- `src/layouts/partials/` contains the hero, about/ventures/values, posts, and contact sections.
+- `src/data/homepage.json` contains the ventures and values.
+- `src/content/` contains Markdown content, loaded through `src/content.config.ts`.
+- `src/styles/main.css` uses Tailwind 4 via its Vite plugin, with the existing JSON theme wired through `tailwind.config.js`.
+- Sass and the legacy Astro Tailwind integration are no longer required.
 
-The original HTML is retained as a design reference. Its personal biography, leisure photos/copy, email address, and social handle placeholders still need real content before publishing. The mobile navigation supports toggle, anchor navigation, and Escape to close.
+The previous black-and-lime website is preserved on the `v1` Git branch. Its unused components and original HTML remain available as references.

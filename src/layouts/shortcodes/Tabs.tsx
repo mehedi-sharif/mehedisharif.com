@@ -1,15 +1,14 @@
 import { marked } from "marked";
 import React, { useEffect, useRef, useState } from "react";
 
-const Tabs = ({ children }: { children: React.ReactElement }) => {
+const Tabs = ({ children }: { children: React.ReactElement<{ value: string }> }) => {
   const [active, setActive] = useState<number>(0);
   const [defaultFocus, setDefaultFocus] = useState<boolean>(false);
 
-  const tabRefs: React.RefObject<HTMLElement[]> = useRef([]);
+  const tabRefs = useRef<(HTMLLIElement | null)[]>([]);
   useEffect(() => {
     if (defaultFocus) {
-      //@ts-ignore
-      tabRefs.current[active]?.focus();
+        tabRefs.current[active]?.focus();
     } else {
       setDefaultFocus(true);
     }
@@ -36,19 +35,18 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
   };
 
   return (
-    <div class="tab">
-      <ul class="tab-nav">
+    <div className="tab">
+      <ul className="tab-nav">
         {tabLinks.map(
           (item: { name: string; children: string }, index: number) => (
             <li
               key={index}
-              class={`tab-nav-item ${index === active && "active"}`}
+              className={`tab-nav-item ${index === active && "active"}`}
               role="tab"
               tabIndex={index === active ? 0 : -1}
               onKeyDown={(event) => handleKeyDown(event, index)}
               onClick={() => setActive(index)}
-              //@ts-ignore
-              ref={(ref) => (tabRefs.current[index] = ref)}
+                        ref={(ref) => { tabRefs.current[index] = ref; }}
             >
               {item.name}
             </li>
@@ -57,10 +55,10 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
       </ul>
       {tabLinks.map((item: { name: string; children: string }, i: number) => (
         <div
-          class={active === i ? "tab-content block px-5" : "hidden"}
+          className={active === i ? "tab-content block px-5" : "hidden"}
           key={i}
           dangerouslySetInnerHTML={{
-            __html: marked.parse(item.children),
+            __html: marked.parse(item.children, { async: false }),
           }}
         />
       ))}

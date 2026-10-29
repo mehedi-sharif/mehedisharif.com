@@ -20,7 +20,6 @@ if (theme.fonts.font_family.secondary) {
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
-  safelist: [{ pattern: /^swiper-/ }],
   darkMode: "class",
   theme: {
     screens: {
@@ -72,24 +71,10 @@ module.exports = {
         h6: h6 + "rem",
       },
       fontFamily: {
-        primary: ["var(--font-primary)", fontPrimaryType],
+        primary: ["var(--font-inter)", fontPrimaryType],
         secondary: ["var(--font-secondary)", fontSecondaryType],
       },
     },
   },
-  plugins: [
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/forms"),
-    require("tailwind-bootstrap-grid")({
-      generateContainer: false,
-      gridGutterWidth: "2rem",
-      gridGutters: {
-        1: "0.25rem",
-        2: "0.5rem",
-        3: "1rem",
-        4: "1.5rem",
-        5: "3rem",
-      },
-    }),
-  ],
+  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
 };
