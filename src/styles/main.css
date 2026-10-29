@@ -315,52 +315,15 @@
     stroke-dashoffset: -64px;
   }
   .btn {
-    @apply relative inline-block rounded-lg border-2 border-primary bg-transparent px-5 py-3 text-sm dark:border-white;
-    transition: color 0s;
+    @apply inline-block rounded border border-primary bg-transparent px-5 py-3 text-sm text-primary dark:border-white dark:text-white;
+    transition: background-color 150ms, color 150ms;
   }
-  .btn::after,
-  .btn::before {
-    content: "";
-    @apply absolute border-2 border-black bg-white dark:border-white dark:bg-primary;
-    border-radius: 4px;
-    height: 12px;
-    width: 12px;
-    top: calc(50% - 6px);
-    pointer-events: none;
-    transition:
-      background 0.1s 0.2s,
-      top 0.1s 0.2s,
-      height 0.1s 0.2s,
-      width 0.2s;
-  }
-  .btn::before {
-    left: -7px;
-  }
-  .btn::after {
-    right: -7px;
-  }
-  .btn:active,
-  .btn:focus,
   .btn:hover {
-    @apply text-white dark:text-primary;
-    transition: color 0.25s 0.2s;
+    @apply bg-primary text-white dark:bg-white dark:text-primary;
   }
-  .btn:active::before,
-  .btn:active::after,
-  .btn:focus::before,
-  .btn:focus::after,
-  .btn:hover::before,
-  .btn:hover::after {
-    @apply bg-primary dark:bg-white;
-    z-index: -1;
-    height: 46px;
-    width: 57%;
-    top: calc(50% - 24px);
-    transition:
-      background 0s,
-      top 0.1s,
-      height 0.1s,
-      width 0.25s 0.2s;
+  .btn:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
   }
   .btn-effect-0 {
     @apply relative inline-block rounded-md border-2 border-primary bg-transparent px-5 py-3 text-sm dark:border-white;

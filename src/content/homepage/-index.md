@@ -1,6 +1,5 @@
 ---
 banner:
-  title: "Hi, I’m **Mehedi_Sharif**"
   image: "/images/author.png"
   image_light: "/images/author-light.png"
   bio: "I build products, and the businesses around them."
