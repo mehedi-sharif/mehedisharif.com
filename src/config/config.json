@@ -5,8 +5,8 @@
     "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
-    "logo": "/images/logo-dark.png",
-    "logo_darkmode": "/images/logo-light.png",
+    "logo": "/images/logo-dark.svg",
+    "logo_darkmode": "/images/logo-light.svg",
     "logo_width": "217",
     "logo_height": "50",
     "logo_text": "Mehedi Sharif"
