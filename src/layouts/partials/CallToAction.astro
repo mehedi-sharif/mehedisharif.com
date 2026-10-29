@@ -1,5 +1,4 @@
 ---
-import Divider from "@/components/Divider.astro";
 import ScrollAnimationSection from "@/helpers/ScrollAnimationSection";
 import { markdownify } from "@/lib/utils/textConverter";
 import { getEntry } from "astro:content";
@@ -11,7 +10,6 @@ const { enable, title, description, button } = CTA.data;
   enable && (
     <section class="relative mx-auto max-w-[1460px]">
       <div class="container">
-        <Divider />
         <div class="section mx-auto overflow-hidden text-center md:w-[75%] lg:w-[80%] xl:w-[62%] 2xl:w-[58%]">
           <div class="before:content[' '] after:content[' '] relative mb-8 inline-flex items-center justify-center before:absolute before:left-full before:top-1/2 before:mx-4 before:bg-black before:px-8  before:py-px after:absolute after:right-full after:top-1/2 after:mx-4 after:bg-black after:px-8 after:py-px dark:before:bg-white dark:after:bg-white">
             <h2
