@@ -1,24 +1,14 @@
 ---
-import Personal from "../layouts/Personal.astro";
-import Navigation from "../components/personal/Navigation.astro";
-import Hero from "../components/personal/Hero.astro";
-import About from "../components/personal/About.astro";
-import Values from "../components/personal/Values.astro";
-import Purpose from "../components/personal/Purpose.astro";
-import PersonalLife from "../components/personal/PersonalLife.astro";
-import Connect from "../components/personal/Connect.astro";
-import Footer from "../components/personal/Footer.astro";
+import Base from "@/layouts/Base.astro";
+import HeroSection from "@/partials/HeroSection.astro";
+import HomeStory from "@/partials/HomeStory.astro";
+import Posts from "@/partials/Posts.astro";
+import CallToAction from "@/partials/CallToAction.astro";
 ---
 
-<Personal>
-  <Navigation />
-  <main id="main-content">
-    <Hero />
-    <About />
-    <Values />
-    <Purpose />
-    <PersonalLife />
-    <Connect />
-  </main>
-  <Footer />
-</Personal>
+<Base title="Mehedi Sharif — Founder & Developer" description="Founder and developer based in Bangladesh. Building GHL MegaMinds, Themefisher, UIHut, Zeon Studio, and SitePins." canonical="https://mehedisharif.com/">
+  <HeroSection />
+  <HomeStory />
+  <Posts />
+  <CallToAction />
+</Base>

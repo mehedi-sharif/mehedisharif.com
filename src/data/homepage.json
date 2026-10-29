@@ -1,0 +1,72 @@
+{
+  "values": [
+    {
+      "title": "Seeking Jannah (Heaven)",
+      "description": "Faith in the Creator and the afterlife guides me. Remembering death keeps my priorities clear. “Every soul shall taste death.”"
+    },
+    {
+      "title": "Workaholic",
+      "description": "Time disappears when I’m building something meaningful. Work is my flow state, especially when it makes an impact."
+    },
+    {
+      "title": "Minimalism",
+      "description": "Simple living, staying down to earth, and being present matter to me. So do quiet moments."
+    },
+    {
+      "title": "Active listener",
+      "description": "Listening to and sharing stories energize my soul. I mentor others weekly and learn from my own mentors and coaches."
+    },
+    {
+      "title": "Believe in connection",
+      "description": "My net worth is in the people in my phonebook."
+    },
+    {
+      "title": "Monk life",
+      "description": "Inside, I picture myself as a monk in white, with a bald head, quietly observing nature."
+    },
+    {
+      "title": "Growth mindset",
+      "description": "Life feels empty when I stop learning. Sometimes I wish I had a second brain to hold it all."
+    },
+    {
+      "title": "Guardian of my galaxy",
+      "description": "I have a son, a daughter, and an amazing family. They are my galaxy."
+    },
+    {
+      "title": "ENFP personality",
+      "description": "Search “ENFP.” You’ll get a good picture of me."
+    }
+  ],
+  "ventures": [
+    {
+      "period": "● Now",
+      "name": "GHL MegaMinds",
+      "description": "My newest venture, and where most of my time goes. As a GoHighLevel Certified Admin, I lead a team helping agencies and business owners connect their marketing, sales, and follow-up.",
+      "url": null
+    },
+    {
+      "period": "2015 — Present",
+      "name": "Themefisher",
+      "description": "I started this website-template business alone, handling design, development, and sales. It taught me how to find customers, grow a team, and build a business beyond the code.",
+      "url": "https://themefisher.com/about"
+    },
+    {
+      "period": "2024 — Acquired",
+      "name": "UIHut",
+      "description": "UIHut helps designers and developers create faster with ready-to-use design resources. I acquired the business, adding a different chapter to my journey—not everything has to start from scratch.",
+      "url": "https://uihut.com/"
+    },
+    {
+      "period": "2022 — Present",
+      "name": "Zeon Studio",
+      "description": "My team and I design and build websites for other businesses. This is where we bring our experience from building our own products into client projects.",
+      "url": "https://zeon.studio/about"
+    },
+    {
+      "period": "2025 — Present",
+      "name": "SitePins",
+      "description": "We built SitePins to solve our own problem: updating website content without depending on developers. Now it helps other teams manage their content without touching code.",
+      "url": "https://sitepins.com/about"
+    }
+  ]
+}
