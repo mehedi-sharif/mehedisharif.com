@@ -1,107 +1,50 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import config from "@/config/config.json";
-const { formsubmit_endpoint } = config.bio;
 
 const ContactForm: React.FC = () => {
-	const [submitted, setSubmitted] = useState<boolean | null>(null);
-	const [loader, setLoader] = useState(false);
-
-	const fullNameRef = useRef<HTMLInputElement>(null);
-	const emailRef = useRef<HTMLInputElement>(null);
-	const messageRef = useRef<HTMLTextAreaElement>(null);
-
-	const formHandler = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-
-		const fullName = fullNameRef.current?.value.trim();
-		const email = emailRef.current?.value.trim();
-		const message = messageRef.current?.value.trim();
-
-		// Basic validation
-		if (!fullName || !email || !message) {
-			setSubmitted(false);
-			setLoader(false);
-			return;
-		}
-
-		setLoader(true);
-
-		fetch(`https://formsubmit.co/ajax/${formsubmit_endpoint}`, {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				_subject: "Message From Personal Website",
-				name: fullName,
-				email: email,
-				message: message,
-			}),
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				setSubmitted(data.success);
-				setLoader(false);
-				setTimeout(() => {
-					setSubmitted(null);
-				}, 4000);
-				e.currentTarget.reset();
-			})
-			.catch((error) => {
-				setSubmitted(error);
-				setLoader(false);
-			});
-	};
-
-	return (
-		<>
-			<form
-				className="text-base sm:text-h4"
-				method="POST"
-				onSubmit={formHandler}
-			>
-				<div className="form-inputs mb-16">
-					<span>Hi, My Name is</span>{" "}
-					<input
-						type="text"
-						id="full_name"
-						name="full_name"
-						ref={fullNameRef}
-						className="leading-0 w-full max-w-[300px] border-0 border-b border-black p-0 text-base focus:border-black focus:ring-0 dark:border-white dark:bg-transparent sm:text-h4"
-						placeholder="type here"
-					/>
-					<span>Here is my Email Address </span>{" "}
-					<input
-						type="email"
-						id="email"
-						name="email"
-						ref={emailRef}
-						className="leading-0 w-full max-w-[500px] border-0 border-b border-black p-0 text-base focus:border-black focus:ring-0 dark:border-white dark:bg-transparent sm:text-h3"
-						placeholder="type here"
-					/>{" "}
-					<span>I would love to get in touch with you.....</span>
-				</div>
-				<textarea
-					className="mb-12 w-full rounded-lg border-black p-4 text-base focus:border-black focus:ring-0 dark:border-white dark:bg-transparent"
-					rows={5}
-					id="message"
-					name="message"
-					ref={messageRef}
-					placeholder="Let’s make something awesome together......"
-				></textarea>
-				<button className="btn" type="submit" disabled={loader}>
-					{loader ? "Submitting.." : "Submit Now"}
-				</button>
-			</form>
-			{submitted !== null && (
-				<p
-					className={`mt-6 text-base ${submitted ? "text-green-400" : "text-red-400"}`}
-				>
-					{submitted
-						? "Message Submitted Successfully!"
-						: "Something went wrong! Please try again."}
-				</p>
-			)}
-		</>
-	);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const formHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const fields = new FormData(form);
+    const name = String(fields.get("full_name") || "").trim();
+    const email = String(fields.get("email") || "").trim();
+    const message = String(fields.get("message") || "").trim();
+    if (!name || !email || !message) { setStatus("error"); return; }
+    setStatus("sending");
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${config.bio.formsubmit_endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ _subject: "Message From Personal Website", name, email, message }),
+      });
+      const result = await response.json();
+      if (!response.ok || !(result.success === true || result.success === "true")) throw new Error("Submission failed");
+      form.reset();
+      setStatus("success");
+    } catch { setStatus("error"); }
+  };
+  return (
+    <form className="contact-form" method="POST" onSubmit={formHandler} aria-busy={status === "sending"}>
+      <div className="contact-field">
+        <label htmlFor="full_name">Name</label>
+        <input id="full_name" name="full_name" type="text" autoComplete="name" placeholder="Your full name" required />
+      </div>
+      <div className="contact-field">
+        <label htmlFor="email">Email</label>
+        <input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" required />
+      </div>
+      <div className="contact-field">
+        <label htmlFor="message">Message</label>
+        <textarea id="message" name="message" rows={6} placeholder="Tell me about your project, idea, or what’s on your mind…" required />
+      </div>
+      <button className="contact-submit" type="submit" disabled={status === "sending"}>
+        {status === "sending" ? "Sending…" : "Get in touch"}<span aria-hidden="true">↗</span>
+      </button>
+      <p className={`contact-status ${status}`} role="status" aria-live="polite">
+        {status === "success" ? "Thanks! Your message has been sent." : status === "error" ? "Your message couldn’t be sent. Please check the fields and try again." : ""}
+      </p>
+    </form>
+  );
 };
-
 export default ContactForm;

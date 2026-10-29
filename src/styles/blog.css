@@ -1,0 +1,28 @@
+/* Blog layout imported from the supplied desktop and mobile design. */
+.blog-page { min-height:calc(100svh - 170px); }
+.blog-page .blog-heading { display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;padding-top:120px;padding-bottom:64px; }
+.blog-heading h1 { margin:0;font-size:clamp(64px,8vw,120px);line-height:.95; }
+.blog-heading p { max-width:46ch;margin:0;font-size:20px;line-height:1.5;color:var(--muted); }
+.blog-page .blog-list { padding-bottom:120px; }
+.blog-list-inner { max-width:1120px;margin:0 auto; }
+.blog-row { display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;padding:28px 0;border-top:1px solid var(--rule);align-items:baseline;text-decoration:none;color:var(--ink); }
+.blog-row:last-of-type { border-bottom:1px solid var(--rule); }
+.blog-date { grid-column:1 / span 2;font-size:13px;color:var(--muted); }
+.blog-row h2 { grid-column:3 / span 6;margin:0;font-size:30px;line-height:1.15;overflow-wrap:anywhere;transition:color .2s; }
+.blog-category { grid-column:9 / span 2;font-size:11px;font-weight:600;line-height:1.4;letter-spacing:.12em;text-transform:uppercase;overflow-wrap:anywhere; }
+.blog-reading { grid-column:11 / span 2;text-align:right;font-size:13px;color:var(--muted); }
+.blog-arrow { display:inline-block;transition:transform .2s; }
+.blog-row:hover h2 { color:var(--accent-text); }
+.blog-row:hover .blog-arrow { transform:translateX(4px); }
+.blog-pagination { display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:40px; }
+.blog-pagination .btn { border:1px solid var(--rule);color:var(--ink); }
+.mnav a.ml.current { color:#D4FF24; }
+@media(max-width:900px) {
+ .blog-page .blog-heading { padding-top:72px; }
+ .blog-heading h1 { font-size:56px; }
+ .blog-row { row-gap:8px; }
+ .blog-row > * { grid-column:1 / -1 !important;text-align:left; }
+ .blog-date:empty { display:none; }
+ .blog-page .blog-list { padding-bottom:80px; }
+}
+@media(prefers-reduced-motion:reduce) { .blog-row h2,.blog-arrow { transition:none; } }

@@ -1,0 +1,38 @@
+---
+import ImportedHome from "@/layouts/ImportedHome.astro";
+import type { CollectionEntry } from "astro:content";
+import "@/styles/blog.css";
+interface Props { posts: CollectionEntry<"posts">[]; currentPage: number; totalPages: number; }
+const { posts, currentPage, totalPages } = Astro.props;
+const pageURL = (page: number) => page === 1 ? "/blog" : `/blog/page/${page}`;
+const readingTime = (body: string | undefined) => {
+  const words = (body || "").trim().split(/\s+/).filter(Boolean).length;
+  return words ? `${Math.max(1, Math.ceil(words / 200))} min read` : "";
+};
+---
+<ImportedHome title="Blog — Mehedi Sharif" description="Writing on business, building products, GoHighLevel and life." canonical={`https://mehedisharif.com${pageURL(currentPage)}`}>
+  <div class="blog-page">
+    <section id="blog-top" class="wrap blog-heading">
+      <span class="tag">Blog</span>
+      <h1 class="d">Notes from building.</h1>
+      <p>Writing on business, building products, GoHighLevel and life.</p>
+    </section>
+    <section class="wrap blog-list" aria-label="Blog posts">
+      <div class="blog-list-inner">
+        {posts.map(post => (
+          <a class="blog-row" href={`/posts/${post.id}`}>
+            <span class="blog-date">{post.data.date && <time datetime={post.data.date.toISOString()}>{post.data.date.toLocaleDateString("en-US", {month:"long",day:"numeric",year:"numeric",timeZone:"UTC"})}</time>}</span>
+            <h2 class="d">{post.data.title}</h2>
+            <span class="blog-category">{post.data.categories.join(", ")}</span>
+            <span class="blog-reading">{readingTime(post.body)} <span class="blog-arrow" aria-hidden="true">→</span></span>
+          </a>
+        ))}
+        {posts.length === 0 && <p>No posts yet. Check back soon.</p>}
+        {totalPages > 1 && <nav class="blog-pagination" aria-label="Blog pagination">
+          {currentPage > 1 && <a class="btn" href={pageURL(currentPage - 1)}>← Newer posts</a>}
+          {currentPage < totalPages && <a class="btn" href={pageURL(currentPage + 1)}>Older posts →</a>}
+        </nav>}
+      </div>
+    </section>
+  </div>
+</ImportedHome>

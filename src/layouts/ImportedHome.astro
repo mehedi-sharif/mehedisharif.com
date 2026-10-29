@@ -4,16 +4,16 @@ import "@/styles/imported-home.css";
 import { AstroFont } from "astro-font";
 import Header from "@/partials/imported/Header.astro";
 import Footer from "@/partials/imported/Footer.astro";
-const { dark = false } = Astro.props;
+const { dark = false, title = "Mehedi Sharif — Founder & Builder", description = "Mehedi Sharif — founder of Themefisher, Zeon Studio, SitePins and GHL MegaMinds.", canonical = "https://mehedisharif.com/" } = Astro.props;
 ---
 <!doctype html>
 <html lang="en" class:list={{dark}}>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mehedi Sharif — Founder &amp; Builder</title>
-<meta name="description" content="Mehedi Sharif — founder of Themefisher, Zeon Studio, SitePins and GHL MegaMinds." />
-<link rel="canonical" href="https://mehedisharif.com/" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
 <link rel="icon" href="/images/favicon.png" />
 <AstroFont config={[
  {src:[],preload:true,display:"swap",name:"Inter",fallback:"sans-serif",googleFontsURL:"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"},
@@ -30,7 +30,7 @@ const { dark = false } = Astro.props;
 <script src="/scripts/imported-hill.js" is:inline defer></script>
 <script>
  const button=document.querySelector<HTMLButtonElement>('.theme-toggle');
- function updateLabel(){ if(button) { const dark=document.documentElement.classList.contains('dark'); button.textContent=dark?'Light mode':'Dark mode'; button.setAttribute('aria-pressed',String(dark)); } }
+ function updateLabel(){ if(button) { const dark=document.documentElement.classList.contains('dark'); button.setAttribute('aria-checked',String(dark)); button.title=dark?'Switch to light mode':'Switch to dark mode'; } }
  updateLabel();
  button?.addEventListener('click',()=>{ const dark=document.documentElement.classList.toggle('dark'); try {localStorage.setItem('theme',dark?'dark':'light');} catch {} updateLabel(); window.dispatchEvent(new Event('resize')); });
 </script>
