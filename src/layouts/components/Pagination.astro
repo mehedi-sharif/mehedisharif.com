@@ -46,7 +46,6 @@ for (let i = 1; i <= totalPages; i++) {
   {
     hasNextPage ? (
       <a
-        href={`/posts/page/${currentPage + 1}`}
         href={`${section ? "/" + section : ""}/page/${currentPage + 1}`}
         class="border-border-default block border-l py-4 px-5 text-center dark:border-darkmode-border"
       >

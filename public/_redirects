@@ -1,0 +1,3 @@
+/posts /blog 301
+/posts/ /blog 301
+/posts/page/* /blog/page/:splat 301

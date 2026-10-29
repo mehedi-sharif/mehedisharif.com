@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import ImageMod from "@/components/ImageMod.astro";
 import Pagination from "@/components/Pagination.astro";
 import config from "@/config/config.json";
@@ -12,11 +13,32 @@ import { BsArrowRight } from "react-icons/bs";
 
 const BLOG_FOLDER = "posts";
 
+const { slug } = Astro.params;
 const postIndex = await getEntry(BLOG_FOLDER, "-index");
 const posts = await getSinglePage(BLOG_FOLDER);
+
 const sortedPosts = sortByDate(posts);
-const totalPages: number = Math.ceil(posts.length / config.settings.pagination);
-const currentPosts = sortedPosts.slice(0, config.settings.pagination);
+const totalPages = Math.ceil(posts.length / config.settings.pagination);
+const currentPage = slug && !isNaN(Number(slug)) ? Number(slug) : 1;
+const indexOfLastPost = currentPage * config.settings.pagination;
+const indexOfFirstPost = indexOfLastPost - config.settings.pagination;
+const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+export async function getStaticPaths() {
+  const BLOG_FOLDER = "posts";
+  const posts = await getSinglePage(BLOG_FOLDER);
+  const totalPages = Math.ceil(posts.length / config.settings.pagination);
+  const paths = [];
+
+  for (let i = 1; i < totalPages; i++) {
+    paths.push({
+      params: {
+        slug: (i + 1).toString(),
+      },
+    });
+  }
+  return paths;
+}
 ---
 
 <Base {...postIndex.data}>
@@ -25,7 +47,7 @@ const currentPosts = sortedPosts.slice(0, config.settings.pagination);
       {
         postIndex && (
           <div class="flex items-center pb-2">
-            <h2
+            <h1
               class="section-title"
               set:html={markdownify(postIndex.data.title)}
             />
@@ -73,6 +95,10 @@ const currentPosts = sortedPosts.slice(0, config.settings.pagination);
       }
     </div>
 
-    <Pagination section={BLOG_FOLDER} currentPage={1} totalPages={totalPages} />
+    <Pagination
+      section="blog"
+      currentPage={currentPage}
+      totalPages={totalPages}
+    />
   </section>
 </Base>
