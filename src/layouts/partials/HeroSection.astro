@@ -1,75 +1,53 @@
 ---
 import HillBackground from "@/components/HillBackground.astro";
-import ImageMod from "@/components/ImageMod.astro";
 import { getEntry } from "astro:content";
 
 const heroBanner = await getEntry("homepage", "-index");
-const { image, bio } = heroBanner?.data?.banner;
+const { bio } = heroBanner?.data?.banner;
 ---
 
-<section class="section banner relative isolate pb-0">
-  <HillBackground />
-  <div class="container relative z-10">
-    <div
-      class="mb-16 grid grid-cols-1 items-center text-center md:grid-cols-2 md:text-left"
-    >
-      <div class="hero-copy relative mt-12 md:mt-0">
-        <h1
-          class="order-last md:order-first"
-        >
-          {bio}
-        </h1>
-        <p class="type-lead mt-6 max-w-2xl">I’m Mehedi, a founder and developer based in Bangladesh. I run a few companies, write code, and am now building GHL MegaMinds.</p>
-        <a class="btn mt-8" href="/contact">Get in touch</a>
-      </div>
-
-      <div
-        class="order-first flex w-full items-center justify-center md:order-last"
-      >
-        <div class="relative h-[279px] w-[252px]">
-          <ImageMod
-            class="block dark:hidden"
-            src="/images/author.png"
-            alt=""
-            width={252}
-            height={279}
-            format="webp"
-            loading="eager"
-          />
-          <ImageMod
-            class="hidden dark:block"
-            src="/images/author-light.png"
-            alt=""
-            width={252}
-            height={279}
-            format="webp"
-            loading="eager"
-          />
-          <ImageMod
-            class="absolute left-[15px] top-[15px] h-[216px] w-[216px] rounded-full object-cover object-center"
-            src={image}
-            alt="Mehedi Sharif"
-            width={504}
-            height={672}
-            format="webp"
-            loading="eager"
-          />
-        </div>
-      </div>
+<section class="banner relative isolate">
+  <div class="container relative z-10 text-center">
+    <div class="hero-copy mx-auto">
+      <h1>{bio}</h1>
+      <p class="type-lead mx-auto mt-6 max-w-2xl">I’m Mehedi, a founder and developer based in Bangladesh. I run a few companies, write code, and am now building GHL MegaMinds.</p>
+      <a class="btn mt-8" href="/contact">Get in touch</a>
     </div>
+  </div>
+  <div class="hero-hills" aria-hidden="true">
+    <HillBackground />
   </div>
 </section>
 
 <style>
-  .hero-copy::before {
-    content: "";
-    position: absolute;
-    inset: -2rem;
-    z-index: -1;
-    pointer-events: none;
-    background: radial-gradient(ellipse, rgba(255,255,255,.96) 25%, rgba(255,255,255,.8) 55%, transparent 74%);
+  .banner {
+    min-height: calc(100svh - 106px);
+    padding-top: clamp(20px, 4vh, 40px);
+    padding-bottom: 180px;
+    clip-path: inset(-100px -100vw 0);
   }
-  :global(.dark) .hero-copy::before {
-    background: radial-gradient(ellipse, rgba(16,23,37,.96) 25%, rgba(16,23,37,.8) 55%, transparent 74%);
+  .hero-copy { max-width: 1000px; }
+  .hero-copy h1, .hero-copy p {
+    text-shadow: 0 0 12px #fff, 0 0 24px #fff;
+  }
+  :global(.dark) .hero-copy h1, :global(.dark) .hero-copy p {
+    text-shadow: 0 0 12px #101725, 0 0 24px #101725;
+  }
+  .hero-copy .btn { background-color: var(--color-body, #fff); }
+  :global(.dark) .hero-copy .btn { background-color: var(--color-darkmode-body, #101725); }
+  .hero-copy .btn:hover { background-color: #000; }
+  :global(.dark) .hero-copy .btn:hover { background-color: #fff; }
+  .hero-hills {
+    position: absolute;
+    bottom: -120px;
+    left: 50%;
+    width: 100vw;
+    height: clamp(440px, 78svh, 740px);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  @media (max-width: 767px) {
+    .banner { padding-top: 16px; padding-bottom: 160px; }
+    .hero-hills { height: 380px; }
   }
 </style>
