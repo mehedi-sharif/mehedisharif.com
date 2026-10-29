@@ -1,8 +1,6 @@
 # Mehedi Sharif
 
-Personal website built with Astro 7, Tailwind CSS 4, React 19, and TypeScript 6.
-
-TypeScript is held at 6.0.3 because the Netlify adapter’s dependency parser still requires the JavaScript compiler API removed in TypeScript 7.
+Personal website built with Astro 7, Tailwind CSS 4, React 19, and TypeScript 7.
 
 ## Development
 
@@ -19,10 +17,10 @@ npm run typecheck
 
 ```sh
 npm run build
-npm run build:cloudflare
+npm run preview
 ```
 
-The default build targets Netlify. Cloudflare Pages uses static HTML in `dist-cloudflare`; see [CLOUDFLARE.md](CLOUDFLARE.md). The homepage, posts, categories, contact, privacy policy, and 404 page are retained. The contact form uses FormSubmit. No database or backend secrets are required.
+The default build targets Cloudflare Pages with static HTML in `dist-cloudflare`; see [CLOUDFLARE.md](CLOUDFLARE.md). The homepage, posts, categories, contact, privacy policy, and 404 page are retained. The contact form uses FormSubmit. No database or backend secrets are required.
 
 ## Homepage and styling
 

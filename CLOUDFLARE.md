@@ -1,19 +1,12 @@
-# Cloudflare Pages migration
+# Cloudflare Pages
 
-Build command: `npm run build:cloudflare`
-Output directory: `dist-cloudflare`
-Node.js: 24 (set `NODE_VERSION=24` in Pages build settings)
-Production branch after migration: `main`
+- Build command: `npm run build`
+- Output directory: `dist-cloudflare`
+- Node.js: 24 (set `NODE_VERSION=24` in Pages build settings)
+- Production branch: `main`
 
-The separate Astro config builds the homepage, blog, categories, contact, privacy policy, and 404 page as static HTML. No Pages Functions or backend secrets are required. The timeline, email verifier, their API routes, and database dependencies have been removed. Existing database data is not modified.
+The default Astro config builds the homepage, posts, categories, contact, privacy policy, and 404 page as static HTML. No server adapter, Pages Functions, database, or backend secrets are required. The contact form uses FormSubmit.
 
-The contact form retains its existing FormSubmit integration.
+Run `npm ci`, `npm run typecheck`, and `npm run build` before deployment. Run `npm run preview` to serve the generated site locally through Wrangler Pages. The `build:cloudflare` and `preview:cloudflare` scripts remain aliases for existing build settings.
 
-Run `npm run preview:cloudflare` to verify the built site. Before changing DNS, verify the Pages URL and retained pages. Keep the Netlify deployment available until successful cutover.
-
-Current web DNS (rollback reference):
-
-- Apex `mehedisharif.com`: A `104.198.14.52`, DNS only.
-- `www.mehedisharif.com`: CNAME `mehedisharif.netlify.app`, DNS only.
-
-Add both domains through Pages custom domains, then update only these web records. Keep mail and verification records unchanged.
+The project name and build directory are defined in `wrangler.jsonc`. Attach the apex and www domains through the Pages custom-domain settings. Keep mail and verification DNS records unchanged.

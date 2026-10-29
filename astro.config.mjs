@@ -1,5 +1,4 @@
 import mdx from "@astrojs/mdx";
-import netlify from "@astrojs/netlify";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@tailwindcss/vite";
@@ -12,8 +11,8 @@ import config from "./src/config/config.json";
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
-  adapter: netlify(),
+  output: "static",
+  outDir: "./dist-cloudflare",
   compressHTML: true,
   vite: { plugins: [tailwind()] },
   site: config.site.base_url ? config.site.base_url : "http://examplesite.com",
