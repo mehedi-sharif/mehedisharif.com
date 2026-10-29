@@ -1,29 +1,48 @@
 ---
-import { Image } from "astro:assets";
-import portrait from "../../../public/images/personal/banner-portrait.jpg";
+import ImageMod from "@/components/ImageMod.astro";
 import { getEntry } from "astro:content";
 
 const heroBanner = await getEntry("homepage", "-index");
-const { bio } = heroBanner?.data?.banner;
+const { image, image_light, bio } = heroBanner?.data?.banner;
 ---
 
 <section class="section banner pb-0">
   <div class="container">
-    <div class="mx-auto mb-16 flex max-w-3xl flex-col items-center text-center">
-      <Image
-        src={portrait}
-        alt="Mehedi Sharif seated in a lounge"
-        width={768}
-        format="webp"
-        loading="eager"
-        fetchpriority="high"
-        class="mb-10 aspect-square h-64 w-64 rounded-2xl object-cover object-center sm:h-80 sm:w-80"
-      />
-      <h1 class="text-[1.5rem] font-semibold md:text-h1 2xl:text-[2.4rem]">
-        {bio}
-      </h1>
-      <p class="mt-6 max-w-2xl">I’m Mehedi, a founder and developer based in Bangladesh. I run a few companies, write code, and am now building GHL MegaMinds.</p>
-      <a class="btn mt-8" href="/contact">Get in touch</a>
+    <div
+      class="mb-16 flex flex-col items-center text-center md:flex-row md:text-left"
+    >
+      <div class="mt-12 md:mt-0">
+        <h1
+          class="order-last text-[1.5rem] font-semibold md:order-first md:text-h1 2xl:text-[2.4rem]"
+        >
+          {bio}
+        </h1>
+        <p class="mt-6 max-w-2xl">I’m Mehedi, a founder and developer based in Bangladesh. I run a few companies, write code, and am now building GHL MegaMinds.</p>
+        <a class="btn mt-8" href="/contact">Get in touch</a>
+      </div>
+
+      <div
+        class="order-first mx-auto block w-1/2 text-center md:order-last md:w-[50%] lg:w-4/5 xl:w-[55%] 2xl:w-4/5"
+      >
+        <ImageMod
+          class="block dark:hidden"
+          src={image}
+          alt="author"
+          width={252}
+          height={279}
+          format="webp"
+          loading={"eager"}
+        />
+        <ImageMod
+          class="hidden dark:block"
+          src={image_light}
+          alt="author"
+          width={252}
+          height={279}
+          format="webp"
+          loading={"eager"}
+        />
+      </div>
     </div>
   </div>
 </section>
