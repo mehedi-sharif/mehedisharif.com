@@ -493,9 +493,9 @@
   }
 }
 @media (max-width: 359px) {
-  .signature-header-space { height: 140px; }
+  .signature-header-space { height: 84px; }
   .signature-nav {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
   }
 }
@@ -530,3 +530,21 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {
 @media (min-width: 768px) {
   body { font-size: 17px; }
 }
+
+@media (max-width: 767px) {
+  .signature-header-space { height: 84px; }
+}
+@media (max-width: 539px) {
+  .signature-header { padding-inline: 12px; }
+}
+@media (max-width: 359px) {
+  .signature-nav-brand img { width: 88px; }
+  .signature-nav-link { font-size: 12px; padding-inline: 8px; }
+}
+
+/* Match the imported homepage palette on existing blog and contact routes. */
+.signature-nav { background:#030407; border-color:#2A2F22; }
+.signature-nav-link { color:#ECEDE4; }
+.signature-nav-link:hover { background:#12170C; color:#D4FF24; }
+.signature-nav-contact { background:#D4FF24; color:#030407; }
+.signature-nav-contact:hover { background:#E2FF6B; color:#030407; }

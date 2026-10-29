@@ -1,12 +1,17 @@
 ---
-import Base from "@/layouts/Base.astro";
-import HeroSection from "@/partials/HeroSection.astro";
-import HomeStory from "@/partials/HomeStory.astro";
-import CallToAction from "@/partials/CallToAction.astro";
+import ImportedHome from "@/layouts/ImportedHome.astro";
+import Hero from "@/partials/imported/Hero.astro";
+import About from "@/partials/imported/About.astro";
+import Values from "@/partials/imported/Values.astro";
+import Purpose from "@/partials/imported/Purpose.astro";
+import ForFun from "@/partials/imported/ForFun.astro";
+import Connect from "@/partials/imported/Connect.astro";
 ---
-
-<Base title="Mehedi Sharif — Founder & Developer" description="Founder and developer based in Bangladesh. Building GHL MegaMinds, Themefisher, UIHut, Zeon Studio, and SitePins." canonical="https://mehedisharif.com/">
-  <HeroSection />
-  <HomeStory />
-  <CallToAction />
-</Base>
+<ImportedHome>
+  <Hero />
+  <About />
+  <Values />
+  <Purpose />
+  <ForFun />
+  <Connect />
+</ImportedHome>

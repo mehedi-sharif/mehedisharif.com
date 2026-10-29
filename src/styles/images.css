@@ -1,0 +1,8 @@
+/* Shared photo treatment for the homepage, blog, and content pages. */
+main img:not(.rounded-full),
+main .photo {
+  border-radius: 16px;
+}
+main .photo {
+  overflow: hidden;
+}

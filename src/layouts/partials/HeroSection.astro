@@ -47,7 +47,16 @@ const { bio } = heroBanner?.data?.banner;
     pointer-events: none;
   }
   @media (max-width: 767px) {
-    .banner { padding-top: 16px; padding-bottom: 160px; }
-    .hero-hills { height: 380px; }
+    .banner { min-height: auto; padding-top: 16px; padding-bottom: 0; }
+    .hero-copy { padding-inline: 12px; }
+    .hero-copy h1 { font-size: clamp(38px, 10.8vw, 56px); line-height: 1; }
+    .hero-copy .type-lead { font-size: 18px; line-height: 1.55; }
+    .hero-copy .btn { margin-top: 24px; }
+    .hero-hills { position: relative; bottom: auto; height: 300px; margin-top: -20px; }
+  }
+  @media (max-width: 359px) {
+    .hero-copy h1 { font-size: 36px; }
+    .hero-copy .type-lead { font-size: 17px; }
+    .hero-hills { height: 260px; }
   }
 </style>
