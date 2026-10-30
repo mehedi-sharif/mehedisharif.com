@@ -12,7 +12,10 @@
     "format": "prettier -w ./src",
     "build:cloudflare": "npm run build",
     "preview:cloudflare": "npm run preview",
-    "typecheck": "astro sync && tsc --noEmit"
+    "typecheck": "astro sync && tsc --noEmit",
+    "prebuild": "node scripts/optimize-images.mjs",
+    "predev": "node scripts/optimize-images.mjs",
+    "pretypecheck": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.5",

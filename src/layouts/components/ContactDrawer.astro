@@ -2,7 +2,7 @@
 import { getEntry } from "astro:content";
 const contact = (await getEntry("contact", "-index"))!.data;
 import SocialContactLinks from "@/components/SocialContactLinks.astro";
-import ContactForm from "@/helpers/ContactForm";
+import config from "@/config/config.json";
 import "@/styles/contact.css";
 ---
 
@@ -28,7 +28,14 @@ import "@/styles/contact.css";
       <br />
       {contact.title_second_line}
     </h2>
-    <ContactForm copy={contact.form} client:load />
+    <form class="contact-form" method="POST" action={`https://formsubmit.co/${config.bio.formsubmit_endpoint}`} data-endpoint={`https://formsubmit.co/ajax/${config.bio.formsubmit_endpoint}`} data-success={contact.form.success_message} data-error={contact.form.error_message} data-sending={contact.form.sending_label}>
+      <input type="hidden" name="_subject" value={contact.form.email_subject} />
+      <div class="contact-field"><label for="full_name">{contact.form.name_label}</label><input id="full_name" name="full_name" type="text" autocomplete="name" placeholder={contact.form.name_placeholder} required /></div>
+      <div class="contact-field"><label for="email">{contact.form.email_label}</label><input id="email" name="email" type="email" autocomplete="email" placeholder={contact.form.email_placeholder} required /></div>
+      <div class="contact-field"><label for="message">{contact.form.message_label}</label><textarea id="message" name="message" rows="6" placeholder={contact.form.message_placeholder} required /></div>
+      <button class="contact-submit" type="submit"><span data-submit-label>{contact.form.submit_label}</span><span aria-hidden="true">↗</span></button>
+      <p class="contact-status" role="status" aria-live="polite"></p>
+    </form>
     <div class="contact-socials">
       <SocialContactLinks />
     </div>
@@ -87,6 +94,35 @@ import "@/styles/contact.css";
     const drawer = getDrawer();
     if (!drawer || drawer.dataset.ready) return;
     drawer.dataset.ready = "true";
+    const form = drawer.querySelector<HTMLFormElement>('.contact-form');
+    form?.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (form.getAttribute('aria-busy') === 'true') return;
+      const button = form.querySelector<HTMLButtonElement>('[type="submit"]')!;
+      const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
+      const status = form.querySelector<HTMLElement>('.contact-status')!;
+      const originalLabel = label.textContent;
+      const fields = new FormData(form);
+      const name = String(fields.get('full_name') || '').trim();
+      const email = String(fields.get('email') || '').trim();
+      const message = String(fields.get('message') || '').trim();
+      if (!name || !email || !message) { status.textContent = form.dataset.error!; status.className = 'contact-status error'; return; }
+      button.disabled = true;
+      form.setAttribute('aria-busy','true');
+      label.textContent = form.dataset.sending!;
+      status.textContent = '';
+      try {
+        const response = await fetch(form.dataset.endpoint!, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({_subject:fields.get('_subject'),name,email,message}),
+          signal:AbortSignal.timeout(20000),
+        });
+        const result = await response.json();
+        if (!response.ok || !(result.success === true || result.success === 'true')) throw new Error('Submission failed');
+        form.reset(); status.textContent = form.dataset.success!; status.className = 'contact-status success';
+      } catch { status.textContent = form.dataset.error!; status.className = 'contact-status error'; }
+      finally { button.disabled = false; form.removeAttribute('aria-busy'); label.textContent = originalLabel; }
+    });
     drawer.addEventListener("cancel", (event) => {
       event.preventDefault();
       void closeDrawer();

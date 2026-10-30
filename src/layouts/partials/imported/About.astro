@@ -1,5 +1,6 @@
 ---
 import { marked } from "marked";
+import ContentImage from "@/components/ContentImage.astro";
 import { getEntry } from "astro:content";
 const { about } = (await getEntry("homepage", "-index"))!.data;
 ---
@@ -9,9 +10,9 @@ const { about } = (await getEntry("homepage", "-index"))!.data;
     <div class="wrap about-section">
       <div class="about-grid">
         <div class="portrait-frame">
-          <img
+          <ContentImage
             src={about.image}
-            loading="lazy"
+            sizes="(max-width: 480px) calc(100vw - 32px), 440px"
             width="724"
             height="1056"
             alt={about.image_alt}
@@ -77,7 +78,7 @@ const { about } = (await getEntry("homepage", "-index"))!.data;
     );
     mix-blend-mode: soft-light;
   }
-  .about-portrait {
+  :global(.about-portrait) {
     display: block;
     width: 100%;
     max-width: 440px;

@@ -33,3 +33,7 @@ dist-cloudflare/
 
 # TypeScript incremental cache
 *.tsbuildinfo
+
+# Generated responsive images; rebuilt from CMS originals.
+/public/images/optimized/
+/src/generated/

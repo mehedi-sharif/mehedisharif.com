@@ -1,0 +1,8 @@
+---
+import manifest from '../../generated/responsive-images.json';
+interface Props { src:string; alt:string; width?:number; height?:number; sizes:string; class?:string; }
+const {src,alt,width,height,sizes,class:className} = Astro.props;
+const images = manifest as Record<string,{src:string;srcset:string;width:number;height:number}>;
+const image = images[src];
+---
+<img src={image?.src || src} srcset={image?.srcset} sizes={sizes} alt={alt} width={image?.width || width} height={image?.height || height} class={className} loading="lazy" decoding="async" />
