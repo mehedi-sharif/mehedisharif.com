@@ -160,7 +160,7 @@ html { scroll-behavior:smooth; }
 body:has(.site-navigation) { padding-top:62px; }
 html:has(.site-navigation) { scroll-padding-top:88px; }
 
-.site-footer { color:var(--muted); }
+.site-footer { color:var(--muted); padding-block:32px; }
 .site-footer .footer-signature { display:block; width:130px; height:auto; }
 .site-footer .soc { flex-shrink:0; min-width:44px; min-height:44px; }
 
