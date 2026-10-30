@@ -1,4 +1,5 @@
 ---
+import SocialContactLinks from "@/components/SocialContactLinks.astro";
 import ContactForm from "@/helpers/ContactForm";
 import "@/styles/contact.css";
 ---
@@ -9,6 +10,7 @@ import "@/styles/contact.css";
   <div class="contact-panel-content">
     <h2 id="contact-heading">Let’s work<br />together.</h2>
     <ContactForm client:load />
+    <div class="contact-socials"><SocialContactLinks /></div>
   </div>
 </dialog>
 <script>
@@ -58,3 +60,5 @@ import "@/styles/contact.css";
   setup();
   document.addEventListener('astro:page-load', setup);
 </script>
+
+<style>.contact-socials { margin-top:32px;padding-top:24px;border-top:1px solid var(--rule); }</style>

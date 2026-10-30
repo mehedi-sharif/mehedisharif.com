@@ -19,7 +19,12 @@ const { dark = false, title = "Mehedi Sharif — Founder & Builder", description
 <link rel="preload" href="/fonts/cormorant-garamond-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/inter-normal.woff2" as="font" type="font/woff2" crossorigin />
 <script is:inline>
- try { const saved=localStorage.getItem('theme'); if(saved) document.documentElement.classList.toggle('dark',saved==='dark'); } catch {}
+ (() => {
+   let saved = null;
+   try { saved = localStorage.getItem('theme'); } catch {}
+   const dark = saved === 'dark' || (saved !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+   document.documentElement.classList.toggle('dark', dark);
+ })();
 </script>
 </head>
 <body>
@@ -31,6 +36,15 @@ const { dark = false, title = "Mehedi Sharif — Founder & Builder", description
  const button=document.querySelector<HTMLButtonElement>('.theme-toggle');
  function updateLabel(){ if(button) { const dark=document.documentElement.classList.contains('dark'); button.setAttribute('aria-checked',String(dark)); button.title=dark?'Switch to light mode':'Switch to dark mode'; } }
  updateLabel();
+ const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+ systemTheme.addEventListener('change', event => {
+   let saved = null;
+   try { saved = localStorage.getItem('theme'); } catch {}
+   if (saved === 'dark' || saved === 'light') return;
+   document.documentElement.classList.toggle('dark',event.matches);
+   updateLabel();
+   window.dispatchEvent(new Event('resize'));
+ });
  button?.addEventListener('click',()=>{ const dark=document.documentElement.classList.toggle('dark'); try {localStorage.setItem('theme',dark?'dark':'light');} catch {} updateLabel(); window.dispatchEvent(new Event('resize')); });
 </script>
 <ContactDrawer />

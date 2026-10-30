@@ -2,7 +2,7 @@
 import "@/styles/navigation-tailwind.css";
 const homePrefix = ["/", "/dark", "/dark/"].includes(Astro.url.pathname) ? "" : "/";
 const isBlog = Astro.url.pathname.startsWith("/blog") || Astro.url.pathname.startsWith("/posts/");
-const links = [{label:"Home",href:homePrefix+"#top"},{label:"About",href:homePrefix+"#about"},{label:"Values",href:homePrefix+"#values"},{label:"Businesses",href:homePrefix+"#purpose"},{label:"For fun",href:homePrefix+"#for-fun"},{label:"Blog",href:"/blog"}];
+const links = [{label:"Home",href:homePrefix+"#top"},{label:"About",href:homePrefix+"#about"},{label:"Businesses",href:homePrefix+"#purpose"},{label:"Values",href:homePrefix+"#values"},{label:"For fun",href:homePrefix+"#for-fun"},{label:"Blog",href:"/blog"}];
 ---
 <header class="site-navigation tw:fixed tw:inset-x-0 tw:top-0 tw:z-30 tw:flex tw:justify-center tw:px-3 tw:pointer-events-none">
   <nav class="tw:pointer-events-auto tw:w-full tw:max-w-lg tw:rounded-b-lg tw:border tw:border-t-0 tw:p-2 tw:shadow-lg tw:min-[800px]:w-auto tw:min-[800px]:max-w-none" aria-label="Main">

@@ -45,6 +45,14 @@ const { title, meta_title, description, image, noindex, canonical } =
 <!doctype html>
 <html lang="en">
   <head>
+<script is:inline>
+ (() => {
+   let saved = null;
+   try { saved = localStorage.getItem('theme'); } catch {}
+   const dark = saved === 'dark' || (saved !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+   document.documentElement.classList.toggle('dark', dark);
+ })();
+</script>
     <!-- favicon -->
     <link rel="shortcut icon" href={config.site.favicon} />
     <!-- theme meta -->
