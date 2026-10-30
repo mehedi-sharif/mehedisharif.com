@@ -133,10 +133,16 @@ html { scroll-behavior:smooth; }
 .dark .theme-sun { background:transparent;color:var(--muted); }
 .dark .theme-moon { background:#D4FF24;color:#030407; }
 
-/* Scale the terrain with wide viewports instead of holding it at 440px. */
-@media(min-width:1440px) {
- .hero-banner { --terrain-height:clamp(440px,30.56vw,900px);min-height:calc(400px + var(--terrain-height)) !important; }
- .hero-banner .hero-hills { height:var(--terrain-height) !important; }
+/* Fill desktop viewports and center the copy above the terrain. */
+@media(min-width:901px) {
+ #top.hero-banner { min-height:max(600px,calc(100svh - 62px)) !important; }
+ #top .hero-content {
+   flex:1;
+   align-content:center;
+   padding-top:40px !important;
+   padding-bottom:clamp(110px,18svh,280px);
+ }
+ #top .hero-hills { height:clamp(280px,46svh,760px) !important; }
 }
 
 /* Let shorter mobile/tablet copy determine the terrain position. */
@@ -168,4 +174,8 @@ html:has(.site-navigation) { scroll-padding-top:88px; }
   :is(#about,#values,#purpose,#for-fun,#connect) h2.d { font-weight:400; }
   #about .bio p { font-size:clamp(19px,.86vw,22px); }
   :is(#top,#connect) .lead { font-size:clamp(21px,1vw,24px); }
+}
+
+@media (min-width:901px) and (max-height:900px) {
+  #top .hero-hills { height:38svh !important; }
 }
