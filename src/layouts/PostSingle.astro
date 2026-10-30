@@ -1,64 +1,130 @@
 ---
-import { render } from "astro:content";
+import { render, getEntry } from "astro:content";
 import { getSinglePage } from "@/lib/contentParser.astro";
 import "@/styles/post.css";
+const blog = (await getEntry("posts", "-index"))!.data;
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
 const posts = await getSinglePage("posts");
-const index = posts.findIndex(p => p.id === post.id);
+const index = posts.findIndex((p) => p.id === post.id);
 const previous = posts[index - 1];
 const next = posts[index + 1];
-const { title, description, categories, image, tags, cover_placeholder, cover_caption } = post.data;
-const rawHeadings = [...(post.body || "").matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g)].map(m => ({slug:m[1],text:m[2].replace(/&amp;/g,"&")}));
-const toc = [...headings.filter(h => h.depth === 2), ...rawHeadings];
+const {
+  title,
+  description,
+  categories,
+  image,
+  tags,
+  cover_placeholder,
+  cover_caption,
+} = post.data;
+const rawHeadings = [
+  ...(post.body || "").matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g),
+].map((m) => ({ slug: m[1], text: m[2].replace(/&amp;/g, "&") }));
+const toc = [...headings.filter((h) => h.depth === 2), ...rawHeadings];
 ---
+
 <article id="post" class="post-layout">
   <header class="wrap posthead">
     <div class="post-heading-inner">
-      <a class="slink" href="/blog" style="align-self:center">← All posts</a>
+      <a class="slink" href="/blog" style="align-self:center">
+        {blog.all_posts_label}
+      </a>
       {categories?.[0] && <span class="tag">{categories[0]}</span>}
       <h1 class="d">{title}</h1>
       {description && <p class="lead muted">{description}</p>}
     </div>
   </header>
-  {(image || cover_placeholder) && <figure class="wrap post-cover">
-    {image ? <img src={image} alt={title} /> : <div class="media">{cover_placeholder}</div>}
-    {cover_caption && <figcaption class="lbl">{cover_caption}</figcaption>}
-  </figure>}
+  {(image || cover_placeholder) && (
+    <figure class="wrap post-cover">
+      {image ? (
+        <img src={image} alt={title} />
+      ) : (
+        <div class="media">{cover_placeholder}</div>
+      )}
+      {cover_caption && <figcaption class="lbl">{cover_caption}</figcaption>}
+    </figure>
+  )}
   <div class="wrap art">
-    {toc.length > 0 && <nav class="toc" aria-label="On this page"><span>On this page</span>{toc.map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav>}
-    <div class="prose"><Content /></div>
-    {tags?.length > 0 && <div class="post-tags">{tags.map(tag => <span class="ptag">{tag}</span>)}</div>}
-    {(previous || next) && <nav class="pnrow" aria-label="More posts">
-      {previous ? <a class="pn" href={`/posts/${previous.id}`}><span class="lbl">← Previous post</span><span class="d">{previous.data.title}</span></a> : <span />}
-      {next && <a class="pn next" href={`/posts/${next.id}`}><span class="lbl">Next post →</span><span class="d">{next.data.title}</span></a>}
-    </nav>}
+    {toc.length > 0 && (
+      <nav class="toc" aria-label="On this page">
+        <span>{blog.toc_label}</span>
+        {toc.map((h) => (
+          <a href={`#${h.slug}`}>{h.text}</a>
+        ))}
+      </nav>
+    )}
+    <div class="prose">
+      <Content />
+    </div>
+    {tags?.length > 0 && (
+      <div class="post-tags">
+        {tags.map((tag) => (
+          <span class="ptag">{tag}</span>
+        ))}
+      </div>
+    )}
+    {(previous || next) && (
+      <nav class="pnrow" aria-label="More posts">
+        {previous ? (
+          <a class="pn" href={`/posts/${previous.id}`}>
+            <span class="lbl">{blog.previous_label}</span>
+            <span class="d">{previous.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {next && (
+          <a class="pn next" href={`/posts/${next.id}`}>
+            <span class="lbl">{blog.next_label}</span>
+            <span class="d">{next.data.title}</span>
+          </a>
+        )}
+      </nav>
+    )}
   </div>
 </article>
 <script>
-  document.querySelectorAll<HTMLButtonElement>('.code .copy').forEach(button => {
-    button.addEventListener('click', async () => {
-      const pre = button.closest('.code')?.querySelector('pre');
-      if (!pre) return;
-      const lines = pre.querySelectorAll('.l');
-      const text = lines.length ? Array.from(lines, line => line.textContent).join('\n') : pre.textContent || '';
-      try {
-        await navigator.clipboard.writeText(text);
-        button.textContent = 'Copied';
-      } catch { button.textContent = 'Copy failed'; }
-      setTimeout(() => { button.textContent = 'Copy'; }, 2000);
-    });
-  });
-  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.toc a'));
-  const observer = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      links.forEach(link => {
-        const active = link.hash === '#' + entry.target.id;
-        link.classList.toggle('on', active);
-        if(active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
+  document
+    .querySelectorAll<HTMLButtonElement>(".code .copy")
+    .forEach((button) => {
+      button.addEventListener("click", async () => {
+        const pre = button.closest(".code")?.querySelector("pre");
+        if (!pre) return;
+        const lines = pre.querySelectorAll(".l");
+        const text = lines.length
+          ? Array.from(lines, (line) => line.textContent).join("\n")
+          : pre.textContent || "";
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = "Copied";
+        } catch {
+          button.textContent = "Copy failed";
+        }
+        setTimeout(() => {
+          button.textContent = "Copy";
+        }, 2000);
       });
-    }
-  }, { rootMargin: '-15% 0px -65% 0px' });
-  links.forEach(link => { const heading = document.getElementById(link.hash.slice(1)); if(heading) observer.observe(heading); });
+    });
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".toc a"),
+  );
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        links.forEach((link) => {
+          const active = link.hash === "#" + entry.target.id;
+          link.classList.toggle("on", active);
+          if (active) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      }
+    },
+    { rootMargin: "-15% 0px -65% 0px" },
+  );
+  links.forEach((link) => {
+    const heading = document.getElementById(link.hash.slice(1));
+    if (heading) observer.observe(heading);
+  });
 </script>

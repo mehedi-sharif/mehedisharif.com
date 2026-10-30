@@ -1,0 +1,5 @@
+{
+  "label": "Photo with caption",
+  "schema": ["posts"],
+  "code": "<figure><img src=\"/images/example.jpg\" alt=\"Describe the image\" /><figcaption>Photo caption and credit.</figcaption></figure>\n"
+}

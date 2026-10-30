@@ -1,5 +1,7 @@
 ---
 export const prerender = true;
+import { getEntry } from "astro:content";
+const site = (await getEntry("site", "-index"))!.data;
 import ImportedHome from "@/layouts/ImportedHome.astro";
 import PostSingle from "@/layouts/PostSingle.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
@@ -21,6 +23,9 @@ const { post } = Astro.props;
 const { title, meta_title, description, image } = post.data;
 ---
 
-<ImportedHome title={meta_title || `${title} — Mehedi Sharif`} description={description} canonical={`https://mehedisharif.com/posts/${post.id}`}>
+<ImportedHome
+  title={meta_title || `${title} — ${site.name}`}
+  description={description}
+>
   <PostSingle post={post} />
 </ImportedHome>

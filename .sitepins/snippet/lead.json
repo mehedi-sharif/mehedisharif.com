@@ -1,0 +1,5 @@
+{
+  "label": "Lead paragraph",
+  "schema": ["posts"],
+  "code": "<p class=\"leadp\">Opening paragraph.</p>\n"
+}

@@ -1,13 +1,45 @@
-<section id="connect" style="background: var(--surface); min-height: 808px; display: flex; flex-direction: column; justify-content: center">
-    <div class="wrap grid" style="width: 100%; row-gap: 40px; padding-top: 120px; padding-bottom: 48px">
-      <div class="sec-head" style="height: 34px"><span class="tag">Connect</span></div>
-      <div class="sec-body" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px">
-        <h2 class="d" style="margin: 0; font-size: clamp(64px, 9vw, 144px); line-height: 0.9">Let’s talk.</h2>
-        <p class="lead muted">Happy to hear about a project, an idea, or just say hello.</p>
-        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px"><a class="btn btn-lime" href="/contact" aria-haspopup="dialog" aria-controls="contact-drawer">Get in touch <span aria-hidden="true">→</span></a>
-          <span class="muted"><br></span>
+---
+import { getEntry } from "astro:content";
+const { connect } = (await getEntry("homepage", "-index"))!.data;
+---
+
+{connect.enable && (
+  <section
+    id="connect"
+    style="background: var(--surface); min-height: 808px; display: flex; flex-direction: column; justify-content: center"
+  >
+    <div
+      class="wrap grid"
+      style="width: 100%; row-gap: 40px; padding-top: 120px; padding-bottom: 48px"
+    >
+      <div class="sec-head" style="height: 34px">
+        <span class="tag">{connect.label}</span>
+      </div>
+      <div
+        class="sec-body"
+        style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px"
+      >
+        <h2
+          class="d"
+          style="margin: 0; font-size: clamp(64px, 9vw, 144px); line-height: 0.9"
+        >
+          {connect.title}
+        </h2>
+        <p class="lead muted">{connect.description}</p>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px">
+          <a
+            class="btn btn-lime"
+            href={connect.button.link}
+            aria-haspopup="dialog"
+            aria-controls="contact-drawer"
+          >
+            {connect.button.label} <span aria-hidden="true">→</span>
+          </a>
+          <span class="muted">
+            <br />
+          </span>
         </div>
       </div>
     </div>
-    
   </section>
+)}

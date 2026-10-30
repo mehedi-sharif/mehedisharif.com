@@ -1,26 +1,78 @@
 {
-  "file": "src/content/posts/-index.md",
+  "file": "src/content/posts/sample-post.md",
   "name": "posts",
   "fileType": "md",
   "fmType": "yaml",
   "template": [
     {
-      "label": "Title",
       "name": "title",
+      "label": "Title",
       "type": "string",
-      "value": ""
+      "value": "",
+      "isRequired": true
     },
     {
-      "label": "Meta Title",
-      "name": "meta_title",
-      "type": "string",
-      "value": ""
-    },
-    {
-      "label": "Description",
       "name": "description",
+      "label": "Description",
       "type": "string",
       "value": ""
+    },
+    {
+      "name": "author",
+      "label": "Author",
+      "type": "string",
+      "value": "Mehedi Sharif"
+    },
+    {
+      "name": "categories",
+      "label": "Categories",
+      "type": "Array",
+      "value": [],
+      "subType": "string"
+    },
+    {
+      "name": "tags",
+      "label": "Tags",
+      "type": "Array",
+      "value": [],
+      "subType": "string"
+    },
+    {
+      "name": "cover_placeholder",
+      "label": "Cover Placeholder",
+      "type": "string",
+      "value": ""
+    },
+    {
+      "name": "cover_caption",
+      "label": "Cover Caption",
+      "type": "string",
+      "value": ""
+    },
+    {
+      "name": "meta_title",
+      "label": "Meta Title",
+      "type": "string",
+      "value": ""
+    },
+    {
+      "name": "date",
+      "label": "Date",
+      "type": "Date",
+      "value": "2026-10-30T00:00:00.000Z",
+      "alwaysUseCurrentDate": true
+    },
+    {
+      "name": "image",
+      "label": "Image",
+      "type": "media",
+      "value": ""
+    },
+    {
+      "name": "draft",
+      "label": "Draft",
+      "type": "boolean",
+      "value": true
     }
   ]
 }

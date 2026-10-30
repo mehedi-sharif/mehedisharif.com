@@ -1,10 +1,55 @@
 {
-  "media": "public/images",
   "content": "src/content",
-  "arrangement": [],
-  "public": "public/",
-  "configs": [
-    "src/config"
-  ],
-  "customCommit": false
+  "media": "public/images",
+  "public": "public",
+  "configs": ["src/config"],
+  "custom-commit": false,
+  "arrangement": [
+    {
+      "id": "file-homepage",
+      "type": "file",
+      "targetPath": "src/content/homepage/-index.md",
+      "groupName": "Home \u2014 all sections"
+    },
+    {
+      "id": "file-site",
+      "type": "file",
+      "targetPath": "src/content/site/-index.md",
+      "groupName": "Navigation, social links & site identity"
+    },
+    {
+      "id": "file-contact",
+      "type": "file",
+      "targetPath": "src/content/contact/-index.md",
+      "groupName": "Contact drawer & form"
+    },
+    {
+      "id": "file-posts",
+      "type": "file",
+      "targetPath": "src/content/posts/-index.md",
+      "groupName": "Blog landing page"
+    },
+    {
+      "id": "folder-posts",
+      "type": "folder",
+      "targetPath": "src/content/posts",
+      "groupName": "Blog posts",
+      "include": "**/*.{md,mdx}",
+      "exclude": "-index.md"
+    },
+    {
+      "id": "folder-pages",
+      "type": "folder",
+      "targetPath": "src/content/pages",
+      "groupName": "Pages",
+      "include": "**/*.{md,mdx}",
+      "exclude": "-index.md"
+    },
+    {
+      "id": "cta",
+      "type": "file",
+      "targetPath": "src/content/sections/call-to-action.md",
+      "groupName": "Legacy call to action"
+    }
+  ]
 }

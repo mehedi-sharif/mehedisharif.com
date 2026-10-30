@@ -1,52 +1,98 @@
 ---
+import { getEntry } from "astro:content";
+import config from "@/config/config.json";
+const site = (await getEntry("site", "-index"))!.data;
 import ContactDrawer from "@/components/ContactDrawer.astro";
 import "@/styles/images.css";
 import "@/styles/imported-home.css";
 import "@/styles/fonts.css";
 import Header from "@/partials/imported/Header.astro";
 import Footer from "@/partials/imported/Footer.astro";
-const { dark = false, title = "Mehedi Sharif — Founder & Builder", description = "Mehedi Sharif — founder of Themefisher, Zeon Studio, SitePins and GHL MegaMinds.", canonical = "https://mehedisharif.com/" } = Astro.props;
+const {
+  dark = false,
+  title = site.title,
+  description = site.description,
+  canonical = new URL(Astro.url.pathname, config.site.base_url).href,
+} = Astro.props;
 ---
+
 <!doctype html>
-<html lang="en" class:list={{dark}}>
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{title}</title>
-<meta name="description" content={description} />
-<link rel="canonical" href={canonical} />
-<link rel="icon" href="/images/favicon.png" />
-<link rel="preload" href="/fonts/cormorant-garamond-normal.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="/fonts/inter-normal.woff2" as="font" type="font/woff2" crossorigin />
-<script is:inline>
- (() => {
-   let saved = null;
-   try { saved = localStorage.getItem('theme'); } catch {}
-   const dark = saved === 'dark' || (saved !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-   document.documentElement.classList.toggle('dark', dark);
- })();
-</script>
-</head>
-<body>
-<Header />
-<main id="main-content" style="background:var(--page);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:17px;line-height:1.55;overflow-x:clip"><slot /></main>
-<Footer />
-<script src="/scripts/imported-hill.js" is:inline defer></script>
-<script>
- const button=document.querySelector<HTMLButtonElement>('.theme-toggle');
- function updateLabel(){ if(button) { const dark=document.documentElement.classList.contains('dark'); button.setAttribute('aria-checked',String(dark)); button.title=dark?'Switch to light mode':'Switch to dark mode'; } }
- updateLabel();
- const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
- systemTheme.addEventListener('change', event => {
-   let saved = null;
-   try { saved = localStorage.getItem('theme'); } catch {}
-   if (saved === 'dark' || saved === 'light') return;
-   document.documentElement.classList.toggle('dark',event.matches);
-   updateLabel();
-   window.dispatchEvent(new Event('resize'));
- });
- button?.addEventListener('click',()=>{ const dark=document.documentElement.classList.toggle('dark'); try {localStorage.setItem('theme',dark?'dark':'light');} catch {} updateLabel(); window.dispatchEvent(new Event('resize')); });
-</script>
-<ContactDrawer />
-</body>
+<html lang="en" class:list={{ dark }}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={config.site.favicon} />
+    <link
+      rel="preload"
+      href="/fonts/cormorant-garamond-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script is:inline>
+      (() => {
+        let saved = null;
+        try {
+          saved = localStorage.getItem("theme");
+        } catch {}
+        const dark =
+          saved === "dark" ||
+          (saved !== "light" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main
+      id="main-content"
+      style="background:var(--page);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:17px;line-height:1.55;overflow-x:clip"
+    >
+      <slot />
+    </main>
+    <Footer />
+    <script src="/scripts/imported-hill.js" is:inline defer></script>
+    <script>
+      const button = document.querySelector<HTMLButtonElement>(".theme-toggle");
+      function updateLabel() {
+        if (button) {
+          const dark = document.documentElement.classList.contains("dark");
+          button.setAttribute("aria-checked", String(dark));
+          button.title = dark ? "Switch to light mode" : "Switch to dark mode";
+        }
+      }
+      updateLabel();
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+      systemTheme.addEventListener("change", (event) => {
+        let saved = null;
+        try {
+          saved = localStorage.getItem("theme");
+        } catch {}
+        if (saved === "dark" || saved === "light") return;
+        document.documentElement.classList.toggle("dark", event.matches);
+        updateLabel();
+        window.dispatchEvent(new Event("resize"));
+      });
+      button?.addEventListener("click", () => {
+        const dark = document.documentElement.classList.toggle("dark");
+        try {
+          localStorage.setItem("theme", dark ? "dark" : "light");
+        } catch {}
+        updateLabel();
+        window.dispatchEvent(new Event("resize"));
+      });
+    </script>
+    <ContactDrawer />
+  </body>
 </html>

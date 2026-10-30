@@ -1,12 +1,67 @@
 ---
 import "../../../styles/navigation-tailwind.css";
+import { getEntry } from "astro:content";
+const site = (await getEntry("site", "-index"))!.data;
 import SocialContactLinks from "@/components/SocialContactLinks.astro";
 ---
+
 <footer class="wrap site-footer tw:grid tw:grid-cols-1 tw:items-center tw:gap-x-4 tw:gap-y-6 tw:text-sm tw:md:grid-cols-3">
-    <span class="tw:justify-self-center tw:md:justify-self-start"><a href={Astro.url.pathname.startsWith("/blog") ? "#blog-top" : Astro.url.pathname.startsWith("/posts/") ? "#post" : "#top"} aria-label="Mehedi Sharif, back to top" style="display: inline-flex; color: var(--ink)"><img class="footer-signature" src="/images/logo-dark.svg" width="130" height="30" alt="" /></a></span>
-    <SocialContactLinks />
-  <button class="theme-toggle tw:justify-self-center tw:md:justify-self-end" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
-    <svg class="theme-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" /></svg>
-    <svg class="theme-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13.2A9 9 0 0 1 10.8 3.1 9 9 0 1 0 20.9 13.2Z" /></svg>
+  <span class="tw:justify-self-center tw:md:justify-self-start">
+    <a
+      href={
+        Astro.url.pathname.startsWith("/blog")
+          ? "#blog-top"
+          : Astro.url.pathname.startsWith("/posts/")
+            ? "#post"
+            : "#top"
+      }
+      aria-label={`${site.name}, back to top`}
+      style="display: inline-flex; color: var(--ink)"
+    >
+      <img
+        class="footer-signature"
+        src={site.footer_logo}
+        width="130"
+        height="30"
+        alt=""
+      />
+    </a>
+  </span>
+  <SocialContactLinks />
+  <button
+    class="theme-toggle tw:justify-self-center tw:md:justify-self-end"
+    type="button"
+    role="switch"
+    aria-checked="false"
+    aria-label="Dark mode"
+  >
+    <svg
+      class="theme-sun"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+    </svg>
+    <svg
+      class="theme-moon"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20.9 13.2A9 9 0 0 1 10.8 3.1 9 9 0 1 0 20.9 13.2Z" />
+    </svg>
   </button>
 </footer>

@@ -1,18 +1,44 @@
-<section id="values" style="background: var(--surface)">
-    <div class="wrap screen" style="display: grid; padding-top: 120px; padding-bottom: 120px">
+---
+import { getEntry } from "astro:content";
+const { values } = (await getEntry("homepage", "-index"))!.data;
+---
+
+{values.enable && (
+  <section id="values" style="background: var(--surface)">
+    <div
+      class="wrap screen"
+      style="display: grid; padding-top: 120px; padding-bottom: 120px"
+    >
       <div style="min-width: 0">
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; padding-bottom: 64px"><span class="tag">Values</span><h2 class="d h2">What I believe in.</h2></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; padding-bottom: 64px">
+          <span class="tag">{values.label}</span>
+          <h2 class="d h2">{values.title}</h2>
+        </div>
         <div class="vgrid">
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">01</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">Seeking Jannah (Heaven)</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">Faith in the Creator and the afterlife guides me. Remembering death keeps my priorities clear. “Every soul shall taste death.”</p></div>
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">02</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">Workaholic</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">Time disappears when I’m building something meaningful. Work is my flow state, especially when it makes an impact.</p></div>
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">03</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">Minimalism</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">Simple living, staying down to earth, and being present matter to me. So do quiet moments.</p></div>
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">04</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">Active listener</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">Listening to and sharing stories energize my soul. I mentor others weekly and learn from my own mentors and coaches.</p></div>
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">05</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">Believe in connection</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">My net worth is in the people in my phonebook.</p></div>
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">06</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">Monk life</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">Inside, I picture myself as a monk in white, with a bald head, quietly observing nature.</p></div>
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">07</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">Growth mindset</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">Life feels empty when I stop learning. Sometimes I wish I had a second brain to hold it all.</p></div>
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">08</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">Guardian of my galaxy</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">I have a son, a daughter, and an amazing family. They are my galaxy.</p></div>
-          <div class="vcell"><span class="lbl" style="color: var(--accent-text); font-size: 12px; font-style: italic">09</span><h3 class="d" style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2">ENFP personality</h3><p class="muted" style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55">Search “ENFP.” You’ll get a good picture of me.</p></div>
+          {values.items.map((item, index) => (
+            <div class="vcell">
+              <span
+                class="lbl"
+                style="color: var(--accent-text); font-size: 12px; font-style: italic"
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3
+                class="d"
+                style="margin: 0; font-size: var(--value-heading-size, 24px); line-height: 1.2"
+              >
+                {item.title}
+              </h3>
+              <p
+                class="muted"
+                style="margin: 0; font-size: var(--section-body-size, 16px); line-height: 1.55"
+              >
+                {item.description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   </section>
+)}

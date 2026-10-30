@@ -1,61 +1,202 @@
 ---
 import "@/styles/navigation-tailwind.css";
-const homePrefix = ["/", "/dark", "/dark/"].includes(Astro.url.pathname) ? "" : "/";
-const isBlog = Astro.url.pathname.startsWith("/blog") || Astro.url.pathname.startsWith("/posts/");
-const links = [{label:"Home",href:homePrefix+"#top"},{label:"About",href:homePrefix+"#about"},{label:"Businesses",href:homePrefix+"#purpose"},{label:"Values",href:homePrefix+"#values"},{label:"For fun",href:homePrefix+"#for-fun"},{label:"Blog",href:"/blog"}];
+import { getEntry } from "astro:content";
+const site = (await getEntry("site", "-index"))!.data;
+const homePrefix = ["/", "/dark", "/dark/"].includes(Astro.url.pathname)
+  ? ""
+  : "/";
+const isBlog =
+  Astro.url.pathname.startsWith("/blog") ||
+  Astro.url.pathname.startsWith("/posts/");
+const links = site.navigation.map((link) => ({
+  label: link.label,
+  href: link.link.startsWith("#") ? homePrefix + link.link : link.link,
+}));
 ---
+
 <header class="site-navigation tw:fixed tw:inset-x-0 tw:top-0 tw:z-30 tw:flex tw:justify-center tw:px-3 tw:pointer-events-none">
-  <nav class="tw:pointer-events-auto tw:w-full tw:max-w-lg tw:rounded-b-lg tw:border tw:border-t-0 tw:p-2 tw:shadow-lg tw:min-[800px]:w-auto tw:min-[800px]:max-w-none" aria-label="Main">
+  <nav
+    class="tw:pointer-events-auto tw:w-full tw:max-w-lg tw:rounded-b-lg tw:border tw:border-t-0 tw:p-2 tw:shadow-lg tw:min-[800px]:w-auto tw:min-[800px]:max-w-none"
+    aria-label="Main"
+  >
     <div class="tw:flex tw:items-center tw:gap-2 tw:min-[800px]:gap-4">
-      <a href={homePrefix+"#top"} class="tw:flex tw:min-h-11 tw:items-center tw:px-1 tw:min-[800px]:px-2 tw:shrink-0" aria-label="Mehedi Sharif, home"><img src="/images/logo-light.svg" width="160" height="37" class="tw:block tw:w-28 tw:h-auto tw:sm:w-36 tw:min-[800px]:w-40" alt="" /></a>
+      <a
+        href={homePrefix + "#top"}
+        class="tw:flex tw:min-h-11 tw:items-center tw:px-1 tw:min-[800px]:px-2 tw:shrink-0"
+        aria-label={`${site.name}, home`}
+      >
+        <img
+          src={site.header_logo}
+          width="160"
+          height="37"
+          class="tw:block tw:w-28 tw:h-auto tw:sm:w-36 tw:min-[800px]:w-40"
+          alt=""
+        />
+      </a>
       <div class="desktop-links tw:hidden tw:min-[800px]:flex tw:items-center tw:gap-1">
-        {links.map(link => <a class="nav-item tw:inline-flex tw:min-h-11 tw:items-center tw:rounded tw:px-3 tw:text-sm tw:font-medium tw:whitespace-nowrap" href={link.href} aria-current={link.label === "Blog" && isBlog ? "page" : undefined}>{link.label}</a>)}
+        {links.map((link) => (
+          <a
+            class="nav-item tw:inline-flex tw:min-h-11 tw:items-center tw:rounded tw:px-3 tw:text-sm tw:font-medium tw:whitespace-nowrap"
+            href={link.href}
+            aria-current={link.href === "/blog" && isBlog ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))}
       </div>
-      <a class="contact-link tw:ml-auto tw:inline-flex tw:min-h-11 tw:items-center tw:justify-center tw:rounded tw:px-3 tw:sm:px-5 tw:text-sm tw:font-medium tw:no-underline" href="/contact" aria-haspopup="dialog" aria-controls="contact-drawer">Contact</a>
-      <button class="menu-toggle tw:inline-flex tw:h-11 tw:w-11 tw:shrink-0 tw:items-center tw:justify-center tw:rounded tw:border tw:cursor-pointer tw:min-[800px]:hidden" type="button" aria-expanded="false" aria-controls="mobile-navigation" aria-label="Open menu">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path class="menu-open-icon" d="M4 6h16M4 12h16M4 18h16"/><path class="menu-close-icon" d="m6 6 12 12M18 6 6 18"/></svg>
+      <a
+        class="contact-link tw:ml-auto tw:inline-flex tw:min-h-11 tw:items-center tw:justify-center tw:rounded tw:px-3 tw:sm:px-5 tw:text-sm tw:font-medium tw:no-underline"
+        href={site.contact_button.link}
+        aria-haspopup="dialog"
+        aria-controls="contact-drawer"
+      >
+        {site.contact_button.label}
+      </a>
+      <button
+        class="menu-toggle tw:inline-flex tw:h-11 tw:w-11 tw:shrink-0 tw:items-center tw:justify-center tw:rounded tw:border tw:cursor-pointer tw:min-[800px]:hidden"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-navigation"
+        aria-label="Open menu"
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path class="menu-open-icon" d="M4 6h16M4 12h16M4 18h16" />
+          <path class="menu-close-icon" d="m6 6 12 12M18 6 6 18" />
+        </svg>
       </button>
     </div>
-    <div id="mobile-navigation" class="tw:hidden tw:grid-cols-2 tw:gap-1 tw:pt-2 tw:min-[800px]:hidden">
-      {links.map(link => <a class="nav-item tw:flex tw:min-h-11 tw:items-center tw:rounded tw:px-3 tw:text-sm tw:font-medium" href={link.href} aria-current={link.label === "Blog" && isBlog ? "page" : undefined}>{link.label}</a>)}
+    <div
+      id="mobile-navigation"
+      class="tw:hidden tw:grid-cols-2 tw:gap-1 tw:pt-2 tw:min-[800px]:hidden"
+    >
+      {links.map((link) => (
+        <a
+          class="nav-item tw:flex tw:min-h-11 tw:items-center tw:rounded tw:px-3 tw:text-sm tw:font-medium"
+          href={link.href}
+          aria-current={link.href === "/blog" && isBlog ? "page" : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
     </div>
   </nav>
 </header>
 <style>
-.site-navigation { font-family:Inter,system-ui,sans-serif;line-height:1.35;padding-inline:0;transition:padding .35s ease; }
-.site-navigation nav { width:100%;max-width:100%;border-radius:0;transition:max-width .35s ease,border-radius .35s ease; }
-.site-navigation.is-scrolled { padding-inline:12px; }
-.site-navigation.is-scrolled nav { max-width:512px;border-radius:0 0 8px 8px; }
-.desktop-links { margin-left:auto; }
-@media(min-width:800px) { .site-navigation.is-scrolled nav { max-width:780px; } }
-@media(prefers-reduced-motion:reduce) { .site-navigation,.site-navigation nav { transition:none; } }
-.site-navigation nav { background:#030407;border-color:#2A2F22; }
-.site-navigation .nav-item { font-size:13px;color:#ECEDE4;text-decoration:none; }
-.site-navigation .nav-item:hover,.site-navigation .nav-item[aria-current="page"] { color:#D4FF24;background:#12170C; }
-.site-navigation .contact-link { background:#D4FF24;color:#030407; }
-.site-navigation .contact-link:hover { background:#E2FF6B; }
-.menu-toggle { color:#ECEDE4;background:transparent;border-color:#2A2F22; }
-.menu-close-icon { display:none; }
-.menu-toggle[aria-expanded="true"] .menu-open-icon { display:none; }
-.menu-toggle[aria-expanded="true"] .menu-close-icon { display:block; }
+  .site-navigation {
+    font-family: Inter, system-ui, sans-serif;
+    line-height: 1.35;
+    padding-inline: 0;
+    transition: padding 0.35s ease;
+  }
+  .site-navigation nav {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    transition:
+      max-width 0.35s ease,
+      border-radius 0.35s ease;
+  }
+  .site-navigation.is-scrolled {
+    padding-inline: 12px;
+  }
+  .site-navigation.is-scrolled nav {
+    max-width: 512px;
+    border-radius: 0 0 8px 8px;
+  }
+  .desktop-links {
+    margin-left: auto;
+  }
+  @media (min-width: 800px) {
+    .site-navigation.is-scrolled nav {
+      max-width: 780px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-navigation,
+    .site-navigation nav {
+      transition: none;
+    }
+  }
+  .site-navigation nav {
+    background: #030407;
+    border-color: #2a2f22;
+  }
+  .site-navigation .nav-item {
+    font-size: 13px;
+    color: #ecede4;
+    text-decoration: none;
+  }
+  .site-navigation .nav-item:hover,
+  .site-navigation .nav-item[aria-current="page"] {
+    color: #d4ff24;
+    background: #12170c;
+  }
+  .site-navigation .contact-link {
+    background: #d4ff24;
+    color: #030407;
+  }
+  .site-navigation .contact-link:hover {
+    background: #e2ff6b;
+  }
+  .menu-toggle {
+    color: #ecede4;
+    background: transparent;
+    border-color: #2a2f22;
+  }
+  .menu-close-icon {
+    display: none;
+  }
+  .menu-toggle[aria-expanded="true"] .menu-open-icon {
+    display: none;
+  }
+  .menu-toggle[aria-expanded="true"] .menu-close-icon {
+    display: block;
+  }
 </style>
 <script>
- const header = document.querySelector<HTMLElement>('.site-navigation');
- const updateScroll = () => header?.classList.toggle('is-scrolled',window.scrollY > 24);
- updateScroll();
- window.addEventListener('scroll',updateScroll,{passive:true});
- window.addEventListener('pageshow',updateScroll);
- const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
- const panel = header?.querySelector<HTMLElement>('#mobile-navigation');
- function setOpen(open:boolean) {
-   toggle?.setAttribute('aria-expanded',String(open));
-   toggle?.setAttribute('aria-label',open?'Close menu':'Open menu');
-   panel?.classList.toggle('tw:hidden',!open);
-   panel?.classList.toggle('tw:grid',open);
- }
- toggle?.addEventListener('click',()=>setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
- header?.addEventListener('click',event=>{if(event.target instanceof Element && event.target.closest('a')) setOpen(false);});
- document.addEventListener('keydown',event=>{if(event.key==='Escape' && toggle?.getAttribute('aria-expanded')==='true'){setOpen(false);toggle.focus();}});
- document.addEventListener('click',event=>{if(event.target instanceof Node && !header?.contains(event.target))setOpen(false);});
- matchMedia('(min-width:800px)').addEventListener('change',()=>setOpen(false));
+  const header = document.querySelector<HTMLElement>(".site-navigation");
+  const updateScroll = () =>
+    header?.classList.toggle("is-scrolled", window.scrollY > 24);
+  updateScroll();
+  window.addEventListener("scroll", updateScroll, { passive: true });
+  window.addEventListener("pageshow", updateScroll);
+  const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
+  const panel = header?.querySelector<HTMLElement>("#mobile-navigation");
+  function setOpen(open: boolean) {
+    toggle?.setAttribute("aria-expanded", String(open));
+    toggle?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    panel?.classList.toggle("tw:hidden", !open);
+    panel?.classList.toggle("tw:grid", open);
+  }
+  toggle?.addEventListener("click", () =>
+    setOpen(toggle.getAttribute("aria-expanded") !== "true"),
+  );
+  header?.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest("a"))
+      setOpen(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      toggle?.getAttribute("aria-expanded") === "true"
+    ) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+  document.addEventListener("click", (event) => {
+    if (event.target instanceof Node && !header?.contains(event.target))
+      setOpen(false);
+  });
+  matchMedia("(min-width:800px)").addEventListener("change", () =>
+    setOpen(false),
+  );
 </script>

@@ -1,7 +1,10 @@
 ---
 import ImportedHome from "@/layouts/ImportedHome.astro";
+import { getEntry } from "astro:content";
+const contact = (await getEntry("contact", "-index"))!.data;
 import Hero from "@/partials/imported/Hero.astro";
 ---
-<ImportedHome title="Contact — Mehedi Sharif" description="Have a project or an idea? Get in touch with Mehedi Sharif." canonical="https://mehedisharif.com/contact">
+
+<ImportedHome title={contact.meta_title} description={contact.description}>
   <Hero />
 </ImportedHome>

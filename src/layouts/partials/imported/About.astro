@@ -1,27 +1,108 @@
-<section id="about" style="background: var(--surface)">
+---
+import { marked } from "marked";
+import { getEntry } from "astro:content";
+const { about } = (await getEntry("homepage", "-index"))!.data;
+---
+
+{about.enable && (
+  <section id="about" style="background: var(--surface)">
     <div class="wrap about-section">
-      
       <div class="about-grid">
-        <div class="portrait-frame"><img src="/images/personal/mehedi-sharif-export.jpg" loading="lazy" width="724" height="1056" alt="Portrait of Mehedi Sharif" class="about-portrait"></div>
+        <div class="portrait-frame">
+          <img
+            src={about.image}
+            loading="lazy"
+            width="724"
+            height="1056"
+            alt={about.image_alt}
+            class="about-portrait"
+          />
+        </div>
         <div class="about-copy">
-          <h2 class="d" style="margin: 0; font-size: 52px; line-height: 1.02; text-align: left">Started with code.<br>Growing beyond it.</h2>
-          <div class="bio" style="margin: 0"><p>Studied sociology. Taught myself to code. Started alone and grew a team of 20. Built brands including <strong>Themefisher</strong> and <strong>Zeon Studio</strong>, acquired <strong>UIHut</strong>, and sold two businesses. Now growing <strong>GHL MegaMinds</strong>.</p><p>Beyond work: literature, quiet moments, and learning something new. At home, an amazing family, a son, and a daughter—my own little galaxy.</p></div>
-          
-          
+          <h2
+            class="d"
+            style="margin: 0; font-size: 52px; line-height: 1.02; text-align: left"
+          >
+            {about.title}
+            <br />
+            {about.title_second_line}
+          </h2>
+          <div class="bio" style="margin: 0">
+            {about.paragraphs.map((paragraph) => (
+              <p set:html={marked.parseInline(paragraph)} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
   </section>
+)}
 
 <style>
-  .about-section { min-height:900px; display:flex; align-items:center; padding-block:80px; }
-  .about-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px; align-items:center; width:100%; max-width:1024px; margin-inline:auto; }
-  .portrait-frame { position:relative; isolation:isolate; overflow:hidden; width:100%; max-width:440px; margin-inline:auto; border-radius:16px; }
-  .portrait-frame::after { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(145deg, rgba(212,255,36,.55) 0%, rgba(212,255,36,.12) 44%, rgba(212,255,36,.04) 62%, rgba(212,255,36,.35) 100%); mix-blend-mode:soft-light; }
-  .about-portrait { display:block; width:100%; max-width:440px; margin-inline:auto; height:auto; aspect-ratio:4 / 5; object-fit:cover; object-position:50% 35%; filter:grayscale(1) contrast(.94); }
-  .about-copy { display:flex; flex-direction:column; gap:32px; min-width:0; }
-  @media (max-width:900px) {
-    .about-section { min-height:0; padding-block:64px; }
-    .about-grid { grid-template-columns:1fr; max-width:560px; gap:32px; }
+  .about-section {
+    min-height: 900px;
+    display: flex;
+    align-items: center;
+    padding-block: 80px;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    align-items: center;
+    width: 100%;
+    max-width: 1024px;
+    margin-inline: auto;
+  }
+  .portrait-frame {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    width: 100%;
+    max-width: 440px;
+    margin-inline: auto;
+    border-radius: 16px;
+  }
+  .portrait-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      145deg,
+      rgba(212, 255, 36, 0.55) 0%,
+      rgba(212, 255, 36, 0.12) 44%,
+      rgba(212, 255, 36, 0.04) 62%,
+      rgba(212, 255, 36, 0.35) 100%
+    );
+    mix-blend-mode: soft-light;
+  }
+  .about-portrait {
+    display: block;
+    width: 100%;
+    max-width: 440px;
+    margin-inline: auto;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 35%;
+    filter: grayscale(1) contrast(0.94);
+  }
+  .about-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-width: 0;
+  }
+  @media (max-width: 900px) {
+    .about-section {
+      min-height: 0;
+      padding-block: 64px;
+    }
+    .about-grid {
+      grid-template-columns: 1fr;
+      max-width: 560px;
+      gap: 32px;
+    }
   }
 </style>
