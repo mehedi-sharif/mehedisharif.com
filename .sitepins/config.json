@@ -1,17 +1,10 @@
 {
-  "media": {
-    "root": "public/images",
-    "public": "public/"
-  },
-  "content": {
-    "root": "src/content"
-  },
-  "code": {
-    "root": "src/layouts"
-  },
-  "themeConfig": [
+  "media": "public/images",
+  "content": "src/content",
+  "arrangement": [],
+  "public": "public/",
+  "configs": [
     "src/config"
   ],
-  "arrangement": [],
-  "showCommitModal": false
+  "customCommit": false
 }
