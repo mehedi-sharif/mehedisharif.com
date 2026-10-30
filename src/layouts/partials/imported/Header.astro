@@ -116,7 +116,7 @@ const links = site.navigation.map((link) => ({
   }
   @media (min-width: 800px) {
     .site-navigation.is-scrolled nav {
-      max-width: 780px;
+      max-width: min(calc(100vw - 24px), clamp(780px, 64vw, 1060px));
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -130,7 +130,7 @@ const links = site.navigation.map((link) => ({
     border-color: #2a2f22;
   }
   .site-navigation .nav-item {
-    font-size: 13px;
+    font-size: clamp(13px, 1.05vw, 20px);
     color: #ecede4;
     text-decoration: none;
   }
