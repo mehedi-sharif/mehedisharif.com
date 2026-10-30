@@ -1,10 +1,10 @@
 ---
 enable: true
-title: "Based in Bangladesh. Happy to hear about a project, an idea, or just say hello."
+title: "Happy to hear about an idea, or just say Hello."
 image: "/images/call-to-action.png"
 description: "Let’s **talk.**"
 button:
   enable: true
-  label: "Get in touch"
-  link: "/contact"
+  label: Get in touch
+  link: /contact
 ---
