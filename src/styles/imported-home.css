@@ -157,3 +157,15 @@ html:has(.site-navigation) { scroll-padding-top:88px; }
 .site-footer { color:var(--muted); }
 .site-footer .footer-signature { display:block; width:130px; height:auto; }
 .site-footer .soc { flex-shrink:0; min-width:44px; min-height:44px; }
+
+/* Keep the homepage type hierarchy balanced on wide desktop viewports. */
+@media (min-width:1440px) {
+  #values, #purpose {
+    --value-heading-size:clamp(28px,1.25vw,34px);
+    --business-heading-size:clamp(32px,1.4vw,38px);
+    --section-body-size:clamp(18px,.86vw,22px);
+  }
+  :is(#about,#values,#purpose,#for-fun,#connect) h2.d { font-weight:400; }
+  #about .bio p { font-size:clamp(19px,.86vw,22px); }
+  :is(#top,#connect) .lead { font-size:clamp(21px,1vw,24px); }
+}
