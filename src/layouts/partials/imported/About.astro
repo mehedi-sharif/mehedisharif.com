@@ -71,10 +71,10 @@ const { about } = (await getEntry("homepage", "-index"))!.data;
     pointer-events: none;
     background: linear-gradient(
       145deg,
-      rgba(212, 255, 36, 0.55) 0%,
-      rgba(212, 255, 36, 0.12) 44%,
-      rgba(212, 255, 36, 0.04) 62%,
-      rgba(212, 255, 36, 0.35) 100%
+      rgba(212, 255, 36, 0.16) 0%,
+      rgba(212, 255, 36, 0.04) 44%,
+      rgba(212, 255, 36, 0) 62%,
+      rgba(212, 255, 36, 0.10) 100%
     );
     mix-blend-mode: soft-light;
   }
@@ -87,7 +87,7 @@ const { about } = (await getEntry("homepage", "-index"))!.data;
     aspect-ratio: 4 / 5;
     object-fit: cover;
     object-position: 50% 35%;
-    filter: grayscale(1) contrast(0.94);
+    filter: brightness(1.08) contrast(1.02);
   }
   .about-copy {
     display: flex;

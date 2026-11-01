@@ -1,10 +1,11 @@
 ---
 banner:
   label: Founder · Chain Breaker
-  title: I break the chain.
+  title: I am a chain Breaker
   title_second_line: And build businesses that matter
-  description: I’m Mehedi. My starting point doesn’t set my limits. I learn what
-    it takes, and build businesses that make a difference.
+  description: 2× exited founder. Built Themefisher
+    from a startup into a $2 million business, acquired UIHut, and built Zeon
+    Studio agency. Now I’m building the next chapter with GHL MegaMinds.
   primary_button:
     label: My story
     link: "#about"
@@ -14,11 +15,11 @@ banner:
 about:
   enable: true
   title: Started with code.
-  title_second_line: Growing beyond it.
+  title_second_line: Ended up founding 8 businesses.
   image: /images/personal/mehedi-sharif-export.jpg
   image_alt: Portrait of Mehedi Sharif
   paragraphs:
-    - Studied sociology. Taught myself to code. Started alone and grew a team of
+    - Taught myself to code. Started alone and grew a team of
       20. Built brands including **Themefisher** and **Zeon Studio**, acquired
       **UIHut**, and sold two businesses. Now growing **GHL MegaMinds**.
     - "Beyond work: literature, quiet moments, and learning something new. At
@@ -74,9 +75,14 @@ values:
   label: Values
   title: What I believe in.
   items:
-    - title: Seeking Jannah (Heaven)
-      description: Faith in the Creator and the afterlife guides me. Remembering death
-        keeps my priorities clear. “Every soul shall taste death.”
+    - title: ENFP personality
+      description: Search “ENFP.” You’ll get a good picture of me.
+    - title: Monk life
+      description: Inside, I picture myself as a monk in white, with a bald head,
+        quietly observing nature.
+    - title: Growth mindset
+      description: Life feels empty when I stop learning. Sometimes I wish I had a
+        second brain to hold it all.
     - title: Workaholic
       description: Time disappears when I’m building something meaningful. Work is my
         flow state, especially when it makes an impact.
@@ -86,18 +92,13 @@ values:
     - title: Active listener
       description: Listening to and sharing stories energize my soul. I mentor others
         weekly and learn from my own mentors and coaches.
-    - title: Believe in connection
+    - title: Believe in Collaboration
       description: My net worth is in the people in my phonebook.
-    - title: Monk life
-      description: Inside, I picture myself as a monk in white, with a bald head,
-        quietly observing nature.
-    - title: Growth mindset
-      description: Life feels empty when I stop learning. Sometimes I wish I had a
-        second brain to hold it all.
     - title: Guardian of my galaxy
       description: I have a son, a daughter, and an amazing family. They are my galaxy.
-    - title: ENFP personality
-      description: Search “ENFP.” You’ll get a good picture of me.
+    - title: Seeking Jannah (Heaven)
+      description: Faith in the Creator and the afterlife guides me. Remembering death
+        keeps my priorities clear. “Every soul shall taste death.”
 interests:
   enable: true
   label: For fun
