@@ -5,7 +5,7 @@ banner:
   title_second_line: And build businesses that matter
   description: 2× exited founder. Built Themefisher
     from a startup into a $2 million business, acquired UIHut, and built Zeon
-    Studio agency. Now I’m building the next chapter with GHL MegaMinds.
+    Studio agency. Now I’m building the next chapter with GHLMegaMinds.
   primary_button:
     label: My story
     link: "#about"
@@ -19,9 +19,8 @@ about:
   image: /images/personal/mehedi-sharif-export.jpg
   image_alt: Portrait of Mehedi Sharif
   paragraphs:
-    - Taught myself to code. Started alone and grew a team of
-      20. Built brands including **Themefisher** and **Zeon Studio**, acquired
-      **UIHut**, and sold two businesses. Now growing **GHL MegaMinds**.
+    - Taught myself to code. Built brands including **Themefisher** and **Zeon Studio**, acquired
+      **UIHut**, and sold two businesses. Now growing **GHLMegaMinds**.
     - "Beyond work: literature, quiet moments, and learning something new. At
       home, an amazing family, a son, and a daughter—my own little galaxy."
 businesses:
@@ -29,14 +28,14 @@ businesses:
   label: Purpose
   title: I am a Builder  ...
   items:
-    - title: GHL MegaMinds
+    - title: GHLMegaMinds
       period: Now · Focus
       featured: true
       link: https://ghlmegaminds.com
       link_label: ghlmegaminds.com
-      description: My newest venture, and where most of my time goes. As a GoHighLevel
-        Certified Admin, I lead a team helping agencies and business owners
-        connect their marketing, sales, and follow-up.
+      description: From a hospital bed to a new beginning with GHLMegaMinds.
+        An idea that slowly took shape—becoming a certified GoHighLevel Admin
+        and helping businesses grow.
     - title: Themefisher
       period: 2015 — Present
       featured: false

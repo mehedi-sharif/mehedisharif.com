@@ -1,6 +1,6 @@
 ---
 title: Mehedi Sharif — Founder & Builder
-description: Mehedi Sharif — founder of Themefisher, Zeon Studio, SitePins and GHL MegaMinds.
+description: Mehedi Sharif — founder of Themefisher, Zeon Studio, SitePins and GHLMegaMinds.
 name: Mehedi Sharif
 header_logo: /images/logo-light.svg
 footer_logo: /images/logo-dark.svg
