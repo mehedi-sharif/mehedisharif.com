@@ -64,7 +64,7 @@ class Component extends DCLogic {
     return (a * (1 - fy) + b * fy) / 99;
   }
   build() {
-    const SX = this.mobile ? 48 : 96, SY = this.mobile ? 64 : 128; this.SX = SX; this.SY = SY;
+    const SX = this.mobile ? 32 : 96, SY = this.mobile ? 48 : 128; this.SX = SX; this.SY = SY;
     const n = (SX + 1) * (SY + 1);
     this.U = new Float32Array(n); this.V = new Float32Array(n); this.HB = new Float32Array(n); this.AL = new Float32Array(n);
     this.PX = new Float32Array(n); this.PY = new Float32Array(n); this.OK = new Uint8Array(n);
@@ -143,5 +143,7 @@ function start() {
   c.cv = el;
   c.componentDidMount();
 }
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+// Let the text and navigation paint before preparing the decorative mesh.
+const scheduleStart = () => requestAnimationFrame(() => setTimeout(start, 0));
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scheduleStart, { once: true }); else scheduleStart();
 })();

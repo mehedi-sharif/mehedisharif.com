@@ -1,4 +1,5 @@
 ---
+import hillScript from "../../../../public/scripts/imported-hill.js?raw";
 import { getEntry } from "astro:content";
 const { banner } = (await getEntry("homepage", "-index"))!.data;
 ---
@@ -51,7 +52,7 @@ const { banner } = (await getEntry("homepage", "-index"))!.data;
   </div>
 </section>
 
-<script src="../../../../public/scripts/imported-hill.js"></script>
+<script is:inline set:html={hillScript} />
 
 <style>
   .hero-title-line {

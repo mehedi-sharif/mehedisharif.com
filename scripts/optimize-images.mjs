@@ -38,7 +38,7 @@ for (const src of urls) {
     variants.push({width,src:url,avif});
   }
   const outputMetadata = await sharp(`public${variants.at(-1).src}`).metadata();
-  manifest[src] = {width:outputMetadata.width,height:outputMetadata.height,src:variants.at(-1).src,avif:variants.map(v=>`${v.avif} ${v.width}w`).join(', '),srcset:variants.map(v=>`${v.src} ${v.width}w`).join(', ')};
+  manifest[src] = {width:outputMetadata.width,height:outputMetadata.height,src:variants.at(-1).src,mobileAvif:variants.filter(v=>v.width<=480).map(v=>`${v.avif} ${v.width}w`).join(', '),avif:variants.map(v=>`${v.avif} ${v.width}w`).join(', '),srcset:variants.map(v=>`${v.src} ${v.width}w`).join(', ')};
 }
 await fs.writeFile('src/generated/responsive-images.json',JSON.stringify(manifest));
 console.log(`Prepared responsive variants for ${Object.keys(manifest).length} content images.`);
