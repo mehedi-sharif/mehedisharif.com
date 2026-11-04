@@ -14,6 +14,7 @@ export default defineConfig({
   output: "static",
   outDir: "./dist-cloudflare",
   compressHTML: true,
+  build: { inlineStylesheets: "always" },
   vite: { plugins: [tailwind()] },
   site: config.site.base_url ? config.site.base_url : "http://examplesite.com",
   base: config.site.base_path ? config.site.base_path : "/",

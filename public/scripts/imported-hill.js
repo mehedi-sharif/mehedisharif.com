@@ -76,14 +76,14 @@ class Component extends DCLogic {
   resize() {
     const cv = this.cv; if (!cv) return;
     const w = cv.clientWidth || 1200, h = cv.clientHeight || 440, dpr = Math.min(window.devicePixelRatio || 1, w < 768 ? 1.5 : 2);
+    const cs = getComputedStyle(cv);
+    this.ink = (cs.getPropertyValue('--hill-ink') || '#56616b').trim();
+    this.op = parseFloat(cs.getPropertyValue('--hill-op')) || 0.26;
     const mobile = w < 768;
     if (!this.U || mobile !== this.mobile) { this.mobile = mobile; this.build(); }
     cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
     this.ctx = cv.getContext('2d'); this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.W = w; this.H = h; this.camZ = w < 768 ? 140 : 84;
-    const cs = getComputedStyle(cv);
-    this.ink = (cs.getPropertyValue('--hill-ink') || '#56616b').trim();
-    this.op = parseFloat(cs.getPropertyValue('--hill-op')) || 0.26;
     this.draw(0);
   }
   draw(dt) {

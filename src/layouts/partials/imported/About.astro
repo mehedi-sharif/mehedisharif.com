@@ -24,9 +24,8 @@ const { about } = (await getEntry("homepage", "-index"))!.data;
             class="d"
             style="margin: 0; font-size: 52px; line-height: 1.02; text-align: left"
           >
-            {about.title}
-            <br />
-            {about.title_second_line}
+            <span class="about-title-line">{about.title}</span>
+            <span class="about-title-line">{about.title_second_line.replace(/(\d+)\s+businesses/g, "$1\u00a0businesses")}</span>
           </h2>
           <div class="bio" style="margin: 0">
             {about.paragraphs.map((paragraph) => (
@@ -40,6 +39,8 @@ const { about } = (await getEntry("homepage", "-index"))!.data;
 )}
 
 <style>
+  .about-title-line { display: block; text-wrap: balance; }
+  .bio :global(p) { text-wrap: pretty; }
   .about-section {
     min-height: 900px;
     display: flex;
