@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import config from "@/config/config.json";
 
 type FormCopy = {
   name_label: string;
@@ -31,25 +30,19 @@ const ContactForm: React.FC<{ copy: FormCopy }> = ({ copy }) => {
     }
     setStatus("sending");
     try {
-      const response = await fetch(
-        `https://formsubmit.co/ajax/${config.bio.formsubmit_endpoint}`,
-        {
+      const response = await fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            _subject: copy.email_subject,
             name,
             email,
             message,
+            website: String(fields.get("website") || ""),
           }),
         },
       );
       const result = await response.json();
-      if (
-        !response.ok ||
-        !(result.success === true || result.success === "true")
-      )
-        throw new Error("Submission failed");
+      if (!response.ok || result.ok !== true) throw new Error("Submission failed");
       form.reset();
       setStatus("success");
     } catch {
@@ -63,6 +56,14 @@ const ContactForm: React.FC<{ copy: FormCopy }> = ({ copy }) => {
       onSubmit={formHandler}
       aria-busy={status === "sending"}
     >
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{ position: "absolute", left: -10000, width: 1, height: 1, opacity: 0 }}
+      />
       <div className="contact-field">
         <label htmlFor="full_name">{copy.name_label}</label>
         <input
