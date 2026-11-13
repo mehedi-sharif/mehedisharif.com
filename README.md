@@ -20,7 +20,7 @@ npm run build
 npm run preview
 ```
 
-The default build targets Cloudflare Pages with static HTML in `dist-cloudflare`; see [CLOUDFLARE.md](CLOUDFLARE.md). The homepage, posts, categories, contact, privacy policy, and 404 page are retained. The contact form uses FormSubmit. No database or backend secrets are required.
+The default build targets Cloudflare Pages with static HTML in `dist-cloudflare`; see [CLOUDFLARE.md](CLOUDFLARE.md). The homepage, posts, categories, contact, privacy policy, and 404 page are retained. The contact form posts to a Pages Function (`/api/contact`) that sends entries to GoHighLevel; it needs the `GHL_TOKEN` secret and `GHL_LOCATION_ID`.
 
 ## Homepage and styling
 
