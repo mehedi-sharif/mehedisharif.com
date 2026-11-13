@@ -27,7 +27,7 @@ import "@/styles/contact.css";
       <br />
       {contact.title_second_line}
     </h2>
-    <form class="contact-form" method="POST" data-endpoint="/api/contact" data-success={contact.form.success_message} data-error={contact.form.error_message} data-sending={contact.form.sending_label}>
+    <form class="contact-form" method="POST" action="/api/contact" data-endpoint="/api/contact" data-success={contact.form.success_message} data-error={contact.form.error_message} data-sending={contact.form.sending_label}>
       <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0" />
       <div class="contact-field"><label for="full_name">{contact.form.name_label}</label><input id="full_name" name="full_name" type="text" autocomplete="name" placeholder={contact.form.name_placeholder} required /></div>
       <div class="contact-field"><label for="email">{contact.form.email_label}</label><input id="email" name="email" type="email" autocomplete="email" placeholder={contact.form.email_placeholder} required /></div>

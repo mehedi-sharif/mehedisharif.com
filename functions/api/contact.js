@@ -20,13 +20,21 @@ const ghl = (env, path, body) =>
     signal: AbortSignal.timeout(15000),
   });
 
-export async function onRequestPost({ request, env }) {
+// Parse JSON (fetch from the form script) or a native form post (no-JS fallback).
+async function readBody(request) {
+  const type = request.headers.get("Content-Type") || "";
+  if (type.includes("application/json")) return request.json();
+  const form = Object.fromEntries(await request.formData());
+  return { ...form, name: form.name ?? form.full_name };
+}
+
+async function handlePost({ request, env }) {
   if (!env.GHL_TOKEN || !env.GHL_LOCATION_ID)
     return json({ ok: false, error: "Server not configured" }, 500);
 
   let data;
   try {
-    data = await request.json();
+    data = await readBody(request);
   } catch {
     return json({ ok: false, error: "Invalid request" }, 400);
   }
@@ -78,5 +86,14 @@ export async function onRequestPost({ request, env }) {
   }
 }
 
-export const onRequest = () =>
-  json({ ok: false, error: "Method not allowed" }, 405);
+// One handler for every method so non-POST requests get an explicit 405
+export async function onRequest(context) {
+  if (context.request.method !== "POST")
+    return json({ ok: false, error: "Method not allowed" }, 405);
+  const response = await handlePost(context);
+  const isJson = (context.request.headers.get("Content-Type") || "").includes("application/json");
+  if (isJson) return response;
+  // Native form post: send the visitor back to the contact page.
+  const ok = response.ok && (await response.clone().json()).ok === true;
+  return Response.redirect(new URL(ok ? "/contact/?sent=1" : "/contact/?error=1", context.request.url), 303);
+}

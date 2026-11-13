@@ -31,16 +31,15 @@ const ContactForm: React.FC<{ copy: FormCopy }> = ({ copy }) => {
     setStatus("sending");
     try {
       const response = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name,
-            email,
-            message,
-            website: String(fields.get("website") || ""),
-          }),
-        },
-      );
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          website: String(fields.get("website") || ""),
+        }),
+      });
       const result = await response.json();
       if (!response.ok || result.ok !== true) throw new Error("Submission failed");
       form.reset();
@@ -53,6 +52,7 @@ const ContactForm: React.FC<{ copy: FormCopy }> = ({ copy }) => {
     <form
       className="contact-form"
       method="POST"
+      action="/api/contact"
       onSubmit={formHandler}
       aria-busy={status === "sending"}
     >
