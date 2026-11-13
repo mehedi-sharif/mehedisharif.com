@@ -10,6 +10,7 @@ import Header from "@/partials/imported/Header.astro";
 import Footer from "@/partials/imported/Footer.astro";
 const {
   dark = false,
+  noindex = false,
   title = site.title,
   description = site.description,
   canonical = new URL(Astro.url.pathname, config.site.base_url).href,
@@ -23,6 +24,7 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={config.site.favicon} />
     <link

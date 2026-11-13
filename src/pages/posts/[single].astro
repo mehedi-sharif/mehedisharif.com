@@ -26,6 +26,7 @@ const { title, meta_title, description, image } = post.data;
 <ImportedHome
   title={meta_title || `${title} — ${site.name}`}
   description={description}
+  noindex={post.data.noindex}
 >
   <PostSingle post={post} />
 </ImportedHome>

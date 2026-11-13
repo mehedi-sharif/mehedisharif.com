@@ -16,7 +16,7 @@ about:
   enable: true
   title: Started with code.
   title_second_line: Ended up founding 8 businesses.
-  image: /images/personal/mehedi-sharif-export.jpg
+  image: /images/personal/mehedi-sharif.png
   image_alt: Portrait of Mehedi Sharif
   paragraphs:
     - Taught myself to code. Built brands including **Themefisher** and **Zeon Studio**, acquired

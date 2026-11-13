@@ -21,7 +21,9 @@ export default defineConfig({
   trailingSlash: config.site.trailing_slash ? "always" : "never",
   integrations: [
     react(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !/\/posts\/sample-post\/?$/.test(new URL(page).pathname),
+    }),
     AutoImport({
       imports: [
         "@/shortcodes/Button",

@@ -1,5 +1,6 @@
 ---
 title: Sample Post
+noindex: true
 description: "A sample post that shows every text and media element, so each article reads the same way — calm, clear and easy on the eyes."
 author: Mehedi Sharif
 categories: [Building]

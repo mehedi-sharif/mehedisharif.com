@@ -24,6 +24,7 @@ const blogCollection = defineCollection({
     categories: z.array(z.string()).default(["others"]),
     tags: z.array(z.string()).default(["others"]),
     draft: z.boolean().optional(),
+    noindex: z.boolean().default(false),
     heading: z.string().optional(),
     empty_message: z.string().optional(),
     newer_label: z.string().optional(),
