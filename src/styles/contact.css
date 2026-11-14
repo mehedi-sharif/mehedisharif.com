@@ -18,6 +18,12 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 .contact-panel-content { padding:100px 28px 24px; }
 .contact-panel h2 { font:500 52px/1 'Cormorant Garamond',Georgia,serif; letter-spacing:-.01em; margin:0 0 36px; }
 .contact-form { display:flex; flex-direction:column; gap:24px; }
+.contact-booking { padding:22px; margin-bottom:28px; border:1px solid var(--rule); border-radius:16px; background:var(--surface); }
+.contact-booking h3 { margin:0 0 10px; font:500 30px/1.1 'Cormorant Garamond',Georgia,serif; }
+.contact-booking p { margin:0 0 20px; color:var(--muted); font:400 15px/1.6 Inter,system-ui,sans-serif; }
+.contact-booking-button { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:52px; padding:14px 18px; border-radius:10px; background:#D4FF24; color:#030407; text-decoration:none; font:600 16px/1.4 Inter,system-ui,sans-serif; }
+.contact-booking-button:hover { background:#E2FF6B; }
+.contact-form-intro { margin:0 0 20px; color:var(--muted); font:500 14px/1.5 Inter,system-ui,sans-serif; }
 .contact-field { display:flex; flex-direction:column; gap:10px; }
 .contact-field label { font-size:13px; line-height:1.4; }
 .contact-field input,.contact-field textarea {
@@ -29,8 +35,8 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 .contact-field textarea { resize:vertical; min-height:150px; }
 .contact-field input::placeholder,.contact-field textarea::placeholder { color:var(--muted); opacity:.85; }
 .contact-field input:focus,.contact-field textarea:focus { outline:2px solid var(--accent-text); outline-offset:2px; }
-.contact-submit { display:flex; align-items:center; justify-content:space-between; min-height:52px; border:0; border-radius:10px; padding:14px 18px; background:#D4FF24; color:#030407; font:500 16px/1.4 Inter,system-ui,sans-serif; cursor:pointer; }
-.contact-submit:hover { background:#E2FF6B; }
+.contact-submit { display:flex; align-items:center; justify-content:space-between; min-height:52px; border:1px solid var(--rule); border-radius:10px; padding:14px 18px; background:var(--surface); color:var(--ink); font:500 16px/1.4 Inter,system-ui,sans-serif; cursor:pointer; }
+.contact-submit:hover { background:var(--page); }
 .contact-submit:disabled { opacity:.6; cursor:wait; }
 .contact-status { margin:0; font-size:14px; line-height:1.5; }
 .contact-status:empty { display:none; }

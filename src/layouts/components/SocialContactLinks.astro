@@ -1,5 +1,7 @@
 ---
 import { getEntry } from "astro:content";
+interface Props { showCalendar?: boolean; }
+const { showCalendar = true } = Astro.props;
 const site = (await getEntry("site", "-index"))!.data;
 const icons: Record<string, string> = {
   facebook:
@@ -26,7 +28,7 @@ const icons: Record<string, string> = {
       </a>
     ))}
   </div>
-  <a
+  {showCalendar && <a
     class="calendar-link"
     href={site.calendar.link}
     target={site.calendar.link.startsWith("/") ? undefined : "_blank"}
@@ -45,7 +47,7 @@ const icons: Record<string, string> = {
       <path d="M16 3v4M8 3v4M3 11h18m-13 4h3m2 0h3" />
     </svg>
     {site.calendar.label}
-  </a>
+  </a>}
 </div>
 <style>
   .social-contact-links {

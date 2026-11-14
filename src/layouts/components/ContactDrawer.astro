@@ -1,6 +1,7 @@
 ---
 import { getEntry } from "astro:content";
 const contact = (await getEntry("contact", "-index"))!.data;
+const site = (await getEntry("site", "-index"))!.data;
 import SocialContactLinks from "@/components/SocialContactLinks.astro";
 import "@/styles/contact.css";
 ---
@@ -27,6 +28,14 @@ import "@/styles/contact.css";
       <br />
       {contact.title_second_line}
     </h2>
+    <section class="contact-booking" aria-labelledby="contact-booking-heading">
+      <h3 id="contact-booking-heading">Let’s make time to talk.</h3>
+      <p>Book a 30-minute meeting at a time that works for you.</p>
+      <a class="contact-booking-button" href={site.calendar.link}>
+        Book a meeting <span aria-hidden="true">→</span>
+      </a>
+    </section>
+    <p class="contact-form-intro">Or send me a message</p>
     <form class="contact-form" method="POST" action="/api/contact" data-endpoint="/api/contact" data-success={contact.form.success_message} data-error={contact.form.error_message} data-sending={contact.form.sending_label}>
       <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0" />
       <div class="contact-field"><label for="full_name">{contact.form.name_label}</label><input id="full_name" name="full_name" type="text" autocomplete="name" placeholder={contact.form.name_placeholder} required /></div>
@@ -36,7 +45,7 @@ import "@/styles/contact.css";
       <p class="contact-status" role="status" aria-live="polite"></p>
     </form>
     <div class="contact-socials">
-      <SocialContactLinks />
+      <SocialContactLinks showCalendar={false} />
     </div>
   </div>
 </dialog>
