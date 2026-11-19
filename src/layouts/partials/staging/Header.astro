@@ -1,0 +1,92 @@
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="goo" x="-20%" y="-40%" width="140%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b" />
+      <feColorMatrix
+        in="b"
+        mode="matrix"
+        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -11"
+      />
+    </filter>
+  </defs>
+</svg>
+
+<header>
+  <a href="#top" class="brand" aria-label="Mehedi Sharif, home">
+    <span class="mark">
+      <span></span>
+    </span>
+    <img src="/images/staging/brand.svg" alt="" />
+  </a>
+  <ul class="navpill" aria-label="Primary">
+    <li>
+      <a href="#top">Home</a>
+    </li>
+    <li>
+      <a href="#about">About</a>
+    </li>
+    <li>
+      <a href="#purpose">Businesses</a>
+    </li>
+    <li>
+      <a href="#values">Values</a>
+    </li>
+    <li>
+      <a href="#for-fun">For fun</a>
+    </li>
+    <li>
+      <a href="#blog">Blog</a>
+    </li>
+  </ul>
+  <div class="h-act">
+    <div class="acc" id="acc">
+      <button
+        class="theme"
+        id="accBtn"
+        aria-label="Accent colour"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <span></span>
+      </button>
+      <div class="acc-menu" role="menu">
+        <button data-c="#00ff99" aria-label="Green"></button>
+        <button data-c="#d3ff24" aria-label="Lime"></button>
+        <button data-c="#2749f5" aria-label="Blue"></button>
+        <button data-c="#27f5c8" aria-label="Aqua"></button>
+        <button data-c="#9142ff" aria-label="Purple"></button>
+      </div>
+    </div>
+    <button class="theme" id="themeBtn" aria-label="Switch light or dark">
+      <svg class="sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4.2" />
+        <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" />
+      </svg>
+      <svg class="moon" viewBox="0 0 24 24">
+        <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />
+      </svg>
+    </button>
+    <a href="https://mehedisharif.com/contact" class="cta">
+      <span class="label">Contact</span>
+      <span class="arrow" aria-hidden="true">
+        <span>
+          <svg viewBox="0 0 9 7.364">
+            <path d="M0.5 3.682h7.5M5.318 0.5l3.182 3.182-3.182 3.182" />
+          </svg>
+        </span>
+      </span>
+    </a>
+  </div>
+  <button class="burger" id="burger" aria-label="Menu">
+    <i></i>
+  </button>
+</header>
+<nav class="menu" id="menu">
+  <a href="#top">Home</a>
+  <a href="#about">About</a>
+  <a href="#purpose">Businesses</a>
+  <a href="#values">Values</a>
+  <a href="#for-fun">For fun</a>
+  <a href="#blog">Blog</a>
+  <a href="https://mehedisharif.com/contact">Contact</a>
+</nav>

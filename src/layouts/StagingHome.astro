@@ -1,0 +1,64 @@
+---
+import "@/styles/staging.css";
+import Header from "@/partials/staging/Header.astro";
+import Footer from "@/partials/staging/Footer.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mehedi Sharif — Founder &amp; Builder</title>
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      /* theme: saved choice, else the system setting */
+      (function () {
+        var t = null;
+        try {
+          t = localStorage.getItem("theme");
+        } catch (e) {}
+        if (t !== "light" && t !== "dark")
+          t = matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        document.documentElement.dataset.theme = t;
+      })();
+      /* accent: saved choice; text on it turns white when the colour is dark */
+      (function () {
+        var a = null;
+        try {
+          a = localStorage.getItem("accent");
+        } catch (e) {}
+        if (!/^#[0-9a-f]{6}$/i.test(a || "")) return;
+        var r = parseInt(a.substr(1, 2), 16),
+          g = parseInt(a.substr(3, 2), 16),
+          b = parseInt(a.substr(5, 2), 16);
+        var s = document.documentElement.style;
+        s.setProperty("--accent", a);
+        s.setProperty(
+          "--on-accent",
+          (r * 299 + g * 587 + b * 114) / 1000 < 150 ? "#fff" : "#000",
+        );
+      })();
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <script
+      is:inline
+      src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"
+    ></script>
+    <script is:inline src="/scripts/staging-home.js"></script>
+  </body>
+</html>
