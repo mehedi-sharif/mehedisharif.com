@@ -6,8 +6,8 @@
 :root {
   --background: #f9fafa;
   --foreground: #000;
-  --accent: #00ff99;
-  --on-accent: #000;
+  --accent: #2749f5;
+  --on-accent: #fff;
   --surface: #fdffff;
   --hairline: rgba(0, 0, 0, 0.1);
   --ghost: #e2e6e8;

@@ -182,9 +182,7 @@ document.getElementById("valueList").innerHTML = values
     root = document.documentElement;
   const sw = [...box.querySelectorAll(".acc-menu button")];
   const cur = () =>
-    (
-      getComputedStyle(root).getPropertyValue("--accent").trim() || "#00ff99"
-    ).toLowerCase();
+    getComputedStyle(root).getPropertyValue("--accent").trim().toLowerCase();
   const mark = () => {
     const c = cur();
     sw.forEach((b) => b.classList.toggle("on", b.dataset.c === c));
