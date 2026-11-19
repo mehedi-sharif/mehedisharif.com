@@ -1,5 +1,7 @@
 ---
 import "@/styles/staging.css";
+import "@/styles/fonts.css";
+import ContactDrawer from "@/components/ContactDrawer.astro";
 import Header from "@/partials/staging/Header.astro";
 import Footer from "@/partials/staging/Footer.astro";
 ---
@@ -55,6 +57,7 @@ import Footer from "@/partials/staging/Footer.astro";
       <slot />
     </main>
     <Footer />
+    <ContactDrawer />
     <script
       is:inline
       src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"

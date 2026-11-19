@@ -60,4 +60,4 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 .contact-close { cursor:pointer; }
 /* Keep the drawer themed on legacy content pages as well as the new layout. */
 .contact-panel { --page:#FAFAF7;--ink:#030407;--rule:#DCDFD3;--surface:#F1F3EA;--muted:#55594E;--accent-text:#4D5E00; }
-.dark .contact-panel { --page:#030407;--ink:#ECEDE4;--rule:#23271C;--surface:#12170C;--muted:#9EA192;--accent-text:#D4FF24; }
+.dark .contact-panel, [data-theme="dark"] .contact-panel { --page:#030407;--ink:#ECEDE4;--rule:#23271C;--surface:#12170C;--muted:#9EA192;--accent-text:#D4FF24; }

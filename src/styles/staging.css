@@ -468,7 +468,7 @@ h1 .line {
 }
 
 /* ── Sections ── */
-section {
+main section {
   padding: calc(100px * var(--s)) 0;
   position: relative;
   z-index: 1;
@@ -1380,7 +1380,7 @@ html {
   .wrap {
     padding: 0 20px;
   }
-  section {
+  main section {
     padding: 64px 0;
   }
   #connect {
