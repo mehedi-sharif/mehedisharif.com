@@ -1,0 +1,41 @@
+---
+import { getEntry } from "astro:content";
+import SocialContactLinks from "@/components/SocialContactLinks.astro";
+import "@/styles/contact.css";
+
+interface Props {
+  standalone?: boolean;
+}
+
+const { standalone = false } = Astro.props;
+const contact = (await getEntry("contact", "-index"))!.data;
+const site = (await getEntry("site", "-index"))!.data;
+const Heading = standalone ? "h1" : "h2";
+const BookingHeading = standalone ? "h2" : "h3";
+---
+
+<div
+  class:list={["contact-panel-content", { "contact-page-content": standalone }]}
+>
+  <Heading id="contact-heading" class="contact-heading">
+    {contact.title}
+    <br />
+    {contact.title_second_line}
+  </Heading>
+  <section class="contact-booking" aria-labelledby="contact-booking-heading">
+    <BookingHeading
+      id="contact-booking-heading"
+      class="contact-booking-heading"
+    >
+      Let’s make time to talk.
+    </BookingHeading>
+    <p>Book a 30-minute meeting at a time that works for you.</p>
+    <a class="contact-booking-button" href={site.calendar.link}>
+      Book a meeting <span aria-hidden="true">→</span>
+    </a>
+  </section>
+  <slot />
+  <div class="contact-socials">
+    <SocialContactLinks showCalendar={false} />
+  </div>
+</div>

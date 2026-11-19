@@ -16,10 +16,10 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 }
 .contact-close:hover { background:var(--surface); }
 .contact-panel-content { padding:100px 28px 24px; }
-.contact-panel h2 { font:500 52px/1 'Cormorant Garamond',Georgia,serif; letter-spacing:-.01em; margin:0 0 36px; }
+.contact-heading { font:500 52px/1 'Cormorant Garamond',Georgia,serif; letter-spacing:-.01em; margin:0 0 36px; }
 .contact-form { display:flex; flex-direction:column; gap:24px; }
 .contact-booking { padding:22px; margin-bottom:28px; border:1px solid var(--rule); border-radius:16px; background:var(--surface); }
-.contact-booking h3 { margin:0 0 10px; font:500 30px/1.1 'Cormorant Garamond',Georgia,serif; }
+.contact-booking-heading { margin:0 0 10px; font:500 30px/1.1 'Cormorant Garamond',Georgia,serif; }
 .contact-booking p { margin:0 0 20px; color:var(--muted); font:400 15px/1.6 Inter,system-ui,sans-serif; }
 .contact-booking-button { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:52px; padding:14px 18px; border-radius:10px; background:#D4FF24; color:#030407; text-decoration:none; font:600 16px/1.4 Inter,system-ui,sans-serif; }
 .contact-booking-button:hover { background:#E2FF6B; }
@@ -45,7 +45,7 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 @media (max-width:540px) {
   .contact-panel { border-radius:20px; }
   .contact-panel-content { padding:92px 22px 24px; }
-  .contact-panel h2 { font-size:44px; margin-bottom:30px; }
+  .contact-heading { font-size:44px; margin-bottom:30px; }
   .contact-close { top:20px; right:20px; }
 }
 @media (prefers-reduced-motion:no-preference) {
@@ -61,3 +61,19 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 /* Keep the drawer themed on legacy content pages as well as the new layout. */
 .contact-panel { --page:#FAFAF7;--ink:#030407;--rule:#DCDFD3;--surface:#F1F3EA;--muted:#55594E;--accent-text:#4D5E00; }
 .dark .contact-panel, [data-theme="dark"] .contact-panel { --page:#030407;--ink:#ECEDE4;--rule:#23271C;--surface:#12170C;--muted:#9EA192;--accent-text:#D4FF24; }
+
+
+.contact-page-content {
+  width: min(100%, 560px);
+  margin-inline: auto;
+  padding-block: clamp(112px, 14vh, 160px) 64px;
+}
+
+.contact-page-link {
+  display: block;
+  width: fit-content;
+  margin: 20px auto;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

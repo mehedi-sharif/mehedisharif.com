@@ -1,10 +1,15 @@
 ---
 import ImportedHome from "@/layouts/ImportedHome.astro";
+import ContactDetails from "@/components/ContactDetails.astro";
 import { getEntry } from "astro:content";
+
 const contact = (await getEntry("contact", "-index"))!.data;
-import Hero from "@/partials/imported/Hero.astro";
 ---
 
-<ImportedHome title={contact.meta_title} description={contact.description}>
-  <Hero />
+<ImportedHome
+  title={contact.meta_title}
+  description={contact.description}
+  showContactDrawer={false}
+>
+  <ContactDetails standalone />
 </ImportedHome>

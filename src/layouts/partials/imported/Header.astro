@@ -5,6 +5,7 @@ const site = (await getEntry("site", "-index"))!.data;
 const homePrefix = ["/", "/dark", "/dark/"].includes(Astro.url.pathname)
   ? ""
   : "/";
+const isContact = /^\/contact\/?$/.test(Astro.url.pathname);
 const isBlog =
   Astro.url.pathname.startsWith("/blog") ||
   Astro.url.pathname.startsWith("/posts/");
@@ -48,8 +49,9 @@ const links = site.navigation.map((link) => ({
       <a
         class="contact-link tw:ml-auto tw:inline-flex tw:min-h-11 tw:items-center tw:justify-center tw:rounded tw:px-3 tw:sm:px-5 tw:text-sm tw:font-medium tw:no-underline"
         href={site.contact_button.link}
-        aria-haspopup="dialog"
-        aria-controls="contact-drawer"
+        aria-current={isContact ? "page" : undefined}
+        aria-haspopup={isContact ? undefined : "dialog"}
+        aria-controls={isContact ? undefined : "contact-drawer"}
       >
         {site.contact_button.label}
       </a>

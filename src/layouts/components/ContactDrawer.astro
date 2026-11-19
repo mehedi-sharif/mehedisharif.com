@@ -1,9 +1,13 @@
 ---
 import { getEntry } from "astro:content";
 const contact = (await getEntry("contact", "-index"))!.data;
-const site = (await getEntry("site", "-index"))!.data;
-import SocialContactLinks from "@/components/SocialContactLinks.astro";
-import "@/styles/contact.css";
+import ContactDetails from "@/components/ContactDetails.astro";
+
+interface Props {
+  showPageLink?: boolean;
+}
+
+const { showPageLink = false } = Astro.props;
 ---
 
 <dialog
@@ -23,19 +27,7 @@ import "@/styles/contact.css";
       <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.5" />
     </svg>
   </button>
-  <div class="contact-panel-content">
-    <h2 id="contact-heading">
-      {contact.title}
-      <br />
-      {contact.title_second_line}
-    </h2>
-    <section class="contact-booking" aria-labelledby="contact-booking-heading">
-      <h3 id="contact-booking-heading">Let’s make time to talk.</h3>
-      <p>Book a 30-minute meeting at a time that works for you.</p>
-      <a class="contact-booking-button" href={site.calendar.link}>
-        Book a meeting <span aria-hidden="true">→</span>
-      </a>
-    </section>
+  <ContactDetails>
     <p class="contact-form-intro">Or send me a message</p>
     <form class="contact-form" method="POST" action="/api/contact" data-endpoint="/api/contact" data-success={contact.form.success_message} data-error={contact.form.error_message} data-sending={contact.form.sending_label}>
       <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0" />
@@ -45,10 +37,8 @@ import "@/styles/contact.css";
       <button class="contact-submit" type="submit"><span data-submit-label>{contact.form.submit_label}</span><span aria-hidden="true">↗</span></button>
       <p class="contact-status" role="status" aria-live="polite"></p>
     </form>
-    <div class="contact-socials">
-      <SocialContactLinks showCalendar={false} />
-    </div>
-  </div>
+    {showPageLink && <a class="contact-page-link" href="/contact" data-contact-page>View contact page</a>}
+  </ContactDetails>
 </dialog>
 <script>
   let opener: HTMLElement | null = null;
@@ -81,6 +71,7 @@ import "@/styles/contact.css";
     const link = event.target.closest<HTMLAnchorElement>("a[href]");
     if (
       !link ||
+      link.hasAttribute("data-contact-page") ||
       event.defaultPrevented ||
       event.button !== 0 ||
       event.metaKey ||

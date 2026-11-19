@@ -10,6 +10,7 @@ import Header from "@/partials/imported/Header.astro";
 import Footer from "@/partials/imported/Footer.astro";
 const {
   dark = false,
+  showContactDrawer = true,
   noindex = false,
   title = site.title,
   description = site.description,
@@ -95,6 +96,6 @@ const {
         window.dispatchEvent(new Event("resize"));
       });
     </script>
-    <ContactDrawer />
+    {showContactDrawer && <ContactDrawer />}
   </body>
 </html>

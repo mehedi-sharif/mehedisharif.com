@@ -13,7 +13,9 @@ import SocialContactLinks from "@/components/SocialContactLinks.astro";
           ? "#blog-top"
           : Astro.url.pathname.startsWith("/posts/")
             ? "#post"
-            : "#top"
+            : /^\/contact\/?$/.test(Astro.url.pathname)
+              ? "#main-content"
+              : "#top"
       }
       aria-label={`${site.name}, back to top`}
       style="display: inline-flex; color: var(--ink)"
