@@ -37,7 +37,8 @@ html:has(.contact-panel[open]) { overflow:hidden; }
 .contact-field input:focus,.contact-field textarea:focus { outline:2px solid var(--accent-text); outline-offset:2px; }
 .contact-submit { display:flex; align-items:center; justify-content:space-between; min-height:52px; border:1px solid var(--rule); border-radius:10px; padding:14px 18px; background:var(--surface); color:var(--ink); font:500 16px/1.4 Inter,system-ui,sans-serif; cursor:pointer; }
 .contact-submit:hover { background:var(--page); }
-.contact-submit:disabled { opacity:.6; cursor:wait; }
+.contact-submit:disabled { opacity:.6; cursor:not-allowed; }
+.contact-form[aria-busy="true"] .contact-submit { cursor:wait; }
 .contact-status { margin:0; font-size:14px; line-height:1.5; }
 .contact-status:empty { display:none; }
 .contact-status.error { color:#c33727; }
@@ -68,6 +69,8 @@ html:has(.contact-panel[open]) { overflow:hidden; }
   margin-inline: auto;
   padding-block: clamp(112px, 14vh, 160px) 64px;
 }
+
+.contact-page-content .contact-form { margin-bottom:28px; }
 
 .contact-page-link {
   display: block;

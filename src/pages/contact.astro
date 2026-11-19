@@ -1,5 +1,6 @@
 ---
 import ImportedHome from "@/layouts/ImportedHome.astro";
+import ContactMessageForm from "@/components/ContactMessageForm.astro";
 import ContactDetails from "@/components/ContactDetails.astro";
 import { getEntry } from "astro:content";
 
@@ -11,5 +12,7 @@ const contact = (await getEntry("contact", "-index"))!.data;
   description={contact.description}
   showContactDrawer={false}
 >
-  <ContactDetails standalone />
+  <ContactDetails standalone>
+    <ContactMessageForm enabled={false} />
+  </ContactDetails>
 </ImportedHome>
