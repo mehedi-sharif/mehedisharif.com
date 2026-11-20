@@ -55,6 +55,7 @@ const stagingHomeCollection = defineCollection({
   loader: loader("staging-home"),
   schema: z.object({
     title: z.string(),
+    description: z.string(),
     hero: z.object({
       title_before: z.string(),
       title_highlight: z.string(),

@@ -70,3 +70,65 @@ const endpoint = enabled ? "/api/contact" : undefined;
     {!enabled && "Message submissions will be available soon."}
   </p>
 </form>
+
+<script>
+  function setupContactForms() {
+    for (const form of document.querySelectorAll<HTMLFormElement>(
+      ".contact-form[data-endpoint]",
+    )) {
+      if (form.dataset.ready) continue;
+      form.dataset.ready = "true";
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (form.getAttribute("aria-busy") === "true") return;
+        const button =
+          form.querySelector<HTMLButtonElement>('[type="submit"]')!;
+        const label = form.querySelector<HTMLElement>("[data-submit-label]")!;
+        const status = form.querySelector<HTMLElement>(".contact-status")!;
+        const originalLabel = label.textContent;
+        const fields = new FormData(form);
+        const name = String(fields.get("full_name") || "").trim();
+        const email = String(fields.get("email") || "").trim();
+        const message = String(fields.get("message") || "").trim();
+        if (!name || !email || !message) {
+          status.textContent = form.dataset.error!;
+          status.className = "contact-status error";
+          return;
+        }
+        button.disabled = true;
+        form.setAttribute("aria-busy", "true");
+        label.textContent = form.dataset.sending!;
+        status.textContent = "";
+        try {
+          const response = await fetch(form.dataset.endpoint!, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              email,
+              message,
+              website: fields.get("website") || "",
+            }),
+            signal: AbortSignal.timeout(20000),
+          });
+          const result = await response.json();
+          if (!response.ok || result.ok !== true)
+            throw new Error("Submission failed");
+          form.reset();
+          status.textContent = form.dataset.success!;
+          status.className = "contact-status success";
+        } catch {
+          status.textContent = form.dataset.error!;
+          status.className = "contact-status error";
+        } finally {
+          button.disabled = false;
+          form.removeAttribute("aria-busy");
+          label.textContent = originalLabel;
+        }
+      });
+    }
+  }
+
+  setupContactForms();
+  document.addEventListener("astro:page-load", setupContactForms);
+</script>
