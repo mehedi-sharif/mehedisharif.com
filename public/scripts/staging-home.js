@@ -581,28 +581,3 @@ document.querySelectorAll(".cta").forEach((b) => {
   document.fonts && document.fonts.ready.then(fit);
   addEventListener("resize", fit);
 });
-
-/* Typed word: Builder → Founder → Dreamer, typed in and erased letter by letter */
-(function () {
-  const t = document.getElementById("typed");
-  const words = JSON.parse(t.dataset.words);
-  if (words.length < 2) return;
-  let w = 0,
-    i = words[0].length,
-    del = false;
-  (function tick() {
-    const word = words[w];
-    if (!del && i === word.length) {
-      del = true;
-      return setTimeout(tick, 1800);
-    }
-    if (del && i === 0) {
-      del = false;
-      w = (w + 1) % words.length;
-      return setTimeout(tick, 300);
-    }
-    i += del ? -1 : 1;
-    t.textContent = word.slice(0, i) || "\u200b";
-    setTimeout(tick, del ? 55 : 95);
-  })();
-})();

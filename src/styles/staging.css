@@ -765,21 +765,6 @@ main section {
 }
 
 /* Purpose */
-.typed::after {
-  content: "";
-  display: inline-block;
-  width: 2px;
-  height: 0.8em;
-  background: var(--ink-mid);
-  margin-left: calc(6px * var(--s));
-  vertical-align: -0.05em;
-  animation: blink 1s steps(1) infinite;
-}
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
 .biz {
   @apply flex flex-col;
   gap: calc(10px * var(--s));
@@ -800,7 +785,7 @@ main section {
   transform: translateY(-2px);
 }
 .row.now {
-  border-color: var(--accent);
+  border-color: transparent;
 }
 .when {
   font-family: "Playfair Display", Georgia, serif;
@@ -946,7 +931,7 @@ main section {
   font-weight: 400;
   font-size: calc(22px * var(--s));
   line-height: 1.25;
-  margin-bottom: 4px;
+  margin-bottom: calc(12px * var(--s));
 }
 .val p {
   font-family: var(--mulish);

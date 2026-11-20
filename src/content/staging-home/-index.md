@@ -32,8 +32,6 @@ businesses:
   title_before: I am a
   rotating_words:
     - Builder
-    - Founder
-    - Dreamer
   items:
     - featured: true
       period: NOW · FOCUS
@@ -107,7 +105,7 @@ interests:
   story_end: ": a son, a daughter and an amazing family."
 blog:
   title_before: Notes from
-  title_highlight: building.
+  title_highlight: Second Brain
   description: Writing on business, building products, GoHighLevel and life.
   posts:
     - link: /posts/sample-post

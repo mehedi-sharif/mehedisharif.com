@@ -11,13 +11,7 @@ const { content } = Astro.props;
       <h2>
         {content.title_before}{" "}
         <span class="hl">
-          <i
-            class="pf typed"
-            id="typed"
-            data-words={JSON.stringify(content.rotating_words)}
-          >
-            {content.rotating_words[0]}
-          </i>
+          <i class="pf">{content.rotating_words[0]}</i>
         </span>
       </h2>
     </div>
