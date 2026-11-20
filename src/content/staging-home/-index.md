@@ -154,7 +154,7 @@ navigation:
     - link: "#blog"
       label: Blog
   contact:
-    label: Contact
+    label: Let’s Connect
     link: /contact
 footer:
   brand:

@@ -133,55 +133,7 @@ try {
   });
 })();
 
-/* Accent picker */
-(function () {
-  const box = document.getElementById("acc"),
-    btn = document.getElementById("accBtn"),
-    root = document.documentElement;
-  const sw = [...box.querySelectorAll(".acc-menu button")];
-  const cur = () =>
-    getComputedStyle(root).getPropertyValue("--accent").trim().toLowerCase();
-  const mark = () => {
-    const c = cur();
-    sw.forEach((b) => b.classList.toggle("on", b.dataset.c === c));
-  };
-  sw.forEach((b) => {
-    b.style.setProperty("--c", b.dataset.c);
-    b.addEventListener("click", () => {
-      const c = b.dataset.c,
-        r = parseInt(c.substr(1, 2), 16),
-        g = parseInt(c.substr(3, 2), 16),
-        bl = parseInt(c.substr(5, 2), 16);
-      root.style.setProperty("--accent", c);
-      root.style.setProperty(
-        "--on-accent",
-        (r * 299 + g * 587 + bl * 114) / 1000 < 150 ? "#fff" : "#000",
-      );
-      try {
-        localStorage.setItem("accent", c);
-      } catch (e) {}
-      mark();
-      close();
-    });
-  });
-  const close = () => {
-    box.classList.remove("open");
-    btn.setAttribute("aria-expanded", "false");
-  };
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const o = box.classList.toggle("open");
-    btn.setAttribute("aria-expanded", o);
-    mark();
-  });
-  document.addEventListener("click", (e) => {
-    if (!box.contains(e.target)) close();
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") close();
-  });
-  mark();
-})();
+
 
 /* Hero halftone: columns of 1px dots fall from the top edge and thin out;
    a soft band of light rolls down through them. Rides up with the hero once its pin ends. */
@@ -428,13 +380,12 @@ const io = new IntersectionObserver(
     es.forEach((e) => {
       if (e.isIntersecting) {
         e.target.classList.add("in");
-        e.target.querySelectorAll(".hl").forEach((h) => h.classList.add("in"));
         io.unobserve(e.target);
       }
     }),
   { threshold: 0.15 },
 );
-document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+document.querySelectorAll(".reveal, .hl").forEach((el) => io.observe(el));
 
 /* Founder — scroll-scrubbed frames from the Magnific clip (a slow orbit
    from three-quarter to facing camera, background removed onto the page
@@ -476,14 +427,6 @@ document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
     cur = "";
     draw(true);
   }
-  document.getElementById("themeBtn").addEventListener("click", () => {
-    const t = theme() === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = t;
-    try {
-      localStorage.setItem("theme", t);
-    } catch (e) {}
-    load(t);
-  });
   function size() {
     const d = Math.min(devicePixelRatio || 1, 2);
     cv.width = fig.offsetWidth * d;
