@@ -1,9 +1,12 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import "@/styles/staging.css";
 import "@/styles/fonts.css";
 import ContactDrawer from "@/components/ContactDrawer.astro";
 import Header from "@/partials/staging/Header.astro";
 import Footer from "@/partials/staging/Footer.astro";
+type Props = { content: CollectionEntry<"stagingHome">["data"] };
+const { content } = Astro.props;
 ---
 
 <!doctype html>
@@ -11,7 +14,7 @@ import Footer from "@/partials/staging/Footer.astro";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mehedi Sharif — Founder &amp; Builder</title>
+    <title>{content.title}</title>
     <meta name="robots" content="noindex" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -52,11 +55,11 @@ import Footer from "@/partials/staging/Footer.astro";
     </script>
   </head>
   <body>
-    <Header />
+    <Header content={content.navigation} />
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer content={content.footer} />
     <ContactDrawer showPageLink />
     <script
       is:inline

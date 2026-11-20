@@ -11,7 +11,7 @@ try {
     document.querySelectorAll('a[href^="#"]').forEach((a) =>
       a.addEventListener("click", (e) => {
         const id = a.getAttribute("href");
-        const el = id === "#top" ? 0 : document.querySelector(id);
+        const el = id === "#top" ? 0 : document.getElementById(id.slice(1));
         if (el !== null) {
           e.preventDefault();
           lenis.scrollTo(el, { duration: 1.4 });
@@ -25,7 +25,7 @@ try {
 /* nav scroll-spy */
 (function () {
   const links = [...document.querySelectorAll('.navpill a[href^="#"]')];
-  const secs = links.map((a) => document.querySelector(a.getAttribute("href")));
+  const secs = links.map((a) => document.getElementById(a.hash.slice(1)));
   let last = -1;
   function spy() {
     const y = innerHeight * 0.4;
@@ -101,48 +101,6 @@ try {
     });
   });
 })();
-/* Values */
-const values = [
-  ["ENFP personality", "Search “ENFP.” You’ll get a good picture of me."],
-  [
-    "Monk life",
-    "Inside, I picture myself as a monk in white, with a bald head, quietly observing nature.",
-  ],
-  [
-    "Growth mindset",
-    "Life feels empty when I stop learning. Sometimes I wish I had a second brain to hold it all.",
-  ],
-  [
-    "Workaholic",
-    "Time disappears when I’m building something meaningful. Work is my flow state, especially when it makes an impact.",
-  ],
-  [
-    "Minimalism",
-    "Simple living, staying down to earth, and being present matter to me. So do quiet moments.",
-  ],
-  [
-    "Active listener",
-    "Listening to and sharing stories energize my soul. I mentor others weekly and learn from my own mentors and coaches.",
-  ],
-  [
-    "Believe in Collaboration",
-    "My net worth is in the people in my phonebook.",
-  ],
-  [
-    "Guardian of my galaxy",
-    "I have a son, a daughter, and an amazing family. They are my galaxy.",
-  ],
-  [
-    "Seeking Jannah (Heaven)",
-    "Faith in the Creator and the afterlife guides me. Remembering death keeps my priorities clear. “Every soul shall taste death.”",
-  ],
-];
-document.getElementById("valueList").innerHTML = values
-  .map(
-    (v, i) =>
-      `<div class="card val reveal"><div class="v-top"><div class="n">0${i + 1}</div>${i < values.length - 1 ? '<b class="v-next" aria-hidden="true">→</b>' : ""}</div><div><h4>${v[0]}</h4><p>${v[1]}</p></div></div>`,
-  )
-  .join("");
 /* Values: one pixel scrolled down moves the row one pixel left */
 (function () {
   const sec = document.getElementById("values"),
@@ -497,6 +455,8 @@ document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
     want = 0;
   const poster = document.getElementById("bustPoster");
   function load(t) {
+    poster.src = poster.dataset[t];
+    if (poster.dataset.animate !== "true") return;
     if (!sets[t]) {
       const a = [];
       for (let i = 0; i < COUNT; i++) {
@@ -513,7 +473,6 @@ document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
       sets[t] = a;
     }
     imgs = sets[t];
-    poster.src = poster.dataset[t];
     cur = "";
     draw(true);
   }
@@ -682,8 +641,9 @@ document.querySelectorAll(".cta").forEach((b) => {
 
 /* Typed word: Builder → Founder → Dreamer, typed in and erased letter by letter */
 (function () {
-  const t = document.getElementById("typed"),
-    words = ["Builder", "Founder", "Dreamer"];
+  const t = document.getElementById("typed");
+  const words = JSON.parse(t.dataset.words);
+  if (words.length < 2) return;
   let w = 0,
     i = words[0].length,
     del = false;

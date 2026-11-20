@@ -1,41 +1,37 @@
+---
+import type { CollectionEntry } from "astro:content";
+type Props = { content: CollectionEntry<"stagingHome">["data"]["interests"] };
+const { content } = Astro.props;
+---
+
 <!-- FUN -->
 <section id="for-fun">
   <div class="wrap">
     <div class="sec-head reveal">
       <h2>
-        What I do when I’m{" "}
+        {content.title_before}{" "}
         <span class="hl">
-          <i>not working</i>
+          <i>{content.title_highlight}</i>
         </span>
       </h2>
     </div>
     <!-- Name Cloud, our way: a short story set big; hover a highlighted word
            and it lights up while a small card follows the cursor -->
     <p class="story reveal" id="story">
-      When the laptop closes, I open a{" "}
-      <span class="hw" data-peek="book">
-        <i>book</i>
-      </span>
-      . Literature has been my quiet teacher since the days I taught myself to
-      code. Most of my ideas show up on{" "}
-      <span class="hw" data-peek="walk">
-        <i>long walks</i>
-      </span>
-      , not at the desk. I keep life{" "}
-      <span class="hw" data-peek="minimal">
-        <i>minimal</i>
-      </span>
-      , and save the best part of the day for{" "}
-      <span class="hw" data-peek="galaxy">
-        <i>my little galaxy</i>
-      </span>
-      : a son, a daughter and an amazing family.
+      {content.story.map((item, index) => (
+        <Fragment>
+          {item.before.endsWith(" ") ? item.before : item.before + " "}
+          <span class="hw" data-peek={index}>
+            <i>{item.highlight}</i>
+          </span>
+        </Fragment>
+      ))}
+      {content.story_end}
     </p>
     <div class="peek" id="peek" aria-hidden="true">
-      <img data-k="book" src="/images/staging/reading.jpg" alt="" />
-      <img data-k="walk" src="/images/staging/walking.jpg" alt="" />
-      <img data-k="minimal" src="/images/staging/minimal.jpg" alt="" />
-      <img data-k="galaxy" src="/images/staging/galaxy.jpg" alt="" />
+      {content.story.map((item, index) => (
+        <img data-k={index} src={item.image} alt="" />
+      ))}
     </div>
   </div>
 </section>

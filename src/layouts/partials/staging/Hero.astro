@@ -1,11 +1,19 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BoldText from "./BoldText.astro";
+type Props = { content: CollectionEntry<"stagingHome">["data"]["hero"] };
+const { content } = Astro.props;
+---
+
 <!-- HERO — Stackside composition: headline top-left, copy on a rule,
        2×2 stats right, request row at the bottom, founder centred behind -->
 <div class="figure" id="figure" aria-hidden="true">
   <img
     id="bustPoster"
-    src="/images/staging/bust-light.jpg"
-    data-light="/images/staging/bust-light.jpg"
-    data-dark="/images/staging/bust-dark.jpg"
+    src={content.portrait_light}
+    data-light={content.portrait_light}
+    data-dark={content.portrait_dark}
+    data-animate={String(content.animate_portrait)}
     alt=""
   />
   <canvas id="bust"></canvas>
@@ -17,29 +25,26 @@
     <div class="h-left">
       <div class="h-head">
         <h1 class="split" id="title">
-          I am a chain{" "}
+          {content.title_before}{" "}
           <span class="hl">
-            <i>Breaker</i>
+            <i>{content.title_highlight}</i>
           </span>{" "}
-          and build businesses that matter
+          {content.title_after}
         </h1>
       </div>
       <div class="h-copy">
         <span class="rule reveal"></span>
         <div>
-          <p class="lead reveal">Mehedi Sharif</p>
+          <p class="lead reveal">{content.name}</p>
           <p class="body reveal">
-            <b>2×</b> exited founder. Built <b>Themefisher</b> from a startup
-            into a <b>$2 million</b> business, acquired <b>UIHut</b>, and built{" "}
-            <b>Zeon Studio</b> agency. Now I’m building the next chapter with{" "}
-            <b>GHLMegaMinds</b>.
+            <BoldText text={content.description} />
           </p>
         </div>
       </div>
     </div>
     <div class="h-request reveal">
-      <a href="#about" class="cta">
-        <span class="label">My story</span>
+      <a href={content.primary_button.link} class="cta">
+        <span class="label">{content.primary_button.label}</span>
         <span class="arrow" aria-hidden="true">
           <span>
             <svg viewBox="0 0 9 7.364">
@@ -50,8 +55,8 @@
       </a>
     </div>
     <div class="h-connect reveal">
-      <a href="/contact" class="cta">
-        <span class="label">Let’s connect</span>
+      <a href={content.secondary_button.link} class="cta">
+        <span class="label">{content.secondary_button.label}</span>
         <span class="arrow" aria-hidden="true">
           <span>
             <svg viewBox="0 0 9 7.364">
@@ -63,11 +68,12 @@
     </div>
     <a
       class="h-trust reveal"
-      href="https://ghlmegaminds.com/"
+      href={content.spotlight.link}
       target="_blank"
       rel="noopener"
     >
-      <span class="dot"></span>Now building <i>GHLMegaMinds</i> ↗
+      <span class="dot"></span>
+      {content.spotlight.label} <i>{content.spotlight.name}</i> ↗
     </a>
   </div>
 </section>

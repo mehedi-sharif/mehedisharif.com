@@ -1,17 +1,40 @@
+---
+import type { CollectionEntry } from "astro:content";
+type Props = { content: CollectionEntry<"stagingHome">["data"]["values"] };
+const { content } = Astro.props;
+---
+
 <!-- VALUES -->
 <section id="values">
   <div class="v-stage">
     <div class="wrap">
       <div class="sec-head reveal">
         <h2>
-          What I{" "}
+          {content.title_before}{" "}
           <span class="hl">
-            <i>believe</i>
+            <i>{content.title_highlight}</i>
           </span>{" "}
-          in.
+          {content.title_after}
         </h2>
       </div>
     </div>
-    <div class="values" id="valueList"></div>
+    <div class="values" id="valueList">
+      {content.items.map((item, index) => (
+        <div class="card val reveal">
+          <div class="v-top">
+            <div class="n">{String(index + 1).padStart(2, "0")}</div>
+            {index < content.items.length - 1 && (
+              <b class="v-next" aria-hidden="true">
+                →
+              </b>
+            )}
+          </div>
+          <div>
+            <h4>{item.title}</h4>
+            <p>{item.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
 </section>

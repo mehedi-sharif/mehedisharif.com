@@ -6,10 +6,16 @@
   "custom-commit": false,
   "arrangement": [
     {
+      "id": "file-staging-homepage",
+      "type": "file",
+      "targetPath": "src/content/staging-home/-index.md",
+      "groupName": "Staging homepage — sections, navigation & footer"
+    },
+    {
       "id": "file-homepage",
       "type": "file",
       "targetPath": "src/content/homepage/-index.md",
-      "groupName": "Home \u2014 all sections"
+      "groupName": "Legacy homepage content"
     },
     {
       "id": "file-site",

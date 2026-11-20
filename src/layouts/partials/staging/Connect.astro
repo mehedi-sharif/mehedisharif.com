@@ -1,15 +1,21 @@
+---
+import type { CollectionEntry } from "astro:content";
+type Props = { content: CollectionEntry<"stagingHome">["data"]["connect"] };
+const { content } = Astro.props;
+---
+
 <!-- CONNECT -->
 <section id="connect">
   <div class="wrap reveal">
     <h2>
-      Let’s{" "}
+      {content.title_before}{" "}
       <span class="hl">
-        <i>talk.</i>
+        <i>{content.title_highlight}</i>
       </span>
     </h2>
-    <p>Happy to hear about a project, an idea, or just say hello.</p>
-    <a href="/contact" class="cta">
-      <span class="label">Get in touch</span>
+    <p>{content.description}</p>
+    <a href={content.button.link} class="cta">
+      <span class="label">{content.button.label}</span>
       <span class="arrow" aria-hidden="true">
         <span>
           <svg viewBox="0 0 9 7.364">

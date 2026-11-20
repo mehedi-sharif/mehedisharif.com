@@ -1,3 +1,9 @@
+---
+import type { CollectionEntry } from "astro:content";
+type Props = { content: CollectionEntry<"stagingHome">["data"]["navigation"] };
+const { content } = Astro.props;
+---
+
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <filter id="goo" x="-20%" y="-40%" width="140%" height="180%">
@@ -12,31 +18,18 @@
 </svg>
 
 <header>
-  <a href="#top" class="brand" aria-label="Mehedi Sharif, home">
+  <a href={content.brand.link} class="brand" aria-label={content.brand.label}>
     <span class="mark">
       <span></span>
     </span>
-    <img src="/images/staging/brand.svg" alt="" />
+    <img src={content.brand.image} alt="" />
   </a>
   <ul class="navpill" aria-label="Primary">
-    <li>
-      <a href="#top">Home</a>
-    </li>
-    <li>
-      <a href="#about">About</a>
-    </li>
-    <li>
-      <a href="#purpose">Businesses</a>
-    </li>
-    <li>
-      <a href="#values">Values</a>
-    </li>
-    <li>
-      <a href="#for-fun">For fun</a>
-    </li>
-    <li>
-      <a href="#blog">Blog</a>
-    </li>
+    {content.items.map((item) => (
+      <li>
+        <a href={item.link}>{item.label}</a>
+      </li>
+    ))}
   </ul>
   <div class="h-act">
     <div class="acc" id="acc">
@@ -66,8 +59,8 @@
         <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />
       </svg>
     </button>
-    <a href="/contact" class="cta">
-      <span class="label">Contact</span>
+    <a href={content.contact.link} class="cta">
+      <span class="label">{content.contact.label}</span>
       <span class="arrow" aria-hidden="true">
         <span>
           <svg viewBox="0 0 9 7.364">
@@ -82,11 +75,8 @@
   </button>
 </header>
 <nav class="menu" id="menu">
-  <a href="#top">Home</a>
-  <a href="#about">About</a>
-  <a href="#purpose">Businesses</a>
-  <a href="#values">Values</a>
-  <a href="#for-fun">For fun</a>
-  <a href="#blog">Blog</a>
-  <a href="/contact">Contact</a>
+  {content.items.map((item) => (
+    <a href={item.link}>{item.label}</a>
+  ))}
+  <a href={content.contact.link}>{content.contact.label}</a>
 </nav>

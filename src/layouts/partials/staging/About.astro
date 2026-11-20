@@ -1,27 +1,32 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BoldText from "./BoldText.astro";
+type Props = { content: CollectionEntry<"stagingHome">["data"]["about"] };
+const { content } = Astro.props;
+---
+
 <!-- ABOUT — founder parks on the left, story on the right -->
 <section id="about">
   <div class="wrap about">
     <div class="about-slot" id="aboutSlot" aria-hidden="true"></div>
     <div class="about-text" id="aboutText">
       <h2 class="reveal">
-        Started with code.
-        <br />
-        Ended up founding
-        <br />
+        {content.title_lines.map((line) => (
+          <Fragment>
+            {line}
+            <br />
+          </Fragment>
+        ))}
         <span class="hl">
-          <i>8 businesses.</i>
+          <i>{content.title_highlight}</i>
         </span>
       </h2>
       <div class="reveal">
-        <p>
-          Taught myself to code. Built brands including <b>Themefisher</b> and{" "}
-          <b>Zeon Studio</b>, acquired <b>UIHut</b>, and sold two businesses.
-          Now growing <b>GHLMegaMinds</b>.
-        </p>
-        <p>
-          Beyond work: literature, quiet moments, and learning something new. At
-          home, an amazing family, a son, and a daughter—my own little galaxy.
-        </p>
+        {content.paragraphs.map((paragraph) => (
+          <p>
+            <BoldText text={paragraph} />
+          </p>
+        ))}
       </div>
     </div>
   </div>

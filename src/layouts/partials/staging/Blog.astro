@@ -1,63 +1,38 @@
+---
+import type { CollectionEntry } from "astro:content";
+type Props = { content: CollectionEntry<"stagingHome">["data"]["blog"] };
+const { content } = Astro.props;
+---
+
 <!-- BLOG — from mehedisharif.com/blog -->
 <section id="blog">
   <div class="wrap">
     <div class="sec-head reveal">
       <h2>
-        Notes from{" "}
+        {content.title_before}{" "}
         <span class="hl">
-          <i>building.</i>
+          <i>{content.title_highlight}</i>
         </span>
       </h2>
-      <p class="blog-sub">
-        Writing on business, building products, GoHighLevel and life.
-      </p>
+      <p class="blog-sub">{content.description}</p>
     </div>
     <div class="posts">
-      <a class="post reveal" href="/posts/sample-post">
-        <span class="cat">Building</span>
-        <div>
-          <h3>Sample Post</h3>
-          <p>
-            A sample post that shows every text and media element, so each
-            article reads the same way — calm, clear and easy on the eyes.
-          </p>
-        </div>
-        <span class="read">
-          4 min read <b>→</b>
-        </span>
-      </a>
-      <!-- placeholder post: replace with a real one when it is published -->
-      <a class="post reveal" href="/blog">
-        <span class="cat">Business</span>
-        <div>
-          <h3>What selling two businesses taught me</h3>
-          <p>
-            The lessons that only show up at the end — on timing, on people, and
-            on knowing when a chapter is done.
-          </p>
-        </div>
-        <span class="read">
-          6 min read <b>→</b>
-        </span>
-      </a>
-      <!-- placeholder post: replace with a real one when it is published -->
-      <a class="post reveal" href="/blog">
-        <span class="cat">GoHighLevel</span>
-        <div>
-          <h3>Building on GoHighLevel</h3>
-          <p>
-            Notes from GHLMegaMinds on turning a powerful platform into
-            something agencies actually enjoy using.
-          </p>
-        </div>
-        <span class="read">
-          5 min read <b>→</b>
-        </span>
-      </a>
+      {content.posts.map((post) => (
+        <a class="post reveal" href={post.link}>
+          <span class="cat">{post.category}</span>
+          <div>
+            <h3>{post.title}</h3>
+            <p>{post.description}</p>
+          </div>
+          <span class="read">
+            {post.reading_time} <b>→</b>
+          </span>
+        </a>
+      ))}
     </div>
     <div class="blog-all reveal">
-      <a href="/blog" class="cta">
-        <span class="label">All posts</span>
+      <a href={content.button.link} class="cta">
+        <span class="label">{content.button.label}</span>
         <span class="arrow" aria-hidden="true">
           <span>
             <svg viewBox="0 0 9 7.364">

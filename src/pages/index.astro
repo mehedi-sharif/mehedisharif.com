@@ -1,4 +1,5 @@
 ---
+import { getEntry } from "astro:content";
 import StagingHome from "@/layouts/StagingHome.astro";
 import Hero from "@/partials/staging/Hero.astro";
 import About from "@/partials/staging/About.astro";
@@ -7,14 +8,15 @@ import Values from "@/partials/staging/Values.astro";
 import ForFun from "@/partials/staging/ForFun.astro";
 import Blog from "@/partials/staging/Blog.astro";
 import Connect from "@/partials/staging/Connect.astro";
+const home = (await getEntry("stagingHome", "-index"))!.data;
 ---
 
-<StagingHome>
-  <Hero />
-  <About />
-  <Purpose />
-  <Values />
-  <ForFun />
-  <Blog />
-  <Connect />
+<StagingHome content={home}>
+  <Hero content={home.hero} />
+  <About content={home.about} />
+  <Purpose content={home.businesses} />
+  <Values content={home.values} />
+  <ForFun content={home.interests} />
+  <Blog content={home.blog} />
+  <Connect content={home.connect} />
 </StagingHome>

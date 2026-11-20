@@ -7,6 +7,16 @@ The repository configuration is `.sitepins/config.json`. In Sitepins, select
 been pushed. Sitepins edits repository content; Cloudflare builds commits to main.
 This configuration does not create a Sitepins account or grant GitHub access.
 
+## Edit the staging homepage
+
+Select the `staging` branch and open **Staging homepage — sections, navigation & footer**. Publish to `staging` to update the Cloudflare preview at `staging.mehedisharif.com`.
+
+- Edit the hero, About, Businesses, Values, For fun, Blog, and Connect groups. The title fields keep highlighted words in the current design. Use `**bold**` in the hero description and About paragraphs.
+- Add, reorder, or remove business cards, value cards, blog cards, navigation links, and social links in their lists. Keep at least one word in **Rotating words**. A For fun story row pairs the text before a highlighted word with its hover image. Begin **Story end** with a space if it starts a new word.
+- Change the header or footer signature, its destination, and its accessible label in the corresponding **Brand** group. Footer social icons support `facebook`, `linkedin`, `x`, and `github`. Use root-relative URLs such as `/meet` for links that should stay on staging.
+- Upload replacement images to `public/images` and use their `/images/…` URLs. Turn off **Animate portrait** to use the light and dark still images in place of the current animation frames.
+- Use **Contact drawer & form** for the drawer copy and **Navigation, social links & site identity** for the shared contact links and interior pages.
+
 ## Editor sidebar
 
 - **Home — all sections**: banner, About, businesses, values, personal-interest photos,
