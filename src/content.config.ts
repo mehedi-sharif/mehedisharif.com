@@ -63,7 +63,6 @@ const stagingHomeCollection = defineCollection({
       name: z.string(),
       description: z.string(),
       primary_button: editorialLink,
-      secondary_button: editorialLink,
       spotlight: editorialLink.extend({ name: z.string() }),
       portrait_light: z.string(),
       portrait_dark: z.string(),

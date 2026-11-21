@@ -108,15 +108,22 @@ try {
   let D = 0;
   /* the stage is only as tall as its content, so the gap after it matches every other section */
   const stage = sec.querySelector(".v-stage");
+  /* the stage pins in the middle of the screen, so the sideways scroll starts once the section is centred */
+  let T = 0;
   function size() {
     D = Math.max(0, tr.offsetWidth - innerWidth);
     sec.style.height = stage.offsetHeight + D + "px";
+    T = Math.max(0, Math.round((innerHeight - stage.offsetHeight) / 2));
+    stage.style.top = T + "px";
   }
   function upd() {
     const run = sec.offsetHeight - stage.offsetHeight,
       p =
         run > 0
-          ? Math.min(1, Math.max(0, -sec.getBoundingClientRect().top / run))
+          ? Math.min(
+              1,
+              Math.max(0, (T - sec.getBoundingClientRect().top) / run),
+            )
           : 0;
     tr.style.transform = `translate3d(${(-p * D).toFixed(1)}px,0,0)`;
   }
@@ -131,56 +138,6 @@ try {
     size();
     upd();
   });
-})();
-
-/* Accent picker */
-(function () {
-  const box = document.getElementById("acc"),
-    btn = document.getElementById("accBtn"),
-    root = document.documentElement;
-  const sw = [...box.querySelectorAll(".acc-menu button")];
-  const cur = () =>
-    getComputedStyle(root).getPropertyValue("--accent").trim().toLowerCase();
-  const mark = () => {
-    const c = cur();
-    sw.forEach((b) => b.classList.toggle("on", b.dataset.c === c));
-  };
-  sw.forEach((b) => {
-    b.style.setProperty("--c", b.dataset.c);
-    b.addEventListener("click", () => {
-      const c = b.dataset.c,
-        r = parseInt(c.substr(1, 2), 16),
-        g = parseInt(c.substr(3, 2), 16),
-        bl = parseInt(c.substr(5, 2), 16);
-      root.style.setProperty("--accent", c);
-      root.style.setProperty(
-        "--on-accent",
-        (r * 299 + g * 587 + bl * 114) / 1000 < 150 ? "#fff" : "#000",
-      );
-      try {
-        localStorage.setItem("accent", c);
-      } catch (e) {}
-      mark();
-      close();
-    });
-  });
-  const close = () => {
-    box.classList.remove("open");
-    btn.setAttribute("aria-expanded", "false");
-  };
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const o = box.classList.toggle("open");
-    btn.setAttribute("aria-expanded", o);
-    mark();
-  });
-  document.addEventListener("click", (e) => {
-    if (!box.contains(e.target)) close();
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") close();
-  });
-  mark();
 })();
 
 /* Hero halftone: columns of 1px dots fall from the top edge and thin out;
@@ -379,13 +336,6 @@ try {
   };
   requestAnimationFrame(loop);
 })();
-
-/* Mobile menu */
-const menu = document.getElementById("menu");
-document.getElementById("burger").onclick = () => menu.classList.toggle("open");
-menu
-  .querySelectorAll("a")
-  .forEach((a) => (a.onclick = () => menu.classList.remove("open")));
 
 /* Headline: letters arrive from the left, unblurring as they land */
 const title = document.getElementById("title");
@@ -611,38 +561,75 @@ document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
   })();
 })();
 
-/* liquid buttons: two blobs behind the label and arrow */
-document.querySelectorAll(".cta").forEach((b) => {
-  const g = document.createElement("span");
-  g.className = "goo";
-  g.setAttribute("aria-hidden", "true");
-  g.innerHTML = '<i class="gp"></i><i class="gc"></i>';
-  b.prepend(g);
-  /* liquid only while it moves, so the two shapes sit apart cleanly at rest */
-  let off;
-  b.addEventListener("mouseenter", () => {
-    clearTimeout(off);
-    b.classList.add("goo-on");
+/* Contact drawer */
+(() => {
+  const drawer = document.getElementById("dw");
+  let trigger;
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a[href]");
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      !link ||
+      drawer.contains(link) ||
+      link.origin !== location.origin ||
+      link.pathname.replace(/\/$/, "") !== "/contact"
+    )
+      return;
+    event.preventDefault();
+    trigger = link;
+    drawer.showModal();
+    drawer.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      if (!drawer.open) return;
+      document.body.classList.add("dw-open");
+      drawer
+        .querySelectorAll(".hl")
+        .forEach((highlight) => highlight.classList.add("in"));
+      window.lenis?.stop();
+    });
   });
-  b.addEventListener("mouseleave", () => {
-    clearTimeout(off);
-    off = setTimeout(() => b.classList.remove("goo-on"), 780);
+  async function close() {
+    if (!drawer.open || drawer.dataset.closing) return;
+    drawer.dataset.closing = "true";
+    document.body.classList.remove("dw-open");
+    const slide = drawer
+      .getAnimations()
+      .find((animation) => animation.transitionProperty === "transform");
+    if (slide) {
+      await slide.finished.catch(() => {});
+    }
+    drawer.close();
+    delete drawer.dataset.closing;
+    window.lenis?.start();
+    trigger?.focus({ preventScroll: true });
+  }
+  document.getElementById("dwX").addEventListener("click", close);
+  drawer.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    void close();
   });
-  const fit = () => {
-    const L = b.querySelector(".label"),
-      A = b.querySelector(".arrow");
-    g.querySelector(".gp").style.width = L.offsetWidth + "px";
-    g.querySelector(".gc").style.left = 12 + A.offsetLeft + "px";
-  };
-  fit();
-  document.fonts && document.fonts.ready.then(fit);
-  addEventListener("resize", fit);
-});
+  drawer.addEventListener("click", (event) => {
+    if (event.target !== drawer) return;
+    const bounds = drawer.getBoundingClientRect();
+    if (
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom
+    )
+      void close();
+  });
+})();
 
 /* Typed word: Builder → Founder → Dreamer, typed in and erased letter by letter */
 (function () {
-  const t = document.getElementById("typed");
-  const words = JSON.parse(t.dataset.words);
+  const t = document.getElementById("typed"),
+    words = JSON.parse(t.dataset.words);
   if (words.length < 2) return;
   let w = 0,
     i = words[0].length,
