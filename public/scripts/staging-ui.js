@@ -3,6 +3,9 @@
   const box = document.getElementById("acc"),
     btn = document.getElementById("accBtn"),
     root = document.documentElement;
+  const preset = root.dataset.accentPreset;
+  const accentKey = preset ? `accent-${preset}` : "accent";
+  const secondaryKey = preset ? `accent2-${preset}` : "accent2";
   const sw = [...box.querySelectorAll(".acc-menu button")];
   const on = (c) => {
     const r = parseInt(c.substr(1, 2), 16),
@@ -34,8 +37,8 @@
       root.style.setProperty("--accent-2", c2);
       root.style.setProperty("--on-accent-2", c2 === c ? on(c) : c);
       try {
-        localStorage.setItem("accent", c);
-        localStorage.setItem("accent2", c2);
+        localStorage.setItem(accentKey, c);
+        localStorage.setItem(secondaryKey, c2);
       } catch (e) {}
       mark();
       close();

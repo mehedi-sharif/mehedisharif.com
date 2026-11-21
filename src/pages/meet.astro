@@ -1,17 +1,26 @@
 ---
-import ImportedHome from "@/layouts/ImportedHome.astro";
-const bookingUrl = "https://me.mehedisharif.com/widget/booking/uOCX4hGGCPdoXaZ35kuF";
+import { getEntry } from "astro:content";
+import StagingHome from "@/layouts/StagingHome.astro";
+
+const content = (await getEntry("stagingHome", "-index"))!.data;
+const bookingUrl =
+  "https://me.mehedisharif.com/widget/booking/uOCX4hGGCPdoXaZ35kuF";
 ---
 
-<ImportedHome
+<StagingHome
+  content={content}
+  interior
+  accentPreset="teal-lime"
   title="Book a meeting — Mehedi Sharif"
   description="Choose a convenient time to meet with Mehedi Sharif."
 >
   <section class="meet-page wrap" aria-labelledby="meet-heading">
-    <header class="meet-intro">
-      <h1 id="meet-heading" class="d">Let’s connect.</h1>
+    <div class="meet-intro">
+      <h1 id="meet-heading">
+        Let’s <i>connect.</i>
+      </h1>
       <p>Choose a time that works for you.</p>
-    </header>
+    </div>
     <div class="booking-calendar">
       <iframe
         src={bookingUrl}
@@ -23,22 +32,76 @@ const bookingUrl = "https://me.mehedisharif.com/widget/booking/uOCX4hGGCPdoXaZ35
       ></iframe>
     </div>
     <p class="booking-fallback">
-      Having trouble with the calendar? <a href={bookingUrl} target="_blank" rel="noopener noreferrer">Open the booking page</a>.
+      <a
+        class="cta"
+        href={bookingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="label">Open booking calendar</span>
+        <span class="arrow" aria-hidden="true">
+          <span>
+            <i class="barrow"></i>
+          </span>
+        </span>
+      </a>
     </p>
   </section>
-  <script is:inline src="https://me.mehedisharif.com/js/form_embed.js" type="text/javascript" defer></script>
-</ImportedHome>
+  <script
+    is:inline
+    src="https://me.mehedisharif.com/js/form_embed.js"
+    type="text/javascript"
+    defer
+  ></script>
+</StagingHome>
 
 <style>
-  .meet-page { padding-block: 128px 64px; min-height: 100svh; }
-  .meet-intro { text-align: center; margin-bottom: 32px; }
-  .meet-intro h1 { margin: 0 0 16px; font-size: clamp(44px, 6vw, 76px); line-height: 1.05; }
-  .meet-intro p, .booking-fallback { color: var(--muted); }
-  .booking-calendar { max-width: 1100px; margin-inline: auto; background: #fff; border-radius: 16px; overflow: hidden; }
-  .booking-fallback { text-align: center; margin-top: 24px; font-size: 14px; }
-  .booking-fallback a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-  @media (max-width: 600px) {
-    .meet-page { padding-block: 100px 40px; }
-    .booking-calendar { border-radius: 12px; }
+  :global(:root[data-accent-preset="teal-lime"]) {
+    --accent: #033b38;
+    --on-accent: #fff;
+    --accent-2: #cde314;
+    --on-accent-2: #033b38;
+  }
+  .meet-page {
+    padding-block: clamp(104px, 13vw, 168px) 64px;
+    min-height: 100svh;
+  }
+  .meet-intro,
+  .booking-calendar,
+  .booking-fallback {
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+  .meet-intro {
+    padding: clamp(36px, 7vw, 88px) 24px;
+    margin-bottom: 16px;
+    border-radius: var(--radius-card);
+    background: #033b38;
+    color: #fff;
+    text-align: center;
+  }
+  .meet-intro h1 {
+    margin: 0 0 16px;
+    font-size: clamp(44px, 8vw, 92px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+  .meet-intro h1 i {
+    color: #cde314;
+  }
+  .meet-intro p {
+    font-size: clamp(16px, 2vw, 20px);
+  }
+  .booking-calendar {
+    background: #fff;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .booking-fallback {
+    margin-top: 24px;
+    text-align: center;
   }
 </style>

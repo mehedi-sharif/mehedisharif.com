@@ -9,19 +9,21 @@ import Footer from "@/partials/staging/Footer.astro";
 type Props = {
   content: CollectionEntry<"stagingHome">["data"];
   interior?: boolean;
+  accentPreset?: "teal-lime";
   title?: string;
   description?: string;
 };
 const {
   content,
   interior = false,
+  accentPreset,
   title = content.title,
   description = content.description,
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-accent-preset={accentPreset}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -55,9 +57,12 @@ const {
       })();
       /* accent: saved choice; text on it turns white when the colour is dark */
       (function () {
+        const preset = document.documentElement.dataset.accentPreset;
+        const accentKey = preset ? `accent-${preset}` : "accent";
+        const secondaryKey = preset ? `accent2-${preset}` : "accent2";
         var a = null;
         try {
-          a = localStorage.getItem("accent");
+          a = localStorage.getItem(accentKey);
         } catch (e) {}
         if (!/^#[0-9a-f]{6}$/i.test(a || "")) return;
         var r = parseInt(a.substr(1, 2), 16),
@@ -71,7 +76,7 @@ const {
         );
         var a2 = null;
         try {
-          a2 = localStorage.getItem("accent2");
+          a2 = localStorage.getItem(secondaryKey);
         } catch (e) {}
         if (!/^#[0-9a-f]{6}$/i.test(a2 || "")) return;
         r = parseInt(a2.substr(1, 2), 16);
