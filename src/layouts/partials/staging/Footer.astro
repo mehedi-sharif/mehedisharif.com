@@ -1,7 +1,10 @@
 ---
 import type { CollectionEntry } from "astro:content";
-type Props = { content: CollectionEntry<"stagingHome">["data"]["footer"] };
-const { content } = Astro.props;
+type Props = {
+  content: CollectionEntry<"stagingHome">["data"]["footer"];
+  interior?: boolean;
+};
+const { content, interior = false } = Astro.props;
 const icons: Record<string, string> = {
   facebook:
     "M14 8h3V4h-3c-2.8 0-4 1.7-4 4.3V10H7v4h3v8h4v-8h3l1-4h-4V8.6c0-.4.3-.6.6-.6z",
@@ -15,11 +18,25 @@ const icons: Record<string, string> = {
 
 <footer>
   <div class="card foot">
-    <a href={content.brand.link} class="brand" aria-label={content.brand.label}>
+    <a
+      href={
+        interior && content.brand.link.startsWith("#")
+          ? "/" + content.brand.link
+          : content.brand.link
+      }
+      class="brand"
+      aria-label={content.brand.label}
+    >
       <span class="mark">
         <span></span>
       </span>
-      <img src={content.brand.image} alt="" />
+      <span
+        class="logo"
+        aria-hidden="true"
+        style={{
+          "--brand-mask": `url(${JSON.stringify(content.brand.image)})`,
+        }}
+      ></span>
     </a>
     <div class="socials">
       {content.socials.map((social) => (
@@ -39,5 +56,8 @@ const icons: Record<string, string> = {
         </a>
       ))}
     </div>
+    <a href={content.booking.link} class="book">
+      {content.booking.label}
+    </a>
   </div>
 </footer>

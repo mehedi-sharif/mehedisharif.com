@@ -1,18 +1,146 @@
 ---
-import ImportedHome from "@/layouts/ImportedHome.astro";
-import ContactMessageForm from "@/components/ContactMessageForm.astro";
-import ContactDetails from "@/components/ContactDetails.astro";
+import StagingHome from "@/layouts/StagingHome.astro";
+import "@/styles/staging-contact.css";
 import { getEntry } from "astro:content";
-
-const contact = (await getEntry("contact", "-index"))!.data;
+const details = (await getEntry("contact", "-index"))!.data;
+const site = (await getEntry("site", "-index"))!.data;
+const formEnabled = process.env.CF_PAGES_BRANCH !== "staging";
+const content = (await getEntry("stagingHome", "-index"))!.data;
 ---
 
-<ImportedHome
-  title={contact.meta_title}
-  description={contact.description}
-  showContactDrawer={false}
+<StagingHome
+  content={content}
+  interior
+  title={details.meta_title}
+  description={details.description}
 >
-  <ContactDetails standalone>
-    <ContactMessageForm />
-  </ContactDetails>
-</ImportedHome>
+  <section class="contact" id="contact">
+    <div class="c-dots" aria-hidden="true"></div>
+    <div class="wrap">
+      <h1 class="reveal">
+        {details.title}{" "}
+        <span class="hl">
+          <i>{details.title_second_line}</i>
+        </span>
+      </h1>
+      <p class="c-intro reveal">
+        Have a project, an idea, or just want to say hello? Book a call or drop
+        me a message.
+      </p>
+      <div class="c-grid">
+        <div class="c-book reveal">
+          <svg
+            class="nb nb-bl"
+            viewBox="0 0 200 110"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M0 110V20c30-10 50 20 70 40s60 10 80 30 30 20 50 20Z"
+              fill="#CDE314"
+            />
+          </svg>
+          <svg
+            class="nb nb-tr"
+            viewBox="0 0 120 120"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path d="M120 0H30c10 30 40 30 50 60s20 50 40 60Z" fill="#02D8B6" />
+          </svg>
+          <div>
+            <span class="pill">30 MIN · FREE</span>
+            <h2>
+              Let’s make time <i>to talk.</i>
+            </h2>
+            <p>Book a 30-minute meeting at a time that works for you.</p>
+          </div>
+          <a
+            href={site.calendar.link}
+            class="cta"
+            target="_blank"
+            rel="noopener"
+          >
+            <span class="label">Book a meeting</span>
+            <span class="arrow" aria-hidden="true">
+              <span>
+                <i class="barrow"></i>
+              </span>
+            </span>
+          </a>
+        </div>
+        <form
+          class="card c-form reveal"
+          id="cForm"
+          action={formEnabled ? "/api/contact" : undefined}
+          method="post"
+          data-design-contact={formEnabled ? "" : undefined}
+          data-success={details.form.success_message}
+          data-error={details.form.error_message}
+          data-sending={details.form.sending_label}
+        >
+          <h2>
+            Or send me <i>a message</i>
+          </h2>
+          <div class="c-hp" aria-hidden="true">
+            <label>
+              Website
+              <input
+                type="text"
+                name="website"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+          <div class="c-row">
+            <div class="c-field">
+              <label for="cName">{details.form.name_label}</label>
+              <input
+                id="cName"
+                name="full_name"
+                type="text"
+                placeholder={details.form.name_placeholder}
+                autocomplete="name"
+                required
+              />
+            </div>
+            <div class="c-field">
+              <label for="cEmail">{details.form.email_label}</label>
+              <input
+                id="cEmail"
+                name="email"
+                type="email"
+                placeholder={details.form.email_placeholder}
+                autocomplete="email"
+                required
+              />
+            </div>
+          </div>
+          <div class="c-field">
+            <label for="cMsg">{details.form.message_label}</label>
+            <textarea
+              id="cMsg"
+              name="message"
+              placeholder={details.form.message_placeholder}
+              required
+            ></textarea>
+          </div>
+          <div class="c-send">
+            <button type="submit" class="cta" disabled={!formEnabled}>
+              <span class="label">{details.form.submit_label}</span>
+              <span class="arrow" aria-hidden="true">
+                <span>
+                  <i class="barrow"></i>
+                </span>
+              </span>
+            </button>
+            <span class="c-status" id="cStatus" role="status">
+              {!formEnabled && "Message submissions will be available soon."}
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</StagingHome>

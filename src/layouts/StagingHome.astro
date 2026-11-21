@@ -3,11 +3,21 @@ import config from "@/config/config.json";
 import type { CollectionEntry } from "astro:content";
 import "@/styles/staging.css";
 import "@/styles/fonts.css";
-import ContactDrawer from "@/components/ContactDrawer.astro";
+import Drawer from "@/partials/staging/Drawer.astro";
 import Header from "@/partials/staging/Header.astro";
 import Footer from "@/partials/staging/Footer.astro";
-type Props = { content: CollectionEntry<"stagingHome">["data"] };
-const { content } = Astro.props;
+type Props = {
+  content: CollectionEntry<"stagingHome">["data"];
+  interior?: boolean;
+  title?: string;
+  description?: string;
+};
+const {
+  content,
+  interior = false,
+  title = content.title,
+  description = content.description,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -15,9 +25,15 @@ const { content } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{content.title}</title>
-    <meta name="description" content={content.description} />
-    <link rel="canonical" href={config.site.base_url} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {process.env.CF_PAGES_BRANCH === "staging" && (
+      <meta name="robots" content="noindex" />
+    )}
+    <link
+      rel="canonical"
+      href={new URL(Astro.url.pathname, config.site.base_url).href}
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -53,20 +69,44 @@ const { content } = Astro.props;
           "--on-accent",
           (r * 299 + g * 587 + b * 114) / 1000 < 150 ? "#fff" : "#000",
         );
+        var a2 = null;
+        try {
+          a2 = localStorage.getItem("accent2");
+        } catch (e) {}
+        if (!/^#[0-9a-f]{6}$/i.test(a2 || "")) return;
+        r = parseInt(a2.substr(1, 2), 16);
+        g = parseInt(a2.substr(3, 2), 16);
+        b = parseInt(a2.substr(5, 2), 16);
+        s.setProperty("--accent-2", a2);
+        s.setProperty(
+          "--on-accent-2",
+          a2.toLowerCase() === a.toLowerCase()
+            ? (r * 299 + g * 587 + b * 114) / 1000 < 150
+              ? "#fff"
+              : "#000"
+            : a,
+        );
       })();
     </script>
   </head>
   <body>
-    <Header content={content.navigation} />
+    <Header content={content.navigation} interior={interior} />
     <main>
       <slot />
     </main>
-    <Footer content={content.footer} />
-    <ContactDrawer showPageLink />
+    <Footer content={content.footer} interior={interior} />
+    {!interior && <Drawer />}
     <script
       is:inline
       src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"
     ></script>
-    <script is:inline src="/scripts/staging-home.js"></script>
+    <script is:inline src="/scripts/staging-ui.js"></script>
+    <script
+      is:inline
+      src={
+        interior ? "/scripts/staging-contact.js" : "/scripts/staging-home.js"
+      }
+    ></script>
+    <script is:inline src="/scripts/design-contact-form.js"></script>
   </body>
 </html>

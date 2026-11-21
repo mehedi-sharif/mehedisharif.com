@@ -1,13 +1,14 @@
 @layer theme, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
-
 /* Stackside (GetLayers) style tokens */
 :root {
   --background: #f9fafa;
   --foreground: #000;
   --accent: #2749f5;
   --on-accent: #fff;
+  --accent-2: var(--accent);
+  --on-accent-2: var(--on-accent);
   --surface: #fdffff;
   --hairline: rgba(0, 0, 0, 0.1);
   --ghost: #e2e6e8;
@@ -17,7 +18,7 @@
   /* solid colours that look like 50% / 80% / 30% black on the page */
   --text: color-mix(in srgb, #000 50%, var(--background));
   --heading: color-mix(in srgb, #000 80%, var(--background));
-  --nav-text: color-mix(in srgb, #000 30%, var(--background));
+  --nav-text: color-mix(in srgb, #000 50%, var(--background));
   /* the same 50% shade, but solid, so highlight lines stay hidden behind the letters */
   --text-solid: color-mix(in srgb, #000 50%, var(--background));
   --ink-light: #aeff00;
@@ -51,7 +52,7 @@
   --ink-deep: var(--accent);
   --text: color-mix(in srgb, #fff 50%, var(--background));
   --heading: color-mix(in srgb, #fff 80%, var(--background));
-  --nav-text: color-mix(in srgb, #fff 50%, var(--background));
+  --nav-text: color-mix(in srgb, #fff 70%, var(--background));
   --text-solid: color-mix(in srgb, #fff 50%, var(--background));
   --nav-bg: rgba(255, 255, 255, 0.08);
   --glass-a: rgba(255, 255, 255, 0.12);
@@ -113,7 +114,8 @@ h3 i {
 }
 img,
 video {
-  @apply block max-w-full;
+  display: block;
+  max-width: 100%;
 }
 /* every italic accent word is Playfair Display italic */
 i,
@@ -129,7 +131,7 @@ em {
   padding: 0 calc(30px * var(--s));
 }
 .light {
-  @apply font-light;
+  font-weight: 300;
 }
 
 /* ── Header: logo · centre nav pill · green CTA + arrow twin ── */
@@ -146,7 +148,8 @@ header > * {
   pointer-events: auto;
 }
 .brand {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
   gap: calc(10px * var(--s));
   height: calc(50px * var(--s));
   padding: 0 calc(18px * var(--s)) 0 calc(6px * var(--s));
@@ -167,15 +170,21 @@ header > * {
   border-radius: 50%;
   background: var(--on-accent);
 }
-.brand img {
-  height: calc(26px * var(--s));
-  width: auto;
+/* brand signature logo from the brand sheet, drawn as a mask so it takes the theme colour */
+.brand .logo {
+  display: block;
+  height: calc(28px * var(--s));
+  aspect-ratio: 1000/211;
+  background: var(--foreground);
+  -webkit-mask: var(--brand-mask) center/contain no-repeat;
+  mask: var(--brand-mask) center/contain no-repeat;
 }
 .navpill {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
   gap: calc(34px * var(--s));
   height: calc(50px * var(--s));
   padding: 0 calc(40px * var(--s));
@@ -188,7 +197,8 @@ header > * {
   list-style: none;
 }
 .navpill li {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
 }
 /* scroll-spy: the section you are in reads in Playfair italic at full strength, the rest sit at 60% (45% in dark) */
 .navpill a {
@@ -201,7 +211,7 @@ header > * {
   color: var(--foreground);
   font-family: "Playfair Display", Georgia, serif;
   font-style: italic;
-  font-size: 1.08em;
+  font-size: 1em;
 }
 .navpill a {
   white-space: nowrap;
@@ -218,12 +228,16 @@ header > * {
 .cta {
   --gap: 6px;
   --merge: -20px;
-  @apply relative inline-flex items-center isolate;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  isolation: isolate;
   color: var(--on-accent);
 }
 /* theme switch: a round glass button next to Contact */
 .h-act {
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
   gap: calc(10px * var(--s));
 }
 .theme {
@@ -267,12 +281,12 @@ header > * {
   width: calc(18px * var(--s));
   height: calc(18px * var(--s));
   border-radius: 50%;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--accent) 50%, var(--accent-2) 50%);
 }
 .acc-menu {
   position: absolute;
   top: calc(100% + calc(10px * var(--s)));
-  left: 50%;
+  right: 0;
   display: flex;
   gap: calc(8px * var(--s));
   padding: calc(8px * var(--s));
@@ -282,7 +296,7 @@ header > * {
   backdrop-filter: blur(20px) saturate(170%);
   opacity: 0;
   visibility: hidden;
-  transform: translate(-50%, -6px);
+  transform: translateY(-6px);
   transition:
     opacity 0.25s,
     transform 0.35s var(--ease),
@@ -291,7 +305,7 @@ header > * {
 .acc.open .acc-menu {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, 0);
+  transform: none;
   transition:
     opacity 0.25s,
     transform 0.35s var(--ease);
@@ -302,7 +316,7 @@ header > * {
   border-radius: 50%;
   border: 0;
   cursor: pointer;
-  background: var(--c);
+  background: linear-gradient(90deg, var(--c) 50%, var(--c2, var(--c)) 50%);
   box-shadow: 0 0 0 2px transparent;
   transition:
     transform 0.25s var(--ease),
@@ -338,6 +352,17 @@ header > * {
   background: var(--accent);
   border-radius: 999px;
 }
+/* two-tone: the arrow circle wears the second colour; once it melts into the pill it takes the pill's colour */
+.cta:not(.ghost) .arrow {
+  background: var(--accent-2);
+  color: var(--on-accent-2);
+  transition:
+    transform 0.75s cubic-bezier(0.5, 1.6, 0.4, 0.9),
+    color 0.35s;
+}
+.cta:not(.ghost):hover .arrow {
+  color: var(--on-accent);
+}
 .cta.goo-on .label,
 .cta.goo-on .arrow {
   background: transparent;
@@ -354,10 +379,18 @@ header > * {
 }
 .cta .goo .gc {
   width: calc(50px * var(--s));
-  transition: transform 0.75s cubic-bezier(0.5, 1.6, 0.4, 0.9);
+  background: var(--accent-2);
+  transition:
+    transform 0.75s cubic-bezier(0.5, 1.6, 0.4, 0.9),
+    background-color 0.35s;
+}
+.cta:hover .goo .gc {
+  background: var(--accent);
 }
 .cta .label {
-  @apply flex items-center justify-center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: calc(50px * var(--s));
   padding: 0 calc(34px * var(--s));
   line-height: 1.2;
@@ -381,6 +414,10 @@ header > * {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.1;
+}
+.cta .barrow {
+  width: calc(17px * var(--s));
+  height: calc(17px * var(--s));
 }
 .cta:hover .arrow,
 .cta:hover .goo .gc {
@@ -415,6 +452,54 @@ header > * {
 .menu {
   display: none;
 }
+/* nav and CTA buttons: fixed size on every screen above phones
+     (they ignore the big-screen --s steps), and no text in them goes above 16px */
+:root {
+  --sr: var(--s);
+}
+header,
+.cta,
+.h-trust {
+  --s: 1;
+  font-size: 16px;
+}
+.cta {
+  --gap: 6px;
+  --merge: -20px;
+}
+/* phones only: buttons follow the phone's width in small steps (text never above 16px) */
+@media (max-width: 600px) {
+  header,
+  .cta,
+  .h-trust {
+    --s: 0.92;
+    font-size: 14.7px;
+  }
+}
+@media (max-width: 440px) {
+  header,
+  .cta,
+  .h-trust {
+    --s: 0.88;
+    font-size: 14px;
+  }
+}
+@media (max-width: 400px) {
+  header,
+  .cta,
+  .h-trust {
+    --s: 0.8;
+    font-size: 12.8px;
+  }
+}
+@media (max-width: 360px) {
+  header,
+  .cta,
+  .h-trust {
+    --s: 0.72;
+    font-size: 11.5px;
+  }
+}
 
 /* ── Hero ── */
 h1 {
@@ -437,7 +522,7 @@ h1 .line {
   z-index: -1;
   left: -0.04em;
   right: -0.04em;
-  bottom: calc(0.17em - 3px);
+  bottom: 0.17em;
   height: 5px;
   border-radius: 0;
   background: var(--accent);
@@ -445,6 +530,7 @@ h1 .line {
   transform: scaleX(0);
   transition: transform 1.1s var(--ease) 0.6s;
 }
+.in .hl::before,
 .hl.in::before {
   transform: scaleX(1);
 }
@@ -467,7 +553,7 @@ h1 .line {
 }
 
 /* ── Sections ── */
-main section {
+section {
   padding: calc(100px * var(--s)) 0;
   position: relative;
   z-index: 1;
@@ -487,7 +573,7 @@ main section {
   letter-spacing: 0.02em;
 }
 .sec-head {
-  @apply text-center;
+  text-align: center;
   margin-bottom: calc(64px * var(--s));
 }
 .sec-head h2 {
@@ -570,7 +656,8 @@ main section {
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  @apply flex flex-col;
+  display: flex;
+  flex-direction: column;
   gap: calc(56px * var(--s));
 }
 .h-head {
@@ -599,7 +686,8 @@ main section {
 }
 .h-copy > div {
   width: min(25.6875rem, 30vw);
-  @apply flex flex-col;
+  display: flex;
+  flex-direction: column;
   gap: calc(22px * var(--s));
 }
 .h-copy .lead {
@@ -620,7 +708,9 @@ main section {
   font-weight: 500;
 }
 .stat {
-  @apply flex flex-col justify-center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: calc(12px * var(--s));
   padding: calc(24px * var(--s));
 }
@@ -645,21 +735,14 @@ main section {
   gap: calc(10px * var(--s));
   z-index: 2;
 }
-.h-connect {
-  position: absolute;
-  right: calc(30px * var(--s));
-  bottom: calc(30px * var(--s));
-  z-index: 2;
-}
 .h-trust {
   position: absolute;
-  left: 0;
-  right: 0;
-  margin-inline: auto;
+  right: calc(30px * var(--sr));
   width: max-content;
-  bottom: calc(30px * var(--s));
+  bottom: calc(30px * var(--sr));
   z-index: 2;
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
   gap: calc(10px * var(--s));
   height: calc(50px * var(--s));
   padding: 0 calc(22px * var(--s)) 0 calc(14px * var(--s));
@@ -765,8 +848,24 @@ main section {
 }
 
 /* Purpose */
+.typed::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 0.8em;
+  background: var(--ink-mid);
+  margin-left: calc(6px * var(--s));
+  vertical-align: -0.05em;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
 .biz {
-  @apply flex flex-col;
+  display: flex;
+  flex-direction: column;
   gap: calc(10px * var(--s));
 }
 .row {
@@ -785,7 +884,7 @@ main section {
   transform: translateY(-2px);
 }
 .row.now {
-  border-color: transparent;
+  border-color: var(--accent);
 }
 .when {
   font-family: "Playfair Display", Georgia, serif;
@@ -846,6 +945,63 @@ main section {
 .row:hover .url {
   border-color: var(--accent);
 }
+/* NOW card: brand graphic card — dark teal with a lime and a mint blob, no outline */
+.row.now {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: #033b38;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  padding: calc(30px * var(--s) + 1px);
+}
+.row.now:hover {
+  border: 0;
+}
+.row.now .nb {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  transition: transform 0.7s var(--ease);
+}
+.row.now .nb-bl {
+  left: 0;
+  bottom: 0;
+  width: calc(200px * var(--s));
+  height: calc(110px * var(--s));
+  transform-origin: 0 100%;
+}
+.row.now .nb-tr {
+  right: 0;
+  top: 0;
+  width: calc(120px * var(--s));
+  height: calc(120px * var(--s));
+  transform-origin: 100% 0;
+}
+.row.now:hover .nb {
+  transform: scale(1.08);
+}
+.row.now .pill {
+  background: #fd86ea;
+  color: #47063c;
+}
+.row.now h3,
+.row.now:hover h3 {
+  color: #cde314;
+}
+.row.now .url {
+  color: #02d8b6;
+  border-color: #02d8b6;
+}
+.row.now .url:hover {
+  color: #efefef;
+  border-color: #efefef;
+}
+.row.now p {
+  color: color-mix(in srgb, #efefef 82%, #033b38);
+  max-width: 85%;
+}
 .row p {
   font-family: var(--mulish);
   color: var(--muted);
@@ -861,7 +1017,8 @@ main section {
 .v-stage {
   position: sticky;
   top: 0;
-  @apply flex flex-col;
+  display: flex;
+  flex-direction: column;
   padding: calc(100px * var(--s)) 0;
   overflow: hidden;
 }
@@ -877,10 +1034,10 @@ main section {
 }
 .val {
   flex: 0 0 calc(360px * var(--s));
-  min-height: calc(320px * var(--s));
-  @apply flex flex-col;
-  justify-content: space-between;
-  gap: calc(40px * var(--s));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: calc(100px * var(--s));
   padding: calc(32px * var(--s));
   border-color: transparent;
   transition:
@@ -891,27 +1048,52 @@ main section {
   border-color: var(--accent);
   transform: translateY(-2px);
 }
-.val > div:last-child {
-  min-height: calc(120px * var(--s));
+/* no fixed heights: the row stretches every card to the tallest one; icon and title sit at the
+     same height in every card, and the tallest card has equal top and bottom padding */
+.values {
+  align-items: stretch;
 }
-/* arrow pointing on to the next value; darkens and nudges right on hover */
-.v-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+/* value badge: 120x90 pill filled with a two-colour brand blob, an icon sticker on top */
+.v-badge {
+  position: relative;
+  flex: none;
+  align-self: flex-start;
+  isolation: isolate;
 }
-.v-next {
-  font-size: calc(24px * var(--s));
-  line-height: 1;
-  font-weight: 300;
-  color: var(--text);
-  transition:
-    transform 0.4s var(--ease),
-    color 0.3s;
+/* brand sticker: round, chunky dark icon, centred on the pill */
+.v-badge .ic {
+  position: relative;
+  width: calc(54px * var(--s));
+  height: calc(54px * var(--s));
+  border-radius: 50%;
+  @apply grid place-items-center;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.5s var(--ease);
 }
-.val:hover .v-next {
-  color: var(--foreground);
-  transform: translateX(6px);
+.v-badge .ic svg.cb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  stroke: none;
+  transition: transform 0.6s var(--ease);
+}
+.v-badge .ic svg {
+  width: calc(32px * var(--s));
+  height: calc(32px * var(--s));
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.val:hover .v-badge .ic svg.cb {
+  transform: scale(1.15) rotate(8deg);
+}
+.val:hover .v-badge .ic {
+  transform: rotate(-12deg) scale(1.06);
 }
 .pf {
   font-family: "Playfair Display", Georgia, serif;
@@ -931,7 +1113,7 @@ main section {
   font-weight: 400;
   font-size: calc(22px * var(--s));
   line-height: 1.25;
-  margin-bottom: calc(12px * var(--s));
+  margin-bottom: 4px;
 }
 .val p {
   font-family: var(--mulish);
@@ -973,15 +1155,19 @@ main section {
   position: absolute;
   left: -0.08em;
   right: -0.08em;
-  bottom: calc(0.17em - 3px);
+  bottom: 0.17em;
   height: 5px;
   background: var(--accent);
   z-index: -1;
   transform-origin: left;
-  transform: scaleX(1);
+  transform: scaleX(0.0001);
   transition:
+    transform 0.6s var(--ease),
     height 0.55s var(--ease),
     bottom 0.55s var(--ease);
+}
+.story.in .hw::after {
+  transform: scaleX(1);
 }
 .story.dim .hw {
   color: color-mix(in srgb, var(--foreground) 40%, var(--background));
@@ -1041,7 +1227,7 @@ main section {
 
 /* Connect */
 #connect {
-  @apply text-center;
+  text-align: center;
   padding: calc(100px * var(--s)) 0 calc(160px * var(--s));
   overflow: hidden;
 }
@@ -1071,7 +1257,8 @@ main section {
   gap: calc(16px * var(--s));
 }
 .post {
-  @apply flex flex-col;
+  display: flex;
+  flex-direction: column;
   gap: calc(22px * var(--s));
   min-height: calc(340px * var(--s));
   padding: calc(32px * var(--s));
@@ -1132,6 +1319,15 @@ main section {
   background: var(--accent);
   color: var(--on-accent);
 }
+/* the exact arrow from the brand sheet's sticker, turned to point right */
+.barrow {
+  display: block;
+  width: calc(20px * var(--s));
+  height: calc(20px * var(--s));
+  background: currentColor;
+  -webkit-mask: url(/images/staging/button-arrow.png) center/contain no-repeat;
+  mask: url(/images/staging/button-arrow.png) center/contain no-repeat;
+}
 .blog-sub {
   font-family: var(--mulish);
   color: var(--muted);
@@ -1153,7 +1349,7 @@ footer {
 }
 .foot {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: calc(20px * var(--s));
   padding: calc(24px * var(--s)) calc(30px * var(--s));
@@ -1189,7 +1385,8 @@ footer {
 }
 .book {
   justify-self: end;
-  @apply flex items-center;
+  display: flex;
+  align-items: center;
   gap: calc(8px * var(--s));
   height: calc(42px * var(--s));
   padding: 0 calc(18px * var(--s));
@@ -1276,10 +1473,6 @@ html {
 
 /* ── small laptops ── */
 @media (max-width: 1279px) {
-  .navpill {
-    gap: 24px;
-    padding: 0 26px;
-  }
   .h-head {
     width: min(640px, 56vw);
   }
@@ -1299,7 +1492,7 @@ html {
   }
 }
 /* ── tablets: the nav folds into the menu button ── */
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .navpill {
     display: none;
   }
@@ -1360,7 +1553,7 @@ html {
   .wrap {
     padding: 0 20px;
   }
-  main section {
+  section {
     padding: 64px 0;
   }
   #connect {
@@ -1410,15 +1603,9 @@ html {
     left: 20px;
     bottom: 20px;
   }
-  .h-connect {
+  .h-trust {
     right: 20px;
     bottom: 20px;
-  }
-  .h-trust {
-    display: none;
-  }
-  .cta .label {
-    padding: 0 22px;
   }
   .about {
     grid-template-columns: 1fr;
@@ -1442,13 +1629,18 @@ html {
     gap: 12px;
     padding: 24px;
   }
+  .row.now .nb-bl {
+    display: none;
+  }
+  .row.now p {
+    max-width: 100%;
+  }
   .row p {
     max-width: 100%;
     font-size: 16px;
   }
   .val {
     flex-basis: min(80vw, 360px);
-    min-height: 300px;
     padding: 26px;
   }
   .values {
@@ -1466,37 +1658,21 @@ html {
   .foot {
     grid-template-columns: 1fr;
     justify-items: center;
-    @apply text-center;
+    text-align: center;
     padding: 24px 16px;
   }
   .foot .brand,
-  .foot .socials {
+  .book {
     justify-self: center;
   }
 }
-@media (max-width: 480px) {
-  header {
-    left: 8px;
-    right: 8px;
-    top: 8px;
-  }
-  .brand {
-    height: 44px;
-  }
-  .theme,
-  .burger {
-    width: 44px;
-    height: 44px;
-  }
-  .h-act {
-    gap: 6px;
-  }
-  .h-request .cta .label {
-    padding: 0 18px;
-  }
-}
 @media (max-width: 600px) {
-  .h-connect {
+  .acc-menu {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    border-radius: 24px;
+  }
+  .h-trust {
     display: none;
   }
   .figure-spot {
@@ -1511,4 +1687,261 @@ html {
   .peek {
     display: none;
   }
+}
+
+/* ── contact drawer: slides in from the right over a blurred page ── */
+.dw-back {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: color-mix(in srgb, var(--background) 45%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.4s var(--ease),
+    visibility 0s 0.4s;
+}
+.dw {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 91;
+  width: min(460px, calc(100vw - 16px));
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+  transform: translateX(calc(100% + 24px));
+  visibility: hidden;
+  transition:
+    transform 0.6s var(--ease),
+    visibility 0s 0.6s;
+}
+body.dw-open .dw-back {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s var(--ease);
+}
+body.dw-open .dw {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.6s var(--ease);
+}
+.dw-x {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  background: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  @apply grid place-items-center;
+  transition:
+    transform 0.3s var(--ease),
+    background-color 0.2s;
+}
+.dw-x:hover {
+  transform: rotate(90deg);
+  background: var(--ghost);
+}
+.dw-x svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  fill: none;
+}
+.dw-in {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 56px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dw-in > * {
+  flex-shrink: 0;
+}
+.dw h2.dw-title {
+  font-weight: 300;
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--heading);
+  margin: 0 0 8px;
+}
+.dw h2.dw-title i {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 400;
+  color: var(--foreground);
+}
+.dw-book {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 26px;
+  border-radius: 18px;
+  background: #033b38;
+  color: color-mix(in srgb, #efefef 82%, #033b38);
+}
+.dw-book .nb {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.dw-book .nb-tr {
+  right: 0;
+  top: 0;
+  width: 110px;
+  height: 110px;
+}
+.dw-book .pill {
+  background: #fd86ea;
+  color: #47063c;
+  align-self: flex-start;
+}
+.dw-book h3 {
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #cde314;
+  margin: 14px 0 8px;
+}
+.dw-book h3 i {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 400;
+  color: #cde314;
+}
+.dw-book p {
+  font-size: 15px;
+}
+.dw-book .cta {
+  align-self: flex-start;
+}
+/* on the teal card the button keeps fixed brand colours, so no accent choice can make it vanish */
+.dw-book .cta {
+  --accent: #cde314;
+  --on-accent: #033b38;
+  --accent-2: #02d8b6;
+  --on-accent-2: #033b38;
+}
+.dw-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  background: var(--background);
+}
+.dw-form h3 {
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--heading);
+}
+.dw-form h3 i {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 400;
+  color: var(--foreground);
+}
+.dw-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.dw-field label {
+  font-size: 13px;
+  color: var(--heading);
+}
+.dw-field input,
+.dw-field textarea {
+  font: inherit;
+  font-size: 16px;
+  color: var(--foreground);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: 0;
+  width: 100%;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s;
+}
+.dw-field textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+.dw-field input::placeholder,
+.dw-field textarea::placeholder {
+  color: var(--muted);
+}
+.dw-field input:focus,
+.dw-field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.dw-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.dw-send {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+button.cta {
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+.dw-status {
+  font-size: 13px;
+  color: var(--muted);
+}
+.dw-status.ok {
+  color: var(--foreground);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dw,
+  .dw-back {
+    transition: none;
+  }
+}
+
+.dw {
+  margin: 0;
+  left: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  color: var(--foreground);
+}
+.dw::backdrop {
+  background: transparent;
+}
+.dw:not([open]) {
+  display: none;
 }

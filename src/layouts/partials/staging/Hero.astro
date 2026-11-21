@@ -6,7 +6,7 @@ const { content } = Astro.props;
 ---
 
 <!-- HERO — Stackside composition: headline top-left, copy on a rule,
-       founder centred behind -->
+       2×2 stats right, request row at the bottom, founder centred behind -->
 <div class="figure" id="figure" aria-hidden="true">
   <img
     id="bustPoster"
@@ -41,6 +41,16 @@ const { content } = Astro.props;
           </p>
         </div>
       </div>
+    </div>
+    <div class="h-request reveal">
+      <a href={content.primary_button.link} class="cta">
+        <span class="label">{content.primary_button.label}</span>
+        <span class="arrow" aria-hidden="true">
+          <span>
+            <i class="barrow"></i>
+          </span>
+        </span>
+      </a>
     </div>
     <a
       class="h-trust reveal"

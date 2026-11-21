@@ -11,13 +11,45 @@ const { content } = Astro.props;
       <h2>
         {content.title_before}{" "}
         <span class="hl">
-          <i class="pf">{content.rotating_words[0]}</i>
+          <i
+            class="pf typed"
+            id="typed"
+            data-words={JSON.stringify(content.rotating_words)}
+          >
+            {content.rotating_words[0]}
+          </i>
         </span>
       </h2>
     </div>
     <div class="biz">
       {content.items.map((item) => (
         <div class:list={["card row reveal", { now: item.featured }]}>
+          {item.featured && (
+            <Fragment>
+              <svg
+                class="nb nb-bl"
+                viewBox="0 0 200 110"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0 110V20c30-10 50 20 70 40s60 10 80 30 30 20 50 20Z"
+                  fill="#CDE314"
+                />
+              </svg>
+              <svg
+                class="nb nb-tr"
+                viewBox="0 0 120 120"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M120 0H30c10 30 40 30 50 60s20 50 40 60Z"
+                  fill="#02D8B6"
+                />
+              </svg>
+            </Fragment>
+          )}
           <div class="when">
             {item.featured ? (
               <span class="pill">{item.period}</span>

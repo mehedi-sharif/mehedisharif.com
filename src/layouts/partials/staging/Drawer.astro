@@ -1,0 +1,112 @@
+---
+import { getEntry } from "astro:content";
+const details = (await getEntry("contact", "-index"))!.data;
+const site = (await getEntry("site", "-index"))!.data;
+---
+
+<div class="dw-back" id="dwBack" aria-hidden="true"></div>
+<dialog class="dw" id="dw" aria-labelledby="dwTitle">
+  <button class="dw-x" id="dwX" aria-label="Close">
+    <svg viewBox="0 0 14 14">
+      <path d="M1 1l12 12M13 1L1 13" />
+    </svg>
+  </button>
+  <div class="dw-in" data-lenis-prevent>
+    <h2 class="dw-title" id="dwTitle">
+      {details.title}{" "}
+      <span class="hl">
+        <i>{details.title_second_line}</i>
+      </span>
+    </h2>
+    <div class="dw-book">
+      <svg
+        class="nb nb-tr"
+        viewBox="0 0 120 120"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path d="M120 0H30c10 30 40 30 50 60s20 50 40 60Z" fill="#02D8B6" />
+      </svg>
+      <div>
+        <span class="pill">30 MIN · FREE</span>
+        <h3>
+          Let’s make time <i>to talk.</i>
+        </h3>
+        <p>Book a 30-minute meeting at a time that works for you.</p>
+      </div>
+      <a href={site.calendar.link} class="cta" target="_blank" rel="noopener">
+        <span class="label">Book a meeting</span>
+        <span class="arrow" aria-hidden="true">
+          <span>
+            <i class="barrow"></i>
+          </span>
+        </span>
+      </a>
+    </div>
+    <form
+      class="dw-form"
+      id="dwForm"
+      action="/api/contact"
+      method="post"
+      data-design-contact
+      data-success={details.form.success_message}
+      data-error={details.form.error_message}
+      data-sending={details.form.sending_label}
+    >
+      <h3>
+        Or send me <i>a message</i>
+      </h3>
+      <div class="dw-hp" aria-hidden="true">
+        <label>
+          Website
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </label>
+      </div>
+      <div class="dw-field">
+        <label for="dwName">{details.form.name_label}</label>
+        <input
+          id="dwName"
+          name="full_name"
+          type="text"
+          placeholder={details.form.name_placeholder}
+          autocomplete="name"
+          required
+        />
+      </div>
+      <div class="dw-field">
+        <label for="dwEmail">{details.form.email_label}</label>
+        <input
+          id="dwEmail"
+          name="email"
+          type="email"
+          placeholder={details.form.email_placeholder}
+          autocomplete="email"
+          required
+        />
+      </div>
+      <div class="dw-field">
+        <label for="dwMsg">{details.form.message_label}</label>
+        <textarea
+          id="dwMsg"
+          name="message"
+          placeholder={details.form.message_placeholder}
+          required
+        ></textarea>
+      </div>
+      <div class="dw-send">
+        <button type="submit" class="cta">
+          <span class="label">{details.form.submit_label}</span>
+          <span class="arrow" aria-hidden="true">
+            <span>
+              <i class="barrow"></i>
+            </span>
+          </span>
+        </button>
+        <span class="dw-status" id="dwStatus" role="status"></span>
+      </div>
+    </form>
+    <a class="dw-status" href="/contact">
+      View contact page
+    </a>
+  </div>
+</dialog>

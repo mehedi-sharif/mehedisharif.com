@@ -8,11 +8,8 @@ hero:
   name: Mehedi Sharif
   description: "**2×** exited founder. Built **Themefisher** from a startup into a **$2 million** business, acquired **UIHut**, and built **Zeon Studio** agency. Now I’m building the next chapter with **GHLMegaMinds**."
   primary_button:
-    label: My story
-    link: "#about"
-  secondary_button:
-    label: Let’s connect
-    link: /contact
+    label: Let’s work with me
+    link: "#connect"
   spotlight:
     label: Now building
     name: GHLMegaMinds
@@ -32,6 +29,8 @@ businesses:
   title_before: I am a
   rotating_words:
     - Builder
+    - Founder
+    - Dreamer
   items:
     - featured: true
       period: NOW · FOCUS
@@ -99,13 +98,13 @@ interests:
     - before: ", not at the desk. I keep life"
       highlight: minimal
       image: /images/staging/minimal.jpg
-    - before: ", and save the best part of the day for"
+    - before: ", dressed in white, and save the best part of the day for"
       highlight: my little galaxy
       image: /images/staging/galaxy.jpg
   story_end: ": a son, a daughter and an amazing family."
 blog:
   title_before: Notes from
-  title_highlight: Second Brain
+  title_highlight: building.
   description: Writing on business, building products, GoHighLevel and life.
   posts:
     - link: /posts/sample-post
@@ -135,7 +134,7 @@ connect:
     link: /contact
 navigation:
   brand:
-    image: /images/staging/brand.svg
+    image: /images/staging/signature.png
     link: "#top"
     label: Mehedi Sharif, home
   items:
@@ -152,11 +151,11 @@ navigation:
     - link: "#blog"
       label: Blog
   contact:
-    label: Let’s Connect
+    label: Contact
     link: /contact
 footer:
   brand:
-    image: /images/staging/brand.svg
+    image: /images/staging/signature.png
     link: "#top"
     label: Mehedi Sharif, back to top
   socials:

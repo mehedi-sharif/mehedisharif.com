@@ -108,15 +108,22 @@ try {
   let D = 0;
   /* the stage is only as tall as its content, so the gap after it matches every other section */
   const stage = sec.querySelector(".v-stage");
+  /* the stage pins in the middle of the screen, so the sideways scroll starts once the section is centred */
+  let T = 0;
   function size() {
     D = Math.max(0, tr.offsetWidth - innerWidth);
     sec.style.height = stage.offsetHeight + D + "px";
+    T = Math.max(0, Math.round((innerHeight - stage.offsetHeight) / 2));
+    stage.style.top = T + "px";
   }
   function upd() {
     const run = sec.offsetHeight - stage.offsetHeight,
       p =
         run > 0
-          ? Math.min(1, Math.max(0, -sec.getBoundingClientRect().top / run))
+          ? Math.min(
+              1,
+              Math.max(0, (T - sec.getBoundingClientRect().top) / run),
+            )
           : 0;
     tr.style.transform = `translate3d(${(-p * D).toFixed(1)}px,0,0)`;
   }
@@ -132,8 +139,6 @@ try {
     upd();
   });
 })();
-
-
 
 /* Hero halftone: columns of 1px dots fall from the top edge and thin out;
    a soft band of light rolls down through them. Rides up with the hero once its pin ends. */
@@ -332,13 +337,6 @@ try {
   requestAnimationFrame(loop);
 })();
 
-/* Mobile menu */
-const menu = document.getElementById("menu");
-document.getElementById("burger").onclick = () => menu.classList.toggle("open");
-menu
-  .querySelectorAll("a")
-  .forEach((a) => (a.onclick = () => menu.classList.remove("open")));
-
 /* Headline: letters arrive from the left, unblurring as they land */
 const title = document.getElementById("title");
 let k = 0;
@@ -380,12 +378,13 @@ const io = new IntersectionObserver(
     es.forEach((e) => {
       if (e.isIntersecting) {
         e.target.classList.add("in");
+        e.target.querySelectorAll(".hl").forEach((h) => h.classList.add("in"));
         io.unobserve(e.target);
       }
     }),
   { threshold: 0.15 },
 );
-document.querySelectorAll(".reveal, .hl").forEach((el) => io.observe(el));
+document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
 /* Founder — scroll-scrubbed frames from the Magnific clip (a slow orbit
    from three-quarter to facing camera, background removed onto the page
@@ -427,6 +426,14 @@ document.querySelectorAll(".reveal, .hl").forEach((el) => io.observe(el));
     cur = "";
     draw(true);
   }
+  document.getElementById("themeBtn").addEventListener("click", () => {
+    const t = theme() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = t;
+    try {
+      localStorage.setItem("theme", t);
+    } catch (e) {}
+    load(t);
+  });
   function size() {
     const d = Math.min(devicePixelRatio || 1, 2);
     cv.width = fig.offsetWidth * d;
@@ -554,30 +561,92 @@ document.querySelectorAll(".reveal, .hl").forEach((el) => io.observe(el));
   })();
 })();
 
-/* liquid buttons: two blobs behind the label and arrow */
-document.querySelectorAll(".cta").forEach((b) => {
-  const g = document.createElement("span");
-  g.className = "goo";
-  g.setAttribute("aria-hidden", "true");
-  g.innerHTML = '<i class="gp"></i><i class="gc"></i>';
-  b.prepend(g);
-  /* liquid only while it moves, so the two shapes sit apart cleanly at rest */
-  let off;
-  b.addEventListener("mouseenter", () => {
-    clearTimeout(off);
-    b.classList.add("goo-on");
+/* Contact drawer */
+(() => {
+  const drawer = document.getElementById("dw");
+  let trigger;
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a[href]");
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      !link ||
+      drawer.contains(link) ||
+      link.origin !== location.origin ||
+      link.pathname.replace(/\/$/, "") !== "/contact"
+    )
+      return;
+    event.preventDefault();
+    trigger = link;
+    drawer.showModal();
+    drawer.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      if (!drawer.open) return;
+      document.body.classList.add("dw-open");
+      drawer
+        .querySelectorAll(".hl")
+        .forEach((highlight) => highlight.classList.add("in"));
+      window.lenis?.stop();
+    });
   });
-  b.addEventListener("mouseleave", () => {
-    clearTimeout(off);
-    off = setTimeout(() => b.classList.remove("goo-on"), 780);
+  async function close() {
+    if (!drawer.open || drawer.dataset.closing) return;
+    drawer.dataset.closing = "true";
+    document.body.classList.remove("dw-open");
+    const slide = drawer
+      .getAnimations()
+      .find((animation) => animation.transitionProperty === "transform");
+    if (slide) {
+      await slide.finished.catch(() => {});
+    }
+    drawer.close();
+    delete drawer.dataset.closing;
+    window.lenis?.start();
+    trigger?.focus({ preventScroll: true });
+  }
+  document.getElementById("dwX").addEventListener("click", close);
+  drawer.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    void close();
   });
-  const fit = () => {
-    const L = b.querySelector(".label"),
-      A = b.querySelector(".arrow");
-    g.querySelector(".gp").style.width = L.offsetWidth + "px";
-    g.querySelector(".gc").style.left = 12 + A.offsetLeft + "px";
-  };
-  fit();
-  document.fonts && document.fonts.ready.then(fit);
-  addEventListener("resize", fit);
-});
+  drawer.addEventListener("click", (event) => {
+    if (event.target !== drawer) return;
+    const bounds = drawer.getBoundingClientRect();
+    if (
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom
+    )
+      void close();
+  });
+})();
+
+/* Typed word: Builder → Founder → Dreamer, typed in and erased letter by letter */
+(function () {
+  const t = document.getElementById("typed"),
+    words = JSON.parse(t.dataset.words);
+  if (words.length < 2) return;
+  let w = 0,
+    i = words[0].length,
+    del = false;
+  (function tick() {
+    const word = words[w];
+    if (!del && i === word.length) {
+      del = true;
+      return setTimeout(tick, 1800);
+    }
+    if (del && i === 0) {
+      del = false;
+      w = (w + 1) % words.length;
+      return setTimeout(tick, 300);
+    }
+    i += del ? -1 : 1;
+    t.textContent = word.slice(0, i) || "\u200b";
+    setTimeout(tick, del ? 55 : 95);
+  })();
+})();
