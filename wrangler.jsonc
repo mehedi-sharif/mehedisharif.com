@@ -4,6 +4,8 @@
   "pages_build_output_dir": "./dist-cloudflare",
   "compatibility_date": "2026-10-29",
   "vars": {
-    "GHL_LOCATION_ID": "RulB9rnnRn2HFdQ5yzJT"
+    "GHL_LOCATION_ID": "RulB9rnnRn2HFdQ5yzJT",
+    "OWNER_EMAIL": "mehedi@mehedisharif.com",
+    "ACCOUNTANT_EMAIL": "tuhin.themefisher@gmail.com"
   }
 }
