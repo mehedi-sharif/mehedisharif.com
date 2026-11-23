@@ -1,0 +1,329 @@
+---
+import { getEntry } from "astro:content";
+import config from "@/config/config.json";
+import StagingHome from "@/layouts/StagingHome.astro";
+import BoldText from "@/partials/staging/BoldText.astro";
+
+type BrandImage = {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  backdrop?: "light" | "dark";
+  note?: string;
+};
+
+const socialImage = {
+  src: config.metadata.meta_image,
+  width: 252,
+  height: 279,
+  alt: "Mehedi Sharif",
+  note: "Social sharing image",
+};
+
+const photos: BrandImage[] = [
+  { src: "/mehedi.jpg", width: 460, height: 460, alt: "Mehedi Sharif" },
+  {
+    src: "/images/author.png",
+    width: 252,
+    height: 279,
+    alt: "Mehedi Sharif",
+  },
+  socialImage,
+  {
+    src: "/images/personal/hero-portrait.jpg",
+    width: 768,
+    height: 1024,
+    alt: "Mehedi Sharif",
+  },
+  {
+    src: "/images/personal/mehedi-sharif-export.jpg",
+    width: 724,
+    height: 1056,
+    alt: "Mehedi Sharif",
+  },
+  {
+    src: "/images/personal/mehedi-sharif.png",
+    width: 1165,
+    height: 1350,
+    alt: "Mehedi Sharif",
+  },
+  {
+    src: "/images/personal/portrait.jpg",
+    width: 724,
+    height: 1056,
+    alt: "Mehedi Sharif",
+  },
+  {
+    src: "/images/staging/bust-light.jpg",
+    width: 420,
+    height: 560,
+    alt: "Mehedi Sharif on a light background",
+  },
+  {
+    src: "/images/staging/bust-dark.jpg",
+    width: 420,
+    height: 560,
+    alt: "Mehedi Sharif on a dark background",
+  },
+];
+
+const logos: BrandImage[] = [
+  {
+    src: "/images/staging/signature.png",
+    width: 1000,
+    height: 211,
+    alt: "Mehedi Sharif’s signature",
+    backdrop: "light",
+  },
+  {
+    src: "/images/staging/brand.svg",
+    width: 217,
+    height: 50,
+    alt: "Mehedi Sharif logo",
+    backdrop: "light",
+  },
+  {
+    src: "/images/logo-dark.svg",
+    width: 217,
+    height: 50,
+    alt: "Black Mehedi Sharif logo",
+    backdrop: "light",
+  },
+  {
+    src: "/images/logo-dark.png",
+    width: 217,
+    height: 50,
+    alt: "Black Mehedi Sharif logo",
+    backdrop: "light",
+  },
+  {
+    src: "/images/logo-light.svg",
+    width: 217,
+    height: 50,
+    alt: "White Mehedi Sharif logo",
+    backdrop: "dark",
+  },
+  {
+    src: "/images/logo-light.png",
+    width: 217,
+    height: 50,
+    alt: "White Mehedi Sharif logo",
+    backdrop: "dark",
+  },
+  { src: "/images/favicon.png", width: 64, height: 64, alt: "Site icon" },
+  socialImage,
+];
+
+// Accent colors and neutrals from staging.css, staging-contact.css, and Header.astro.
+const colors = [
+  { name: "Brand teal", hex: "#033B38" },
+  { name: "Brand mint", hex: "#02D8B6" },
+  { name: "Brand lime", hex: "#CDE314" },
+  { name: "Default blue", hex: "#2749F5" },
+  { name: "Green accent", hex: "#00FF99" },
+  { name: "Pink accent", hex: "#FD86EA" },
+  { name: "Light background", hex: "#F9FAFA" },
+  { name: "Light surface", hex: "#FDFFFF" },
+  { name: "Light foreground", hex: "#000000" },
+  { name: "Dark background", hex: "#0B0F0D" },
+  { name: "Dark surface", hex: "#121816" },
+  { name: "Dark foreground", hex: "#F2F5F3" },
+];
+
+const fonts = [
+  { name: "Inter Tight", family: "var(--sans)", style: "normal" },
+  {
+    name: "Playfair Display Italic",
+    family: '"Playfair Display", Georgia, serif',
+    style: "italic",
+  },
+  { name: "Inter", family: "Inter, system-ui, sans-serif", style: "normal" },
+  {
+    name: "Cormorant Garamond",
+    family: '"Cormorant Garamond", Georgia, serif',
+    style: "normal",
+  },
+];
+
+const imageSections = [
+  { id: "photos", title: "Photos", images: photos },
+  { id: "logos", title: "Logo and icons", images: logos },
+];
+
+const content = (await getEntry("stagingHome", "-index"))!.data;
+---
+
+<StagingHome content={content} interior title="Brand kit — Mehedi Sharif">
+  <div class="brand-kit wrap">
+    <h1>
+      Brand <i>kit</i>
+    </h1>
+
+    {imageSections.map(({ id, title, images }) => (
+      <section aria-labelledby={id}>
+        <h2 id={id}>{title}</h2>
+        <ul class="asset-grid">
+          {images.map(({ src, width, height, alt, backdrop, note }) => {
+            const filename = src.slice(src.lastIndexOf("/") + 1);
+            return (
+              <li class="card asset-card">
+                <div class="asset-preview" data-backdrop={backdrop}>
+                  <img
+                    src={src}
+                    alt={alt}
+                    width={width}
+                    height={height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div class="asset-info">
+                  <p class="asset-name">{filename}</p>
+                  <p class="asset-size">
+                    {width} × {height} px
+                  </p>
+                  {note && <p class="asset-size">{note}</p>}
+                  <a
+                    href={src}
+                    download={filename}
+                    aria-label={`Download ${filename}`}
+                  >
+                    Download
+                  </a>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))}
+
+    <section aria-labelledby="colors">
+      <h2 id="colors">Colors</h2>
+      <ul class="asset-grid swatch-grid">
+        {colors.map(({ name, hex }) => (
+          <li class="card asset-card">
+            <div class="swatch" style={{ backgroundColor: hex }}></div>
+            <div class="asset-info">
+              <p class="asset-name">{name}</p>
+              <p>{hex}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="fonts">
+      <h2 id="fonts">Fonts</h2>
+      <ul class="asset-grid">
+        {fonts.map(({ name, family, style }) => (
+          <li class="card asset-info">
+            <p class="asset-name">{name}</p>
+            <p
+              class="font-sample"
+              style={{ fontFamily: family, fontStyle: style }}
+            >
+              {content.hero.name}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="bio">
+      <h2 id="bio">Name and short bio</h2>
+      <div class="bio-copy">
+        <p class="asset-name">{content.hero.name}</p>
+        <p>
+          <BoldText text={content.about.paragraphs[0]} />
+        </p>
+      </div>
+    </section>
+  </div>
+</StagingHome>
+
+<style>
+  .brand-kit {
+    padding-block: clamp(112px, 16vw, 168px) 48px;
+  }
+  h1,
+  h2 {
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  h1 {
+    margin-bottom: clamp(28px, 5vw, 64px);
+    font-size: clamp(3.2rem, 8vw, 6.5rem);
+  }
+  h2 {
+    margin-bottom: 24px;
+    font-size: clamp(2rem, 5vw, var(--size-h2));
+  }
+  .brand-kit section {
+    padding-block: clamp(32px, 6vw, 72px);
+    border-top: 1px solid var(--hairline);
+  }
+  .asset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 16px;
+    list-style: none;
+  }
+  .asset-card {
+    overflow: hidden;
+  }
+  .asset-preview {
+    aspect-ratio: 4 / 3;
+    padding: 12px;
+    background: var(--background);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .asset-preview[data-backdrop="light"] {
+    background: #f9fafa;
+  }
+  .asset-preview[data-backdrop="dark"] {
+    background: #0b0f0d;
+  }
+  .asset-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .asset-info {
+    padding: 16px;
+    overflow-wrap: anywhere;
+  }
+  .asset-name {
+    color: var(--heading);
+    font-weight: 600;
+  }
+  .asset-size {
+    font-size: 14px;
+  }
+  .asset-info a {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--heading);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .swatch-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  }
+  .swatch {
+    height: 64px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .font-sample {
+    margin-top: 8px;
+    color: var(--heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  .bio-copy {
+    display: grid;
+    gap: 8px;
+    max-width: 60ch;
+  }
+</style>
