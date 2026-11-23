@@ -26,10 +26,10 @@ socials:
   link: https://www.facebook.com/mehedi.sharif.titas/
 - name: LinkedIn
   icon: linkedin
-  link: https://linkedin.com/in/mehedisharif/
+  link: https://www.linkedin.com/in/mehedi-sharif/
 - name: X
   icon: x
-  link: https://x.com/mehedisharif_/
+  link: https://x.com/mehedisharif
 - name: GitHub
   icon: github
   link: https://github.com/mehedi-sharif/

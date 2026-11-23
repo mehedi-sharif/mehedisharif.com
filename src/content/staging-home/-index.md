@@ -166,11 +166,11 @@ footer:
     - name: LinkedIn
       label: Mehedi Sharif on LinkedIn
       icon: linkedin
-      link: https://linkedin.com/in/mehedisharif/
+      link: https://www.linkedin.com/in/mehedi-sharif/
     - name: X
       label: Mehedi Sharif on X
       icon: x
-      link: https://x.com/mehedisharif_/
+      link: https://x.com/mehedisharif
     - name: GitHub
       label: Mehedi Sharif on GitHub
       icon: github

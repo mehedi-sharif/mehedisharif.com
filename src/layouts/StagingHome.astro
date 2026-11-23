@@ -36,6 +36,8 @@ const {
       rel="canonical"
       href={new URL(Astro.url.pathname, config.site.base_url).href}
     />
+    <link rel="icon" type="image/png" href={config.site.favicon} />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

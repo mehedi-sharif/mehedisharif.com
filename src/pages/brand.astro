@@ -28,6 +28,14 @@ const heroPhoto = {
   alt: "Mehedi Sharif",
 };
 
+const photoDownloads = [
+  heroPhoto,
+  { src: "/images/personal/mehedi-sharif-800.png", width: 800, height: 927 },
+  { src: "/images/personal/mehedi-sharif-600.png", width: 600, height: 695 },
+  { src: "/images/personal/mehedi-sharif-400.png", width: 400, height: 463 },
+  { src: "/images/personal/mehedi-sharif-200.png", width: 200, height: 231 },
+];
+
 const photos: BrandImage[] = [
   { src: "/mehedi.jpg", width: 460, height: 460, alt: "Mehedi Sharif" },
   {
@@ -49,7 +57,6 @@ const photos: BrandImage[] = [
     height: 1056,
     alt: "Mehedi Sharif",
   },
-  heroPhoto,
   {
     src: "/images/personal/portrait.jpg",
     width: 724,
@@ -169,6 +176,17 @@ const content = (await getEntry("stagingHome", "-index"))!.data;
         width={heroPhoto.width}
         height={heroPhoto.height}
       />
+      <div
+        class="asset-size photo-downloads"
+        role="group"
+        aria-label="Photo downloads"
+      >
+        {photoDownloads.map(({ src, width, height }) => (
+          <a href={src} download>
+            {width}x{height}
+          </a>
+        ))}
+      </div>
     </div>
 
     {imageSections.map(({ id, title, images }) => (
@@ -270,6 +288,13 @@ const content = (await getEntry("stagingHome", "-index"))!.data;
     height: auto;
     object-fit: contain;
   }
+  .photo-downloads {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px 16px;
+  }
   @media (max-width: 820px) {
     .brand-hero {
       grid-template-columns: 1fr;
@@ -277,6 +302,9 @@ const content = (await getEntry("stagingHome", "-index"))!.data;
     .brand-hero-photo {
       max-width: 220px;
       justify-self: center;
+    }
+    .photo-downloads {
+      justify-content: center;
     }
   }
   h1,
@@ -336,6 +364,9 @@ const content = (await getEntry("stagingHome", "-index"))!.data;
   .asset-info a {
     display: inline-block;
     margin-top: 8px;
+  }
+  .asset-info a,
+  .photo-downloads a {
     color: var(--heading);
     text-decoration: underline;
     text-underline-offset: 4px;
