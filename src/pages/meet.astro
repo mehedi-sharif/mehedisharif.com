@@ -3,105 +3,133 @@ import { getEntry } from "astro:content";
 import StagingHome from "@/layouts/StagingHome.astro";
 
 const content = (await getEntry("stagingHome", "-index"))!.data;
-const bookingUrl =
-  "https://me.mehedisharif.com/widget/booking/uOCX4hGGCPdoXaZ35kuF";
+const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
 ---
 
 <StagingHome
   content={content}
   interior
-  accentPreset="teal-lime"
-  title="Book a meeting — Mehedi Sharif"
-  description="Choose a convenient time to meet with Mehedi Sharif."
+  title="Join a call — Mehedi Sharif"
+  description="Join Mehedi Sharif on Google Meet."
 >
-  <section class="meet-page wrap" aria-labelledby="meet-heading">
-    <div class="meet-intro">
-      <h1 id="meet-heading">
-        Let’s <i>connect.</i>
-      </h1>
-      <p>Choose a time that works for you.</p>
-    </div>
-    <div class="booking-calendar">
-      <iframe
-        src={bookingUrl}
-        title="Book a meeting with Mehedi Sharif"
-        allow="payment"
-        style="width:100%;height:900px;border:none;overflow:hidden;display:block;"
-        scrolling="no"
-        id="uOCX4hGGCPdoXaZ35kuF_1794598656925"
-      ></iframe>
-    </div>
-    <p class="booking-fallback">
-      <a
-        class="cta"
-        href={bookingUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span class="label">Open booking calendar</span>
+  <section class="join wrap" aria-labelledby="join-heading">
+    <div class="join-card">
+      <div class="join-photo">
+        <img
+          class="photo-light"
+          src="/images/staging/bust-light.jpg"
+          alt="Mehedi Sharif"
+          width="420"
+          height="560"
+        />
+        <img
+          class="photo-dark"
+          src="/images/staging/bust-dark.jpg"
+          alt=""
+          width="420"
+          height="560"
+        />
+      </div>
+      <p class="join-name">Mehedi Sharif</p>
+      <h1 id="join-heading">Join a call with <i>Mehedi</i></h1>
+      <p class="join-line">You’re joining a Google Meet.</p>
+      <a class="cta" href={meetUrl} target="_blank" rel="noopener noreferrer">
+        <span class="label">Join Google Meet</span>
         <span class="arrow" aria-hidden="true">
           <span>
             <i class="barrow"></i>
           </span>
         </span>
       </a>
-    </p>
+      <p class="join-alt">
+        <a href="/discover-call">Need a time instead? Book a call</a>
+      </p>
+    </div>
   </section>
-  <script
-    is:inline
-    src="https://me.mehedisharif.com/js/form_embed.js"
-    type="text/javascript"
-    defer
-  ></script>
 </StagingHome>
 
 <style>
-  :global(:root[data-accent-preset="teal-lime"]) {
-    --accent: #033b38;
-    --on-accent: #fff;
-    --accent-2: #cde314;
-    --on-accent-2: #033b38;
-  }
-  .meet-page {
-    padding-block: clamp(104px, 13vw, 168px) 64px;
+  .join {
     min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(112px, 16vw, 168px) 0 clamp(72px, 10vw, 120px);
   }
-  .meet-intro,
-  .booking-calendar,
-  .booking-fallback {
-    max-width: 1100px;
+  .join-card {
+    width: min(100%, 32rem);
     margin-inline: auto;
-  }
-  .meet-intro {
-    padding: clamp(36px, 7vw, 88px) 24px;
-    margin-bottom: 16px;
-    border-radius: var(--radius-card);
-    background: #033b38;
-    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
   }
-  .meet-intro h1 {
-    margin: 0 0 16px;
-    font-size: clamp(44px, 8vw, 92px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    color: #fff;
-  }
-  .meet-intro h1 i {
-    color: #cde314;
-  }
-  .meet-intro p {
-    font-size: clamp(16px, 2vw, 20px);
-  }
-  .booking-calendar {
-    background: #fff;
+  .join-photo {
+    width: min(220px, 62vw);
+    aspect-ratio: 3 / 4;
+    margin-bottom: 28px;
     border: 1px solid var(--hairline);
     border-radius: var(--radius-card);
     overflow: hidden;
+    background: #fff;
   }
-  .booking-fallback {
-    margin-top: 24px;
-    text-align: center;
+  .join-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 12%;
+  }
+  .photo-dark {
+    display: none;
+  }
+  :global([data-theme="dark"]) .photo-light {
+    display: none;
+  }
+  :global([data-theme="dark"]) .photo-dark {
+    display: block;
+  }
+  :global([data-theme="dark"]) .join-photo {
+    background: #000;
+  }
+  .join-name {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .join h1 {
+    margin: 0 0 12px;
+    max-width: 12ch;
+    color: var(--heading);
+    font-weight: 300;
+    font-size: clamp(2.4rem, 8vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+  .join-line {
+    margin: 0 0 28px;
+    font-size: clamp(16px, 2.4vw, 18px);
+  }
+  .join-alt {
+    margin: 22px 0 0;
+    font-size: 14px;
+  }
+  .join-alt a {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .join-alt a:hover {
+    color: var(--foreground);
+  }
+  @media (max-width: 600px) {
+    .join-photo {
+      width: min(180px, 52vw);
+      margin-bottom: 22px;
+    }
+    .join-line {
+      margin-bottom: 24px;
+    }
   }
 </style>

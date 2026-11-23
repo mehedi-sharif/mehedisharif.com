@@ -177,5 +177,5 @@ footer:
       link: https://github.com/mehedi-sharif/
   booking:
     label: 📅 Book a 30-minute call
-    link: /meet
+    link: /discover-call
 ---

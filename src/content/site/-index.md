@@ -35,5 +35,5 @@ socials:
   link: https://github.com/mehedi-sharif/
 calendar:
   label: Book a 30-minute call
-  link: /meet
+  link: /discover-call
 ---
