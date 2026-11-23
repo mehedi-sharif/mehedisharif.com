@@ -5,21 +5,63 @@
   aria-checked="false"
   aria-label="Switch light or dark mode"
   data-theme-switcher
-></button>
+  data-theme-toggle="sun-moon"
+>
+  <span class="theme-switcher__side theme-switcher__sun" aria-hidden="true">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42m0-14.14-1.42 1.42m-11.3 11.3-1.42 1.42" />
+    </svg>
+  </span>
+  <span class="theme-switcher__side theme-switcher__moon" aria-hidden="true">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linejoin="round"
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+    </svg>
+  </span>
+</button>
 
 <style>
   .theme-switcher {
-    display: block;
+    display: flex;
+    gap: 2px;
+    width: fit-content;
     margin-inline: auto;
-    box-sizing: border-box;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: 2px solid var(--brand-lime);
-    border-radius: 50%;
-    background: linear-gradient(90deg, var(--brand-lime) 50%, var(--brand-teal) 50%);
-    box-shadow: 0 0 0 1px var(--brand-teal);
+    padding: 3px;
+    border: 1px solid var(--theme-border);
+    border-radius: 999px;
+    background: var(--theme-surface);
+    color: var(--theme-muted);
     cursor: pointer;
+  }
+
+  .theme-switcher__side {
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 24px;
+    border-radius: 999px;
+  }
+
+  :global(html:not(.dark)) .theme-switcher__sun,
+  :global(html.dark) .theme-switcher__moon {
+    background: var(--brand-lime);
+    color: var(--brand-teal);
   }
 
   .theme-switcher:focus-visible {
