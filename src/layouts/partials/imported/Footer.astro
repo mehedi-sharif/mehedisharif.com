@@ -5,7 +5,7 @@ const site = (await getEntry("site", "-index"))!.data;
 import SocialContactLinks from "@/components/SocialContactLinks.astro";
 ---
 
-<footer class="wrap site-footer tw:grid tw:grid-cols-1 tw:items-center tw:gap-x-4 tw:gap-y-6 tw:text-sm tw:md:grid-cols-3">
+<footer class="wrap site-footer tw:grid tw:grid-cols-1 tw:items-center tw:gap-x-4 tw:gap-y-6 tw:text-sm tw:md:grid-cols-[1fr_auto_auto]">
   <span class="tw:justify-self-center tw:md:justify-self-start">
     <a
       href={
@@ -29,7 +29,7 @@ import SocialContactLinks from "@/components/SocialContactLinks.astro";
       />
     </a>
   </span>
-  <SocialContactLinks />
+  <SocialContactLinks showCalendar={false} />
   <button
     class="theme-toggle tw:justify-self-center tw:md:justify-self-end"
     type="button"
