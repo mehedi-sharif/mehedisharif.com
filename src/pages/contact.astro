@@ -3,7 +3,6 @@ import StagingHome from "@/layouts/StagingHome.astro";
 import "@/styles/staging-contact.css";
 import { getEntry } from "astro:content";
 const details = (await getEntry("contact", "-index"))!.data;
-const site = (await getEntry("site", "-index"))!.data;
 const formEnabled = process.env.CF_PAGES_BRANCH !== "staging";
 const content = (await getEntry("stagingHome", "-index"))!.data;
 ---
@@ -56,10 +55,10 @@ const content = (await getEntry("stagingHome", "-index"))!.data;
             <p>Book a 30-minute meeting at a time that works for you.</p>
           </div>
           <a
-            href={site.calendar.link}
+            href="https://meet.google.com/thp-qoyp-ahf"
             class="cta"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
           >
             <span class="label">Book a meeting</span>
             <span class="arrow" aria-hidden="true">
