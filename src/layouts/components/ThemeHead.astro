@@ -1,0 +1,48 @@
+---
+import theme from "@/config/theme.json";
+import "@/styles/theme.css";
+
+const light = theme.colors.default.theme_color.body;
+const dark = theme.colors.darkmode.theme_color.body;
+---
+
+<meta name="theme-color" content={light} data-light={light} data-dark={dark} />
+<script is:inline>
+  (() => {
+    const system = matchMedia("(prefers-color-scheme: dark)");
+    let choice;
+    try {
+      choice = localStorage.getItem("theme");
+    } catch {}
+
+    function applyTheme(page = document) {
+      const dark = choice === "dark" || (choice !== "light" && system.matches);
+      const mode = dark ? "dark" : "light";
+      const root = page.documentElement;
+      root.classList.toggle("dark", dark);
+      if (root.dataset.theme !== mode) root.dataset.theme = mode;
+      const meta = page.querySelector('meta[name="theme-color"]');
+      if (meta?.dataset[mode]) meta.content = meta.dataset[mode];
+      page
+        .querySelector("[data-theme-switcher]")
+        ?.setAttribute("aria-checked", String(dark));
+    }
+
+    applyTheme();
+    system.addEventListener("change", () => applyTheme());
+    document.addEventListener("DOMContentLoaded", () => applyTheme(), {
+      once: true,
+    });
+    document.addEventListener("astro:before-swap", (event) =>
+      applyTheme(event.newDocument),
+    );
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest?.("[data-theme-switcher]")) return;
+      choice = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      try {
+        localStorage.setItem("theme", choice);
+      } catch {}
+      applyTheme();
+    });
+  })();
+</script>

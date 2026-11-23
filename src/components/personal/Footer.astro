@@ -1,11 +1,13 @@
-<footer
-  class="wrap flex flex-wrap justify-between items-center gap-4 pt-6 pb-6 text-sm [color:#9EA192]"
->
-  <span>© 2026 Mehedi Sharif</span>
+---
+import ThemeSwitcher from "@/components/ThemeSwitcher.astro";
+---
+
+<footer class="wrap grid items-center justify-items-center gap-4 py-6 text-sm text-(--theme-muted) sm:grid-cols-[1fr_auto_1fr]">
+  <span class="sm:justify-self-start">© 2026 Mehedi Sharif</span>
+  <ThemeSwitcher />
   <a
     href="#"
-    class="inline-flex items-center [gap:10px] [min-height:44px] no-underline"
-    ><span class="[width:6px] [height:6px] [background:#D4FF24]"
-    ></span>@[your-handle]</a
+    class="inline-flex min-h-11 items-center gap-2.5 no-underline sm:justify-self-end"
+    ><span class="size-1.5 bg-(--theme-primary)"></span>@[your-handle]</a
   >
 </footer>

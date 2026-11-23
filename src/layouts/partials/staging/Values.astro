@@ -2,11 +2,6 @@
 import type { CollectionEntry } from "astro:content";
 type Props = { content: CollectionEntry<"stagingHome">["data"]["values"] };
 const { content } = Astro.props;
-/* brand palette pairs: [pill colour, blob colour, sticker colour, icon colour] */
-const vPal = [
-  ["#02D8B6", "#033B38", "#CDE314", "#033B38"],
-  ["#FD86EA", "#033B38", "#CDE314", "#033B38"],
-];
 /* blob in the round sticker: kept to the edge so the dark icon always sits on the light colour */
 const vDot = [
   "M54 24C45 29 41 41 43 54H54Z",
@@ -44,10 +39,10 @@ const vIcon = [
       {content.items.map((item, index) => (
         <div class="card val reveal">
           <div class="v-badge" aria-hidden="true">
-            <span class="ic" style={{ color: vPal[index % 2][3] }}>
+            <span class="ic">
               <svg class="cb" viewBox="0 0 54 54">
-                <rect width="54" height="54" fill={vPal[index % 2][0]} />
-                <path d={vDot[index % vDot.length]} fill={vPal[index % 2][1]} />
+                <rect width="54" height="54" fill="var(--brand-lime)" />
+                <path d={vDot[index % vDot.length]} fill="var(--brand-teal)" />
               </svg>
               <svg viewBox="0 0 24 24" set:html={vIcon[index % vIcon.length]} />
             </span>

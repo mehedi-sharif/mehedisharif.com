@@ -44,83 +44,14 @@ const localLink = (link: string) =>
       </li>
     ))}
   </ul>
-  <div class="h-act">
-    <div class="acc" id="acc">
-      <button
-        class="theme"
-        id="accBtn"
-        aria-label="Accent colour"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <span></span>
-      </button>
-      <div class="acc-menu" role="menu">
-        <button data-c="#00ff99" aria-label="Green"></button>
-        <button data-c="#2749f5" aria-label="Blue"></button>
-        <button data-c="#033b38" aria-label="Brand teal"></button>
-        <button data-c="#02d8b6" aria-label="Brand mint"></button>
-        <button data-c="#cde314" aria-label="Brand lime"></button>
-        <button
-          data-c="#033b38"
-          data-c2="#02d8b6"
-          aria-label="Teal and mint"
-        ></button>
-        <button
-          data-c="#033b38"
-          data-c2="#cde314"
-          aria-label="Teal and lime"
-        ></button>
-        <button
-          data-c="#fd86ea"
-          data-c2="#033b38"
-          aria-label="Pink and teal"
-        ></button>
-        <button
-          data-c="#2749f5"
-          data-c2="#00ff99"
-          aria-label="Blue and green"
-        ></button>
-        <button
-          data-c="#2749f5"
-          data-c2="#cde314"
-          aria-label="Blue and lime"
-        ></button>
-        <button
-          data-c="#033b38"
-          data-c2="#00ff99"
-          aria-label="Teal and green"
-        ></button>
-        <button
-          data-c="#cde314"
-          data-c2="#033b38"
-          aria-label="Lime and teal"
-        ></button>
-        <button
-          data-c="#02d8b6"
-          data-c2="#2749f5"
-          aria-label="Mint and blue"
-        ></button>
-      </div>
-    </div>
-    <button class="theme" id="themeBtn" aria-label="Switch light or dark">
-      <svg class="sun" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="4.2" />
-        <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" />
-      </svg>
-      <svg class="moon" viewBox="0 0 24 24">
-        <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />
-      </svg>
-    </button>
-    <a href={content.contact.link} class="cta">
-      <span class="label">{content.contact.label}</span>
-      <span class="arrow" aria-hidden="true">
-        <span>
-          <i class="barrow"></i>
-        </span>
+  <a href={content.contact.link} class="cta header-contact">
+    <span class="label">{content.contact.label}</span>
+    <span class="arrow" aria-hidden="true">
+      <span>
+        <i class="barrow"></i>
       </span>
-    </a>
-  </div>
+    </span>
+  </a>
   <button
     class="burger"
     id="burger"

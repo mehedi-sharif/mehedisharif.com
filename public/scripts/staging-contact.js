@@ -12,16 +12,6 @@ try {
     })(performance.now());
   }
 } catch (e) {}
-/* theme switch */
-document.getElementById("themeBtn").addEventListener("click", () => {
-  const t =
-    document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-  document.documentElement.dataset.theme = t;
-  try {
-    localStorage.setItem("theme", t);
-  } catch (e) {}
-});
-
 /* Reveal on load / scroll */
 const io = new IntersectionObserver(
   (es) =>

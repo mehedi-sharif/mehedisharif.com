@@ -4,26 +4,18 @@
 /* Stackside (GetLayers) style tokens */
 :root {
   --background: #f9fafa;
-  --foreground: #000;
-  --accent: #2749f5;
-  --on-accent: #fff;
-  --accent-2: var(--accent);
-  --on-accent-2: var(--on-accent);
+  --foreground: var(--theme-ink);
+  --accent: var(--theme-primary);
+  --on-accent: var(--theme-on-primary);
+  --accent-2: var(--brand-lime);
+  --on-accent-2: var(--brand-teal);
   --surface: #fdffff;
-  --hairline: rgba(0, 0, 0, 0.1);
+  --hairline: var(--theme-border);
   --ghost: #e2e6e8;
-  --hairline-strong: rgba(0, 0, 0, 0.2);
-  --muted: color-mix(in srgb, #000 50%, var(--background));
-  /* text: 50% black everywhere; full black only on hover, buttons and the For fun links */
-  /* solid colours that look like 50% / 80% / 30% black on the page */
-  --text: color-mix(in srgb, #000 50%, var(--background));
-  --heading: color-mix(in srgb, #000 80%, var(--background));
-  --nav-text: color-mix(in srgb, #000 50%, var(--background));
-  /* the same 50% shade, but solid, so highlight lines stay hidden behind the letters */
-  --text-solid: color-mix(in srgb, #000 50%, var(--background));
-  --ink-light: #aeff00;
-  --ink-mid: color-mix(in srgb, var(--accent) 75%, #000);
-  --ink-deep: color-mix(in srgb, var(--accent) 48%, #000);
+  --muted: var(--theme-muted);
+  --text: var(--muted);
+  --heading: var(--foreground);
+  --nav-text: var(--accent);
   --radius-card: 1rem;
   --size-display: 2.5rem;
   --size-h2: 2.25rem;
@@ -33,35 +25,20 @@
   --sans: "Inter Tight", system-ui, sans-serif;
   --mulish: "Inter Tight", system-ui, sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --nav-bg: rgba(0, 0, 0, 0.08);
-  --glass-a: rgba(255, 255, 255, 0.55);
-  --glass-b: rgba(255, 255, 255, 0.18);
-  --nav-dim: 0.6;
+  --nav-bg: color-mix(in srgb, var(--surface) 90%, transparent);
+  --glass-a: color-mix(in srgb, var(--surface) 95%, transparent);
+  --glass-b: color-mix(in srgb, var(--surface) 85%, transparent);
   --s: 1; /* scale: grows on big screens so the layout fills them */
-  color-scheme: light;
+  accent-color: var(--accent);
 }
-/* dark version — the founder frames are rendered on this exact background */
-:root[data-theme="dark"] {
-  --background: #0b0f0d;
-  --foreground: #f2f5f3;
-  --surface: #121816;
-  --hairline: rgba(255, 255, 255, 0.1);
-  --ghost: #1d2421;
-  --hairline-strong: rgba(255, 255, 255, 0.2);
-  --muted: color-mix(in srgb, #fff 50%, var(--background));
-  --ink-deep: var(--accent);
-  --text: color-mix(in srgb, #fff 50%, var(--background));
-  --heading: color-mix(in srgb, #fff 80%, var(--background));
-  --nav-text: color-mix(in srgb, #fff 70%, var(--background));
-  --text-solid: color-mix(in srgb, #fff 50%, var(--background));
-  --nav-bg: rgba(255, 255, 255, 0.08);
-  --glass-a: rgba(255, 255, 255, 0.12);
-  --glass-b: rgba(255, 255, 255, 0.04);
-  --nav-dim: 0.45;
-  color-scheme: dark;
+:root.dark {
+  --background: var(--theme-background);
+  --surface: var(--theme-surface);
+  --ghost: color-mix(in srgb, var(--surface) 85%, var(--foreground));
 }
-[data-theme="dark"] .brand img {
-  filter: invert(1);
+/* The portrait's JPEG background blends into this shade of dark teal. */
+:root.dark:has(.figure) {
+  --background: #101f1d;
 }
 body {
   transition:
@@ -134,7 +111,7 @@ em {
   font-weight: 300;
 }
 
-/* ── Header: logo · centre nav pill · green CTA + arrow twin ── */
+/* Header */
 header {
   position: fixed;
   left: calc(10px * var(--s));
@@ -200,7 +177,7 @@ header > * {
   display: flex;
   align-items: center;
 }
-/* scroll-spy: the section you are in reads in Playfair italic at full strength, the rest sit at 60% (45% in dark) */
+/* The active section uses Playfair italic. */
 .navpill a {
   line-height: 1.2;
   color: var(--nav-text);
@@ -233,102 +210,6 @@ header > * {
   align-items: center;
   isolation: isolate;
   color: var(--on-accent);
-}
-/* theme switch: a round glass button next to Contact */
-.h-act {
-  display: flex;
-  align-items: center;
-  gap: calc(10px * var(--s));
-}
-.theme {
-  width: calc(50px * var(--s));
-  height: calc(50px * var(--s));
-  border-radius: 50%;
-  border: 0;
-  cursor: pointer;
-  @apply grid place-items-center;
-  color: var(--foreground);
-  background: var(--nav-bg);
-  -webkit-backdrop-filter: blur(20px) saturate(170%);
-  backdrop-filter: blur(20px) saturate(170%);
-  transition: background-color 0.2s;
-}
-.theme:hover {
-  background: var(--hairline-strong);
-}
-.theme svg {
-  width: calc(18px * var(--s));
-  height: calc(18px * var(--s));
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-}
-.theme .moon {
-  display: none;
-}
-[data-theme="dark"] .theme .sun {
-  display: none;
-}
-[data-theme="dark"] .theme .moon {
-  display: block;
-}
-/* accent picker: a dot of the current colour, swatches drop down below */
-.acc {
-  position: relative;
-}
-.acc > .theme span {
-  width: calc(18px * var(--s));
-  height: calc(18px * var(--s));
-  border-radius: 50%;
-  background: linear-gradient(90deg, var(--accent) 50%, var(--accent-2) 50%);
-}
-.acc-menu {
-  position: absolute;
-  top: calc(100% + calc(10px * var(--s)));
-  right: 0;
-  display: flex;
-  gap: calc(8px * var(--s));
-  padding: calc(8px * var(--s));
-  border-radius: 999px;
-  background: var(--nav-bg);
-  -webkit-backdrop-filter: blur(20px) saturate(170%);
-  backdrop-filter: blur(20px) saturate(170%);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-6px);
-  transition:
-    opacity 0.25s,
-    transform 0.35s var(--ease),
-    visibility 0s 0.35s;
-}
-.acc.open .acc-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-  transition:
-    opacity 0.25s,
-    transform 0.35s var(--ease);
-}
-.acc-menu button {
-  width: calc(30px * var(--s));
-  height: calc(30px * var(--s));
-  border-radius: 50%;
-  border: 0;
-  cursor: pointer;
-  background: linear-gradient(90deg, var(--c) 50%, var(--c2, var(--c)) 50%);
-  box-shadow: 0 0 0 2px transparent;
-  transition:
-    transform 0.25s var(--ease),
-    box-shadow 0.25s;
-}
-.acc-menu button:hover {
-  transform: scale(1.1);
-}
-.acc-menu button.on {
-  box-shadow:
-    0 0 0 2px var(--background),
-    0 0 0 4px var(--c);
 }
 .cta .goo {
   position: absolute;
@@ -525,7 +406,7 @@ h1 .line {
   bottom: 0.17em;
   height: 5px;
   border-radius: 0;
-  background: var(--accent);
+  background: var(--brand-lime);
   transform-origin: left;
   transform: scaleX(0);
   transition: transform 1.1s var(--ease) 0.6s;
@@ -565,8 +446,8 @@ section {
   height: calc(30px * var(--s));
   padding: 0 calc(14px * var(--s));
   border-radius: 999px;
-  background: color-mix(in srgb, var(--accent) 30%, transparent);
-  color: var(--text);
+  background: var(--brand-lime);
+  color: var(--brand-teal);
   font-family: var(--mulish);
   font-size: calc(13px * var(--s));
   font-weight: 500;
@@ -634,7 +515,10 @@ section {
   transform-origin: 0 0;
   will-change: transform;
 }
-.figure img,
+.dark .figure {
+  mix-blend-mode: lighten;
+}
+.figure-poster,
 .figure canvas {
   position: absolute;
   inset: 0;
@@ -642,6 +526,12 @@ section {
   height: 100%;
   object-fit: contain;
   object-position: bottom;
+}
+.figure-poster {
+  background: var(--portrait-light) center bottom / contain no-repeat;
+}
+.dark .figure-poster {
+  background-image: var(--portrait-dark);
 }
 .figure canvas {
   opacity: 0;
@@ -697,7 +587,7 @@ section {
   color: var(--heading);
 }
 .h-trust {
-  color: var(--foreground);
+  color: var(--accent);
 }
 .h-copy .body {
   font-size: calc(18px * var(--s));
@@ -770,7 +660,7 @@ section {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--brand-lime);
   z-index: -1;
   animation: ripple 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
@@ -853,7 +743,7 @@ section {
   display: inline-block;
   width: 2px;
   height: 0.8em;
-  background: var(--ink-mid);
+  background: var(--accent);
   margin-left: calc(6px * var(--s));
   vertical-align: -0.05em;
   animation: blink 1s steps(1) infinite;
@@ -930,8 +820,8 @@ section {
   margin-top: calc(10px * var(--s));
   font-family: var(--mulish);
   font-size: calc(13px * var(--s));
-  color: var(--muted);
-  border-bottom: 1px solid transparent;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
   padding-bottom: 1px;
   transition:
     color 0.3s,
@@ -945,12 +835,12 @@ section {
 .row:hover .url {
   border-color: var(--accent);
 }
-/* NOW card: brand graphic card — dark teal with a lime and a mint blob, no outline */
+/* Featured business card */
 .row.now {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  background: #033b38;
+  background: var(--brand-teal);
   border: 0;
   outline: 0;
   box-shadow: none;
@@ -963,6 +853,7 @@ section {
   position: absolute;
   z-index: -1;
   pointer-events: none;
+  opacity: 0.15;
   transition: transform 0.7s var(--ease);
 }
 .row.now .nb-bl {
@@ -983,23 +874,23 @@ section {
   transform: scale(1.08);
 }
 .row.now .pill {
-  background: #fd86ea;
-  color: #47063c;
+  background: var(--brand-lime);
+  color: var(--brand-teal);
 }
 .row.now h3,
 .row.now:hover h3 {
-  color: #cde314;
+  color: var(--brand-lime);
 }
 .row.now .url {
-  color: #02d8b6;
-  border-color: #02d8b6;
+  color: var(--brand-lime);
+  border-color: var(--brand-lime);
 }
 .row.now .url:hover {
   color: #efefef;
   border-color: #efefef;
 }
 .row.now p {
-  color: color-mix(in srgb, #efefef 82%, #033b38);
+  color: color-mix(in srgb, #efefef 82%, var(--brand-teal));
   max-width: 85%;
 }
 .row p {
@@ -1063,6 +954,7 @@ section {
 /* brand sticker: round, chunky dark icon, centred on the pill */
 .v-badge .ic {
   position: relative;
+  color: var(--brand-teal);
   width: calc(54px * var(--s));
   height: calc(54px * var(--s));
   border-radius: 50%;
@@ -1107,7 +999,7 @@ section {
   font-weight: 400;
   font-size: 3.2rem;
   line-height: 1;
-  color: var(--ink-deep);
+  color: var(--accent);
 }
 .val h4 {
   font-weight: 400;
@@ -1132,8 +1024,9 @@ section {
   letter-spacing: -0.02em;
   transition: color 0.6s var(--ease);
 }
-.story.dim {
-  color: color-mix(in srgb, var(--foreground) 26%, var(--background));
+.story.dim,
+.story.dim .hw {
+  color: var(--muted);
 }
 .hw {
   position: relative;
@@ -1157,7 +1050,7 @@ section {
   right: -0.08em;
   bottom: 0.17em;
   height: 5px;
-  background: var(--accent);
+  background: var(--brand-lime);
   z-index: -1;
   transform-origin: left;
   transform: scaleX(0.0001);
@@ -1169,15 +1062,12 @@ section {
 .story.in .hw::after {
   transform: scaleX(1);
 }
-.story.dim .hw {
-  color: color-mix(in srgb, var(--foreground) 40%, var(--background));
-}
 .hl,
 .hl i {
   color: var(--foreground);
 }
 .story.dim .hw.on {
-  color: var(--on-accent);
+  color: var(--brand-teal);
 }
 .hw.on::after {
   height: 0.98em;
@@ -1348,9 +1238,6 @@ footer {
   padding: 0 calc(10px * var(--s)) calc(10px * var(--s));
 }
 .foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   gap: calc(20px * var(--s));
   padding: calc(24px * var(--s)) calc(30px * var(--s));
 }
@@ -1358,7 +1245,6 @@ footer {
   display: flex;
   gap: calc(8px * var(--s));
   justify-content: center;
-  margin-inline-start: auto;
 }
 .socials a {
   width: calc(42px * var(--s));
@@ -1513,7 +1399,7 @@ html {
   .menu a {
     padding: 12px 16px;
     border-radius: 12px;
-    color: var(--heading);
+    color: var(--accent);
   }
   .menu a:hover {
     background: var(--ghost);
@@ -1543,7 +1429,7 @@ html {
   .v-stage {
     padding: 96px 0 64px;
   }
-  .h-act .cta {
+  .header-contact {
     display: none;
   }
   #top {
@@ -1641,11 +1527,6 @@ html {
   }
 }
 @media (max-width: 600px) {
-  .acc-menu {
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    border-radius: 24px;
-  }
   .h-trust {
     display: none;
   }
@@ -1768,13 +1649,14 @@ body.dw-open .dw {
   gap: 22px;
   padding: 26px;
   border-radius: 18px;
-  background: #033b38;
-  color: color-mix(in srgb, #efefef 82%, #033b38);
+  background: var(--brand-teal);
+  color: color-mix(in srgb, #efefef 82%, var(--brand-teal));
 }
 .dw-book .nb {
   position: absolute;
   z-index: -1;
   pointer-events: none;
+  opacity: 0.15;
 }
 .dw-book .nb-tr {
   right: 0;
@@ -1783,8 +1665,8 @@ body.dw-open .dw {
   height: 110px;
 }
 .dw-book .pill {
-  background: #fd86ea;
-  color: #47063c;
+  background: var(--brand-lime);
+  color: var(--brand-teal);
   align-self: flex-start;
 }
 .dw-book h3 {
@@ -1792,26 +1674,21 @@ body.dw-open .dw {
   font-size: 28px;
   line-height: 1.05;
   letter-spacing: -0.02em;
-  color: #cde314;
+  color: var(--brand-lime);
   margin: 14px 0 8px;
 }
 .dw-book h3 i {
   font-family: "Playfair Display", Georgia, serif;
   font-weight: 400;
-  color: #cde314;
+  color: var(--brand-lime);
 }
 .dw-book p {
   font-size: 15px;
 }
 .dw-book .cta {
   align-self: flex-start;
-}
-/* on the teal card the button keeps fixed brand colours, so no accent choice can make it vanish */
-.dw-book .cta {
-  --accent: #cde314;
-  --on-accent: #033b38;
-  --accent-2: #02d8b6;
-  --on-accent-2: #033b38;
+  --accent: var(--brand-lime);
+  --on-accent: var(--brand-teal);
 }
 .dw-form {
   display: flex;
@@ -1897,6 +1774,11 @@ button.cta {
 }
 .dw-status.ok {
   color: var(--foreground);
+}
+a.dw-status {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 @media (prefers-reduced-motion: reduce) {
   .dw,

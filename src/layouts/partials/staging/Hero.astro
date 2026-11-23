@@ -7,15 +7,19 @@ const { content } = Astro.props;
 
 <!-- HERO — Stackside composition: headline top-left, copy on a rule,
        2×2 stats right, request row at the bottom, founder centred behind -->
-<div class="figure" id="figure" aria-hidden="true">
-  <img
-    id="bustPoster"
-    src={content.portrait_light}
-    data-light={content.portrait_light}
-    data-dark={content.portrait_dark}
-    data-animate={String(content.animate_portrait)}
-    alt=""
-  />
+<div
+  class="figure"
+  id="figure"
+  data-animate={String(content.animate_portrait)}
+  aria-hidden="true"
+>
+  <div
+    class="figure-poster"
+    style={{
+      "--portrait-light": `url(${JSON.stringify(content.portrait_light)})`,
+      "--portrait-dark": `url(${JSON.stringify(content.portrait_dark)})`,
+    }}
+  ></div>
   <canvas id="bust"></canvas>
 </div>
 <canvas class="halftone" id="halftone" aria-hidden="true"></canvas>

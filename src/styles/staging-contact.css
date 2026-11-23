@@ -55,13 +55,14 @@
   flex-direction: column;
   padding: calc(40px * var(--s));
   border-radius: var(--radius-card);
-  background: #033b38;
-  color: color-mix(in srgb, #efefef 82%, #033b38);
+  background: var(--brand-teal);
+  color: color-mix(in srgb, #efefef 82%, var(--brand-teal));
 }
 .c-book .nb {
   position: absolute;
   z-index: -1;
   pointer-events: none;
+  opacity: 0.15;
   transition: transform 0.7s var(--ease);
 }
 .c-book .nb-bl {
@@ -82,8 +83,8 @@
   transform: scale(1.08);
 }
 .c-book .pill {
-  background: #fd86ea;
-  color: #47063c;
+  background: var(--brand-lime);
+  color: var(--brand-teal);
   align-self: flex-start;
 }
 .c-book h2 {
@@ -91,23 +92,18 @@
   font-size: var(--size-h2);
   line-height: 1.05;
   letter-spacing: -0.02em;
-  color: #cde314;
+  color: var(--brand-lime);
   margin: calc(18px * var(--s)) 0;
 }
 .c-book h2 i {
   font-family: "Playfair Display", Georgia, serif;
   font-weight: 400;
-  color: #cde314;
+  color: var(--brand-lime);
 }
 .c-book .cta {
   align-self: flex-start;
-}
-/* on the teal card the button keeps fixed brand colours, so no accent choice can make it vanish */
-.c-book .cta {
-  --accent: #cde314;
-  --on-accent: #033b38;
-  --accent-2: #02d8b6;
-  --on-accent-2: #033b38;
+  --accent: var(--brand-lime);
+  --on-accent: var(--brand-teal);
 }
 /* message form */
 .c-form {

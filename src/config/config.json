@@ -27,8 +27,6 @@
   "settings": {
     "search": true,
     "sticky_header": true,
-    "theme_switcher": true,
-    "default_theme": "system",
     "pagination": 6,
     "summary_length": 200,
     "blog_folder": "blog"

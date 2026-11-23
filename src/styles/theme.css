@@ -1,0 +1,25 @@
+:root {
+  --brand-teal: #033b38;
+  --brand-lime: #cde314;
+  --theme-primary: var(--brand-teal);
+  --theme-on-primary: #fff;
+  --theme-primary-hover: color-mix(in srgb, var(--brand-teal) 90%, black);
+  --theme-background: #fafaf7;
+  --theme-surface: #f1f3ea;
+  --theme-ink: #030407;
+  --theme-muted: #55594e;
+  --theme-border: #dcdfd3;
+  color-scheme: light;
+}
+
+:root.dark {
+  --theme-primary: var(--brand-lime);
+  --theme-on-primary: var(--brand-teal);
+  --theme-primary-hover: color-mix(in srgb, var(--brand-lime) 85%, white);
+  --theme-background: #021f1d;
+  --theme-surface: var(--brand-teal);
+  --theme-ink: #ecede4;
+  --theme-muted: #b8cec9;
+  --theme-border: #436c66;
+  color-scheme: dark;
+}

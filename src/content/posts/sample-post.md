@@ -76,7 +76,7 @@ cover_caption: "Cover image caption, with photo credit if needed."
 <h2 id="t-video">Video</h2>
 <p>Videos from YouTube or Vimeo sit in a 16:9 frame with a lime play button:</p>
 <figure>
-  <div class="video" role="img" aria-label="Video player placeholder"><div class="play"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="#030407"></path></svg></div><div class="bar"><span>1:24</span><span class="track"><i></i></span><span>4:30</span></div></div>
+  <div class="video" role="img" aria-label="Video player placeholder"><div class="play"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg></div><div class="bar"><span>1:24</span><span class="track"><i></i></span><span>4:30</span></div></div>
   <figcaption>Video title or a short note about the video.</figcaption>
 </figure>
 

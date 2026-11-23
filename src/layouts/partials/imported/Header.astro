@@ -31,7 +31,7 @@ const links = site.navigation.map((link) => ({
           src={site.header_logo}
           width="160"
           height="37"
-          class="tw:block tw:w-28 tw:h-auto tw:sm:w-36 tw:min-[800px]:w-40"
+          class="nav-logo tw:block tw:w-28 tw:h-auto tw:sm:w-36 tw:min-[800px]:w-40"
           alt=""
         />
       </a>
@@ -129,30 +129,35 @@ const links = site.navigation.map((link) => ({
     }
   }
   .site-navigation nav {
-    background: #030407;
-    border-color: #2a2f22;
+    background: var(--theme-surface);
+    border-color: var(--theme-border);
+  }
+  .nav-logo {
+    filter: invert(1);
+  }
+  :global(.dark) .nav-logo {
+    filter: none;
   }
   .site-navigation .nav-item {
     font-size: clamp(13px, 1.05vw, 20px);
-    color: #ecede4;
+    color: var(--theme-primary);
     text-decoration: none;
   }
   .site-navigation .nav-item:hover,
   .site-navigation .nav-item[aria-current="page"] {
-    color: #d4ff24;
-    background: #12170c;
+    background: var(--theme-background);
   }
   .site-navigation .contact-link {
-    background: #d4ff24;
-    color: #030407;
+    background: var(--theme-primary);
+    color: var(--theme-on-primary);
   }
   .site-navigation .contact-link:hover {
-    background: #e2ff6b;
+    background: var(--theme-primary-hover);
   }
   .menu-toggle {
-    color: #ecede4;
+    color: var(--theme-primary);
     background: transparent;
-    border-color: #2a2f22;
+    border-color: var(--theme-border);
   }
   .menu-close-icon {
     display: none;
