@@ -9,7 +9,7 @@ hero:
   description: "**2×** exited founder. Built **Themefisher** from a startup into a **$2 million** business, acquired **UIHut**, and built **Zeon Studio** agency. Now I’m building the next chapter with **GHLMegaMinds**."
   primary_button:
     label: Let’s work with me
-    link: "#connect"
+    link: "/contact"
   spotlight:
     label: Now building
     name: GHLMegaMinds
