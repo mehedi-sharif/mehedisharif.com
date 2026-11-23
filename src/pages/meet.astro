@@ -22,7 +22,10 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
           height="1350"
         />
       </div>
-      <h1 id="join-heading">Join a instant call with Me (<i>Mehedi Sharif</i>)</h1>
+      <h1 id="join-heading">
+        Join a instant call with Me<br />
+        (<i>Mehedi Sharif</i>)
+      </h1>
       <p class="join-line">You’re joining a Google Meet.</p>
       <a class="cta" href={meetUrl} target="_blank" rel="noopener noreferrer">
         <span class="label">Join Google Meet</span>
@@ -48,7 +51,7 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
     padding: clamp(112px, 16vw, 168px) 0 clamp(72px, 10vw, 120px);
   }
   .join-card {
-    width: min(100%, 32rem);
+    width: min(100%, 48rem);
     margin-inline: auto;
     display: flex;
     flex-direction: column;
@@ -67,10 +70,9 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
   }
   .join h1 {
     margin: 0 0 12px;
-    max-width: 12ch;
     color: var(--heading);
     font-weight: 300;
-    font-size: clamp(2.4rem, 8vw, 4rem);
+    font-size: clamp(1.25rem, 6.5vw, 4rem);
     line-height: 1.02;
     letter-spacing: -0.03em;
   }
