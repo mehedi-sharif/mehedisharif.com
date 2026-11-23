@@ -1348,19 +1348,17 @@ footer {
   padding: 0 calc(10px * var(--s)) calc(10px * var(--s));
 }
 .foot {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: calc(20px * var(--s));
   padding: calc(24px * var(--s)) calc(30px * var(--s));
-}
-.foot .brand {
-  justify-self: start;
 }
 .socials {
   display: flex;
   gap: calc(8px * var(--s));
   justify-content: center;
+  margin-inline-start: auto;
 }
 .socials a {
   width: calc(42px * var(--s));
@@ -1382,23 +1380,6 @@ footer {
   width: calc(15px * var(--s));
   height: calc(15px * var(--s));
   fill: currentColor;
-}
-.book {
-  justify-self: end;
-  display: flex;
-  align-items: center;
-  gap: calc(8px * var(--s));
-  height: calc(42px * var(--s));
-  padding: 0 calc(18px * var(--s));
-  border-radius: 999px;
-  border: 1px solid var(--hairline);
-  font-family: var(--mulish);
-  font-size: calc(14px * var(--s));
-  transition: background 0.3s;
-}
-.book:hover {
-  background: var(--accent);
-  color: var(--on-accent);
 }
 
 /* reveal */
@@ -1656,14 +1637,7 @@ html {
     min-height: 0;
   }
   .foot {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
     padding: 24px 16px;
-  }
-  .foot .brand,
-  .book {
-    justify-self: center;
   }
 }
 @media (max-width: 600px) {

@@ -53,8 +53,6 @@
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: calc(48px * var(--s));
   padding: calc(40px * var(--s));
   border-radius: var(--radius-card);
   background: #033b38;
@@ -94,16 +92,12 @@
   line-height: 1.05;
   letter-spacing: -0.02em;
   color: #cde314;
-  margin: calc(18px * var(--s)) 0 calc(12px * var(--s));
+  margin: calc(18px * var(--s)) 0;
 }
 .c-book h2 i {
   font-family: "Playfair Display", Georgia, serif;
   font-weight: 400;
   color: #cde314;
-}
-.c-book p {
-  font-size: calc(18px * var(--s));
-  max-width: 24rem;
 }
 .c-book .cta {
   align-self: flex-start;
@@ -219,9 +213,6 @@ button.cta {
   .c-book,
   .c-form {
     padding: 26px;
-  }
-  .c-book p {
-    font-size: 16px;
   }
   .c-book .nb-bl {
     display: none;
