@@ -12,6 +12,7 @@ type Props = {
   accentPreset?: "teal-lime";
   title?: string;
   description?: string;
+  robots?: string;
 };
 const {
   content,
@@ -19,6 +20,7 @@ const {
   accentPreset,
   title = content.title,
   description = content.description,
+  robots = process.env.CF_PAGES_BRANCH === "staging" ? "noindex" : undefined,
 } = Astro.props;
 ---
 
@@ -29,9 +31,7 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {process.env.CF_PAGES_BRANCH === "staging" && (
-      <meta name="robots" content="noindex" />
-    )}
+    {robots && <meta name="robots" content={robots} />}
     <link
       rel="canonical"
       href={new URL(Astro.url.pathname, config.site.base_url).href}

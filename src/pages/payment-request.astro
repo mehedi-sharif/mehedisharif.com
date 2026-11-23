@@ -1,0 +1,344 @@
+---
+import { getEntry } from "astro:content";
+import StagingHome from "@/layouts/StagingHome.astro";
+import "@/styles/staging-contact.css";
+
+const content = (await getEntry("stagingHome", "-index"))!.data;
+const title = "Payment request";
+const intro =
+  "Fill this in to get paid. Your details go only to Mehedi and his accountant.";
+const paymentMethods = [
+  "Bank transfer",
+  "Wise",
+  "Payoneer",
+  "PayPal",
+  "bKash",
+  "Other",
+];
+---
+
+<StagingHome
+  content={content}
+  interior
+  {title}
+  description={intro}
+  robots="noindex, nofollow"
+>
+  <section class="contact payment" aria-labelledby="payment-title">
+    <div class="c-dots" aria-hidden="true"></div>
+    <div class="wrap">
+      <h1 id="payment-title">{title}</h1>
+      <p class="c-intro">{intro}</p>
+      <form
+        class="card c-form"
+        id="payment-form"
+        action="/api/payment-request"
+        method="post"
+      >
+        <div class="c-hp" aria-hidden="true">
+          <label>
+            Website
+            <input
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </label>
+        </div>
+
+        <fieldset>
+          <legend>Your details</legend>
+          <div class="c-row">
+            <div class="c-field">
+              <label for="name">Full name *</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                maxlength="200"
+                required
+              />
+            </div>
+            <div class="c-field">
+              <label for="email">Email *</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                maxlength="254"
+                required
+              />
+            </div>
+            <div class="c-field">
+              <label for="phone">Phone</label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                maxlength="40"
+              />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Project</legend>
+          <div class="c-row">
+            <div class="c-field payment-wide">
+              <label for="project">Project name *</label>
+              <input
+                id="project"
+                name="project"
+                type="text"
+                maxlength="200"
+                required
+              />
+            </div>
+            <div class="c-field">
+              <label for="description">Short description of work done</label>
+              <textarea
+                id="description"
+                name="description"
+                rows="3"
+                maxlength="2000"
+              ></textarea>
+            </div>
+            <div class="c-field">
+              <label for="invoice">Invoice/reference number</label>
+              <input id="invoice" name="invoice" type="text" maxlength="120" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Payment</legend>
+          <div class="c-row">
+            <div class="c-field">
+              <label for="amount">Amount *</label>
+              <input
+                id="amount"
+                name="amount"
+                type="text"
+                inputmode="decimal"
+                maxlength="40"
+                pattern="(?=[0-9.]*[1-9])[0-9]*[.]?[0-9]+"
+                title="Enter an amount above zero, like 150.50."
+                required
+              />
+            </div>
+            <div class="c-field">
+              <label for="currency">Currency *</label>
+              <select id="currency" name="currency" required>
+                <option value="">Select currency</option>
+                <option value="USD">USD</option>
+                <option value="BDT">BDT</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="c-field">
+              <label for="dueDate">Due date</label>
+              <input id="dueDate" name="dueDate" type="date" />
+            </div>
+            <div class="c-field">
+              <label for="paymentMethod">Payment method *</label>
+              <select id="paymentMethod" name="paymentMethod" required>
+                <option value="">Select payment method</option>
+                {paymentMethods.map((method) => (
+                  <option value={method}>{method}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Bank details</legend>
+          <div class="c-row">
+            <div class="c-field">
+              <label for="accountHolder">Account holder name *</label>
+              <input
+                id="accountHolder"
+                name="accountHolder"
+                type="text"
+                maxlength="200"
+                required
+              />
+            </div>
+            <div class="c-field">
+              <label for="bankName">Bank name</label>
+              <input
+                id="bankName"
+                name="bankName"
+                type="text"
+                maxlength="200"
+              />
+            </div>
+            <div class="c-field">
+              <label for="accountNumber">Account number or IBAN *</label>
+              <input
+                id="accountNumber"
+                name="accountNumber"
+                type="text"
+                maxlength="120"
+                required
+              />
+            </div>
+            <div class="c-field">
+              <label for="swift">SWIFT/BIC</label>
+              <input id="swift" name="swift" type="text" maxlength="32" />
+            </div>
+            <div class="c-field">
+              <label for="routing">Routing/branch</label>
+              <input id="routing" name="routing" type="text" maxlength="80" />
+            </div>
+            <div class="c-field">
+              <label for="bankCountry">Bank country *</label>
+              <input
+                id="bankCountry"
+                name="bankCountry"
+                type="text"
+                maxlength="120"
+                required
+              />
+            </div>
+            <div class="c-field payment-wide">
+              <label for="bankAddress">Bank address</label>
+              <textarea
+                id="bankAddress"
+                name="bankAddress"
+                rows="3"
+                maxlength="1000"
+              ></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="c-field">
+          <label for="notes">Notes</label>
+          <textarea
+            id="notes"
+            name="notes"
+            rows="3"
+            maxlength="2000"
+          ></textarea>
+        </div>
+        <label class="payment-confirm">
+          <input type="checkbox" name="confirm" value="yes" required />
+          <span>I confirm these details are correct. *</span>
+        </label>
+        <div class="c-send">
+          <button type="submit" class="cta">
+            <span class="label">Send payment request</span>
+            <span class="arrow" aria-hidden="true">
+              <span>
+                <i class="barrow"></i>
+              </span>
+            </span>
+          </button>
+          <div id="payment-status" role="status">
+            <span class="c-status ok" id="payment-sent">
+              Your payment request was sent.
+            </span>
+            <span class="c-status" id="payment-error">
+              We could not send your payment request. Check the fields and try
+              again.
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</StagingHome>
+
+<style>
+  .payment .wrap {
+    max-width: 52rem;
+  }
+
+  fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    margin-bottom: 12px;
+    padding: 0;
+    color: var(--heading);
+    font-weight: 500;
+  }
+
+  .payment-wide {
+    grid-column: 1 / -1;
+  }
+
+  .c-field textarea {
+    min-height: 6rem;
+  }
+
+  .payment-confirm {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  #payment-status span {
+    display: none;
+    scroll-margin-top: 100px;
+  }
+
+  #payment-status:not([data-result]) span:target,
+  #payment-status[data-result="sent"] #payment-sent,
+  #payment-status[data-result="error"] #payment-error {
+    display: block;
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("#payment-form")!;
+  const button = form.querySelector<HTMLButtonElement>(
+    'button[type="submit"]',
+  )!;
+  const label = button.querySelector<HTMLElement>(".label")!;
+  const status = document.querySelector<HTMLElement>("#payment-status")!;
+  const submitLabel = label.textContent;
+  const query = new URLSearchParams(location.search);
+
+  if (query.get("sent") === "1") status.dataset.result = "sent";
+  else if (query.get("error") === "1") status.dataset.result = "error";
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (button.disabled) return;
+
+    button.disabled = true;
+    form.setAttribute("aria-busy", "true");
+    label.textContent = "Sending…";
+    status.dataset.result = "";
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        signal: AbortSignal.timeout(80000),
+      });
+      const sent = response.ok && (await response.json()).ok === true;
+      if (sent) form.reset();
+      status.dataset.result = sent ? "sent" : "error";
+    } catch {
+      status.dataset.result = "error";
+    } finally {
+      button.disabled = false;
+      form.removeAttribute("aria-busy");
+      label.textContent = submitLabel;
+    }
+  });
+</script>

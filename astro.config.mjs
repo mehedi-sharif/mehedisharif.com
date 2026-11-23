@@ -22,7 +22,10 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !/\/posts\/sample-post\/?$/.test(new URL(page).pathname),
+      filter: (page) =>
+        !/\/(posts\/sample-post|payment-request)\/?$/.test(
+          new URL(page).pathname,
+        ),
     }),
     AutoImport({
       imports: [
