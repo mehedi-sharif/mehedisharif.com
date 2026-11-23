@@ -16,18 +16,10 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
     <div class="join-card">
       <div class="join-photo">
         <img
-          class="photo-light"
-          src="/images/staging/bust-light.jpg"
+          src="/images/personal/mehedi-sharif.png"
           alt="Mehedi Sharif"
-          width="420"
-          height="560"
-        />
-        <img
-          class="photo-dark"
-          src="/images/staging/bust-dark.jpg"
-          alt=""
-          width="420"
-          height="560"
+          width="1165"
+          height="1350"
         />
       </div>
       <p class="join-name">Mehedi Sharif</p>
@@ -66,30 +58,13 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
   }
   .join-photo {
     width: min(220px, 62vw);
-    aspect-ratio: 3 / 4;
     margin-bottom: 28px;
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-card);
-    overflow: hidden;
-    background: #fff;
   }
   .join-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 12%;
-  }
-  .photo-dark {
-    display: none;
-  }
-  :global([data-theme="dark"]) .photo-light {
-    display: none;
-  }
-  :global([data-theme="dark"]) .photo-dark {
     display: block;
-  }
-  :global([data-theme="dark"]) .join-photo {
-    background: #000;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
   }
   .join-name {
     margin: 0 0 10px;
