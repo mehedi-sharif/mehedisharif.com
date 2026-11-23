@@ -28,15 +28,8 @@ const { bio } = heroBanner?.data?.banner;
   }
   .hero-copy { max-width: 1000px; }
   .hero-copy h1, .hero-copy p {
-    text-shadow: 0 0 12px #fff, 0 0 24px #fff;
+    text-shadow: 0 0 12px var(--theme-background), 0 0 24px var(--theme-background);
   }
-  :global(.dark) .hero-copy h1, :global(.dark) .hero-copy p {
-    text-shadow: 0 0 12px #101725, 0 0 24px #101725;
-  }
-  .hero-copy .btn { background-color: var(--color-body, #fff); }
-  :global(.dark) .hero-copy .btn { background-color: var(--color-darkmode-body, #101725); }
-  .hero-copy .btn:hover { background-color: #000; }
-  :global(.dark) .hero-copy .btn:hover { background-color: #fff; }
   .hero-hills {
     position: absolute;
     bottom: -120px;

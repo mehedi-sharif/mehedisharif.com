@@ -68,30 +68,31 @@ const icons: Record<string, string> = {
     justify-content: center;
     width: 44px;
     height: 44px;
-    border: 1px solid var(--rule);
+    flex-shrink: 0;
+    border: 1px solid var(--theme-border);
     border-radius: 50%;
-    color: var(--ink);
+    color: var(--theme-primary);
     text-decoration: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
   }
   .soc:hover {
-    background: #d4ff24;
-    color: #030407;
-    border-color: #d4ff24;
+    background: var(--theme-primary);
+    color: var(--theme-on-primary);
+    border-color: var(--theme-primary);
   }
   .calendar-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     min-height: 44px;
-    color: var(--ink);
+    color: var(--theme-primary);
     font:
       500 14px/1.4 Inter,
       sans-serif;
     text-underline-offset: 4px;
-    text-decoration-color: var(--link-rule, #d4ff24);
   }
   a:focus-visible {
-    outline: 2px solid var(--accent-text);
+    outline: 2px solid var(--theme-primary);
     outline-offset: 4px;
   }
 </style>

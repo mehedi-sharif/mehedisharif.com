@@ -43,6 +43,8 @@ class Component extends DCLogic {
     this.motion.addEventListener('change', this.updatePlayback);
     this.observer = new ResizeObserver(this.onResize);
     this.observer.observe(this.cv);
+    this.themeObserver = new MutationObserver(this.onResize);
+    this.themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     this.visibility = new IntersectionObserver(entries => {
       this.visible = entries[0].isIntersecting; this.updatePlayback();
     });
@@ -54,7 +56,7 @@ class Component extends DCLogic {
     window.removeEventListener('resize', this.onResize);
     document.removeEventListener('visibilitychange', this.updatePlayback);
     this.motion.removeEventListener('change', this.updatePlayback);
-    this.observer?.disconnect(); this.visibility?.disconnect();
+    this.observer?.disconnect(); this.visibility?.disconnect(); this.themeObserver?.disconnect();
   }
   tex(m, u, v) {
     const N = 32, x = u * N, y = (1 - v) * N;
@@ -77,7 +79,7 @@ class Component extends DCLogic {
     const cv = this.cv; if (!cv) return;
     const w = cv.clientWidth || 1200, h = cv.clientHeight || 440, dpr = Math.min(window.devicePixelRatio || 1, w < 768 ? 1.5 : 2);
     const cs = getComputedStyle(cv);
-    this.ink = (cs.getPropertyValue('--hill-ink') || '#56616b').trim();
+    this.ink = cs.getPropertyValue('--hill-ink').trim() || '#033B38';
     this.op = parseFloat(cs.getPropertyValue('--hill-op')) || 0.26;
     const mobile = w < 768;
     if (!this.U || mobile !== this.mobile) { this.mobile = mobile; this.build(); }

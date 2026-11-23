@@ -2,26 +2,21 @@
 import Logo from "@/components/Logo.astro";
 import Social from "@/components/Social.astro";
 import ThemeSwitcher from "@/components/ThemeSwitcher.astro";
-import menu from "@/config/menu.json";
 import social from "@/config/social.json";
-
-const { footer }: { footer: { name: string; url: string }[] } = menu;
 ---
 
 <footer class="mx-auto max-w-[1460px]">
   <div class="container mx-auto">
     <div
-      class="flex flex-col items-center justify-between py-14 text-center lg:flex-row"
+      class="grid items-center justify-items-center gap-6 py-14 lg:grid-cols-[1fr_auto_1fr]"
     >
-      <div class="order-1 my-6 inline-block translate-y-2.5 lg:order-0 lg:my-0">
+      <div class="lg:justify-self-start">
         <Logo />
       </div>
 
-      <div class="order-0 lg:order-1">
-        <ThemeSwitcher />
-      </div>
+      <ThemeSwitcher />
 
-      <div class="order-last mt-4 lg:mt-0">
+      <div class="lg:justify-self-end">
         <Social source={social.main} className="social-icons" />
       </div>
     </div>

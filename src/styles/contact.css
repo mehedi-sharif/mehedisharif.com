@@ -4,45 +4,46 @@ html:has(.contact-panel[open]) { overflow:hidden; }
   width:min(440px,calc(100vw - 16px)); max-width:none;
   height:calc(100dvh - 16px); max-height:none;
   border:0; border-radius:24px; padding:0;
-  background:var(--page); color:var(--ink);
+  background:var(--theme-background); color:var(--theme-ink);
   font-family:Inter,system-ui,sans-serif; overflow-y:auto; overscroll-behavior:contain;
   box-shadow:0 16px 60px rgb(0 0 0 / 15%);
 }
 .contact-panel::backdrop { background:rgb(0 0 0 / 48%); backdrop-filter:blur(12px); }
 .contact-close {
   position:absolute; top:24px; right:24px; display:grid; place-items:center;
-  width:48px; height:48px; border:1px solid var(--rule); border-radius:50%;
-  color:var(--ink); background:var(--page); transition:background .2s;
+  width:48px; height:48px; border:1px solid var(--theme-border); border-radius:50%;
+  color:var(--theme-ink); background:var(--theme-background); cursor:pointer; transition:background .2s;
 }
-.contact-close:hover { background:var(--surface); }
+.contact-close:hover { background:var(--theme-surface); }
 .contact-panel-content { padding:100px 28px 24px; }
 .contact-heading { font:500 52px/1 'Cormorant Garamond',Georgia,serif; letter-spacing:-.01em; margin:0 0 36px; }
 .contact-form { display:flex; flex-direction:column; gap:24px; }
-.contact-booking { padding:22px; margin-bottom:28px; border:1px solid var(--rule); border-radius:16px; background:var(--surface); }
+.contact-booking { padding:22px; margin-bottom:28px; border:1px solid var(--theme-border); border-radius:16px; background:var(--theme-surface); }
 .contact-booking-heading { margin:0 0 10px; font:500 30px/1.1 'Cormorant Garamond',Georgia,serif; }
-.contact-booking p { margin:0 0 20px; color:var(--muted); font:400 15px/1.6 Inter,system-ui,sans-serif; }
-.contact-booking-button { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:52px; padding:14px 18px; border-radius:10px; background:#D4FF24; color:#030407; text-decoration:none; font:600 16px/1.4 Inter,system-ui,sans-serif; }
-.contact-booking-button:hover { background:#E2FF6B; }
-.contact-form-intro { margin:0 0 20px; color:var(--muted); font:500 14px/1.5 Inter,system-ui,sans-serif; }
+.contact-booking p { margin:0 0 20px; color:var(--theme-muted); font:400 15px/1.6 Inter,system-ui,sans-serif; }
+.contact-booking-button { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:52px; padding:14px 18px; border-radius:10px; background:var(--theme-primary); color:var(--theme-on-primary); text-decoration:none; font:600 16px/1.4 Inter,system-ui,sans-serif; }
+.contact-booking-button:hover { background:var(--theme-primary-hover); color:var(--theme-on-primary); }
+.contact-form-intro { margin:0 0 20px; color:var(--theme-muted); font:500 14px/1.5 Inter,system-ui,sans-serif; }
 .contact-field { display:flex; flex-direction:column; gap:10px; }
 .contact-field label { font-size:13px; line-height:1.4; }
 .contact-field input,.contact-field textarea {
   box-sizing:border-box; width:100%; min-height:48px; padding:13px 14px;
-  border:1px solid var(--rule); border-radius:10px;
-  background:var(--page); color:var(--ink); font:400 16px/1.5 Inter,sans-serif;
+  border:1px solid var(--theme-border); border-radius:10px;
+  background:var(--theme-background); color:var(--theme-ink); font:400 16px/1.5 Inter,sans-serif;
   box-shadow:0 2px 3px rgb(0 0 0 / 2%); transition:border-color .2s;
 }
 .contact-field textarea { resize:vertical; min-height:150px; }
-.contact-field input::placeholder,.contact-field textarea::placeholder { color:var(--muted); opacity:.85; }
-.contact-field input:focus,.contact-field textarea:focus { outline:2px solid var(--accent-text); outline-offset:2px; }
-.contact-submit { display:flex; align-items:center; justify-content:space-between; min-height:52px; border:1px solid var(--rule); border-radius:10px; padding:14px 18px; background:var(--surface); color:var(--ink); font:500 16px/1.4 Inter,system-ui,sans-serif; cursor:pointer; }
-.contact-submit:hover { background:var(--page); }
+.contact-field input::placeholder,.contact-field textarea::placeholder { color:var(--theme-muted); opacity:1; }
+.contact-field input:focus,.contact-field textarea:focus { outline:2px solid var(--theme-primary); outline-offset:2px; }
+.contact-submit { display:flex; align-items:center; justify-content:space-between; min-height:52px; border:0; border-radius:10px; padding:14px 18px; background:var(--theme-primary); color:var(--theme-on-primary); font:500 16px/1.4 Inter,system-ui,sans-serif; cursor:pointer; }
+.contact-submit:hover { background:var(--theme-primary-hover); }
 .contact-submit:disabled { opacity:.6; cursor:not-allowed; }
 .contact-form[aria-busy="true"] .contact-submit { cursor:wait; }
 .contact-status { margin:0; font-size:14px; line-height:1.5; }
 .contact-status:empty { display:none; }
 .contact-status.error { color:#c33727; }
-.contact-status.success { color:var(--accent-text); }
+.dark .contact-status.error { color:#ffaaa1; }
+.contact-status.success { color:var(--theme-primary); }
 @media (max-width:540px) {
   .contact-panel { border-radius:20px; }
   .contact-panel-content { padding:92px 22px 24px; }
@@ -58,12 +59,6 @@ html:has(.contact-panel[open]) { overflow:hidden; }
   @keyframes contact-enter { from { opacity:0; transform:translateX(36px); } to { opacity:1; transform:translateX(0); } }
 }
 
-.contact-close { cursor:pointer; }
-/* Keep the drawer themed on legacy content pages as well as the new layout. */
-.contact-panel { --page:#FAFAF7;--ink:#030407;--rule:#DCDFD3;--surface:#F1F3EA;--muted:#55594E;--accent-text:#4D5E00; }
-.dark .contact-panel, [data-theme="dark"] .contact-panel { --page:#030407;--ink:#ECEDE4;--rule:#23271C;--surface:#12170C;--muted:#9EA192;--accent-text:#D4FF24; }
-
-
 .contact-page-content {
   width: min(100%, 560px);
   margin-inline: auto;
@@ -76,7 +71,7 @@ html:has(.contact-panel[open]) { overflow:hidden; }
   display: block;
   width: fit-content;
   margin: 20px auto;
-  color: var(--ink);
+  color: var(--theme-primary);
   text-decoration: underline;
   text-underline-offset: 3px;
 }

@@ -1,12 +1,11 @@
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 
-/* Preserve Tailwind 3 border defaults in the restored theme. */
 @layer base {
   *,
   ::before,
   ::after {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--theme-border);
   }
 }
 @layer base {
@@ -17,7 +16,15 @@
     @apply text-base-sm leading-relaxed md:text-base;
   }
   body {
-    @apply bg-body text-base dark:bg-darkmode-body dark:text-darkmode-text;
+    background: var(--theme-background);
+    color: var(--theme-ink);
+  }
+  a {
+    color: var(--theme-primary);
+  }
+  :where(a, button):focus-visible {
+    outline: 2px solid var(--theme-primary);
+    outline-offset: 4px;
   }
 }
 @layer components {
@@ -55,7 +62,9 @@
   }
   .bio .social-icons li a {
     @apply block h-[46px] w-[46px] after:top-[1px] after:left-[1px] after:h-[44px] after:w-[44px];
-    @apply bg-gray-100 text-primary duration-100 after:hidden hover:opacity-80;
+    @apply duration-100 after:hidden;
+    background: var(--theme-surface);
+    color: var(--theme-primary);
   }
   .bio .social-icons li a svg {
     @apply h-[46px] transition-none;
@@ -71,7 +80,8 @@
   }
   .section-title strong::before {
     content: "";
-    @apply absolute right-0 top-1/2 w-12 border-t-2 border-black dark:invert;
+    @apply absolute right-0 top-1/2 w-12 border-t-2;
+    border-color: var(--theme-primary);
   }
   .section-title-center strong {
     @apply pr-0;
@@ -85,7 +95,8 @@
   .post-card::after,
   .post-card::before {
     content: "";
-    @apply absolute -rotate-45 border bg-white dark:border-darkmode-border dark:bg-darkmode-body;
+    @apply absolute -rotate-45 border;
+    background: var(--theme-background);
     transition: border 0.3s;
     height: 18px;
     width: 18px;
@@ -101,12 +112,10 @@
     @apply border-r-0 border-b-0;
     border-top-left-radius: 4px;
   }
-  .post-card:hover {
-    @apply border-dark dark:border-slate-600;
-  }
+  .post-card:hover,
   .post-card:hover::after,
   .post-card:hover::before {
-    @apply border-dark bg-white dark:border-slate-600 dark:bg-darkmode-body;
+    border-color: var(--theme-primary);
   }
   .form-inputs * {
     @apply mb-4 leading-9 sm:mb-5 sm:leading-10;
@@ -115,7 +124,15 @@
     @apply mx-2 inline-block last:mr-0;
   }
   .social-icons li a {
-    @apply relative z-10 block h-[48px] w-[48px] overflow-hidden rounded-full bg-primary text-center text-white transition-all delay-100 after:absolute after:top-[2px] after:left-[2px] after:-z-10 after:h-[44px] after:w-[44px] after:scale-0 after:rounded-full after:bg-white after:transition-all after:duration-[250ms] hover:text-primary hover:after:scale-100 dark:invert;
+    @apply relative z-10 block h-[48px] w-[48px] overflow-hidden rounded-full text-center transition-all delay-100 after:absolute after:top-[2px] after:left-[2px] after:-z-10 after:h-[44px] after:w-[44px] after:scale-0 after:rounded-full after:transition-all after:duration-[250ms] hover:after:scale-100;
+    background: var(--theme-primary);
+    color: var(--theme-on-primary);
+  }
+  .social-icons li a::after {
+    background: var(--theme-background);
+  }
+  .social-icons li a:hover {
+    color: var(--theme-primary);
   }
   .social-icons li a svg {
     @apply m-auto h-9;
@@ -140,7 +157,9 @@
     transition: 0.25s;
   }
   .content {
-    @apply prose max-w-none dark:prose-invert hover:prose-a:opacity-70;
+    @apply prose max-w-none dark:prose-invert;
+    --tw-prose-links: var(--theme-primary);
+    --tw-prose-invert-links: var(--theme-primary);
   }
   .form {
     position: fixed;
@@ -318,24 +337,31 @@
     stroke-dashoffset: -64px;
   }
   .btn {
-    @apply inline-block rounded border border-primary bg-transparent px-5 py-3 text-sm text-primary dark:border-white dark:text-white;
+    @apply inline-block rounded border px-5 py-3 text-sm;
+    background: var(--theme-primary);
+    border-color: var(--theme-primary);
+    color: var(--theme-on-primary);
     transition: background-color 150ms, color 150ms;
   }
-  .btn:hover {
-    @apply bg-primary text-white dark:bg-white dark:text-primary;
+  .btn-outline-primary {
+    background: transparent;
+    color: var(--theme-primary);
   }
-  .btn:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 4px;
+  .btn:hover {
+    background: var(--theme-primary-hover);
+    color: var(--theme-on-primary);
   }
   .btn-effect-0 {
-    @apply relative inline-block rounded-md border-2 border-primary bg-transparent px-5 py-3 text-sm dark:border-white;
+    @apply relative inline-block rounded-md border-2 bg-transparent px-5 py-3 text-sm;
+    border-color: var(--theme-primary);
     transition: color 0s;
   }
   .btn-effect-0::after,
   .btn-effect-0::before {
     content: "";
-    @apply absolute border-2 border-black bg-white dark:border-white dark:bg-primary;
+    @apply absolute border-2;
+    background: var(--theme-background);
+    border-color: var(--theme-primary);
     border-radius: 4px;
     height: 12px;
     width: 12px;
@@ -357,7 +383,8 @@
     @apply relative;
   }
   .line-link::after {
-    @apply absolute right-0 bottom-0 w-0 bg-black;
+    @apply absolute right-0 bottom-0 w-0;
+    background: currentColor;
     transition: 0.3s cubic-bezier(0.77, 0, 0.175, 1);
     content: "";
     height: 1px;
@@ -424,9 +451,9 @@
   width: fit-content;
   max-width: 100%;
   padding: 8px;
-  border: 1px solid #343a47;
+  border: 1px solid var(--theme-border);
   border-radius: 5px;
-  background: #000000;
+  background: var(--theme-surface);
   box-shadow: 0 4px 18px rgb(0 0 0 / 8%);
 }
 .signature-nav-brand {
@@ -438,6 +465,9 @@
   display: block;
   width: 160px;
   height: auto;
+}
+:root:not(.dark) .signature-nav-brand img {
+  filter: invert(1);
 }
 .signature-nav-links {
   display: flex;
@@ -451,7 +481,7 @@
   min-height: 48px;
   padding: 12px 18px;
   border-radius: 3px;
-  color: #ffffff;
+  color: var(--theme-primary);
   font-family: var(--font-inter), sans-serif;
   font-size: 12px;
   font-weight: 600;
@@ -460,21 +490,15 @@
   transition: background-color 150ms, color 150ms;
 }
 .signature-nav-link:hover {
-  background: #222222;
-  color: #fff;
+  background: var(--theme-background);
 }
 .signature-nav-contact {
-  background: #ffffff;
-  color: #000000;
+  background: var(--theme-primary);
+  color: var(--theme-on-primary);
   padding-inline: 24px;
 }
 .signature-nav-contact:hover {
-  background: #f4f7f7;
-  color: #000000;
-}
-.signature-nav a:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 3px;
+  background: var(--theme-primary-hover);
 }
 @media (max-width: 539px) {
   .signature-nav {
@@ -541,10 +565,3 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {
   .signature-nav-brand img { width: 88px; }
   .signature-nav-link { font-size: 12px; padding-inline: 8px; }
 }
-
-/* Match the imported homepage palette on existing blog and contact routes. */
-.signature-nav { background:#030407; border-color:#2A2F22; }
-.signature-nav-link { color:#ECEDE4; }
-.signature-nav-link:hover { background:#12170C; color:#D4FF24; }
-.signature-nav-contact { background:#D4FF24; color:#030407; }
-.signature-nav-contact:hover { background:#E2FF6B; color:#030407; }

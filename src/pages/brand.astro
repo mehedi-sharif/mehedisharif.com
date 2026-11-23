@@ -142,20 +142,14 @@ const logos: BrandImage[] = [
   socialImage,
 ];
 
-// Accent colors and neutrals from staging.css, staging-contact.css, and Header.astro.
 const colors = [
   { name: "Brand teal", hex: "#033B38" },
-  { name: "Brand mint", hex: "#02D8B6" },
   { name: "Brand lime", hex: "#CDE314" },
-  { name: "Default blue", hex: "#2749F5" },
-  { name: "Green accent", hex: "#00FF99" },
-  { name: "Pink accent", hex: "#FD86EA" },
   { name: "Light background", hex: "#F9FAFA" },
   { name: "Light surface", hex: "#FDFFFF" },
-  { name: "Light foreground", hex: "#000000" },
-  { name: "Dark background", hex: "#0B0F0D" },
-  { name: "Dark surface", hex: "#121816" },
-  { name: "Dark foreground", hex: "#F2F5F3" },
+  { name: "Light foreground", hex: "#030407" },
+  { name: "Dark background", hex: "#021F1D" },
+  { name: "Dark foreground", hex: "#ECEDE4" },
 ];
 
 const fonts = [
@@ -361,7 +355,7 @@ const content = (await getEntry("stagingHome", "-index"))!.data;
     background: #f9fafa;
   }
   .asset-preview[data-backdrop="dark"] {
-    background: #0b0f0d;
+    background: var(--brand-teal);
   }
   .asset-preview img {
     width: 100%;
@@ -385,7 +379,7 @@ const content = (await getEntry("stagingHome", "-index"))!.data;
   }
   .asset-info a,
   .photo-downloads a {
-    color: var(--heading);
+    color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 4px;
   }

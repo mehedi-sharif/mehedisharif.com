@@ -20,10 +20,10 @@ const allCategories = await getAllTaxonomy(BLOG_FOLDER, "categories");
               <li class="m-3 inline-block">
                 <a
                   href={`/categories/${category}`}
-                  class="block rounded bg-theme-light px-4 py-2 text-xl text-dark dark:bg-darkmode-theme-light dark:text-darkmode-dark"
+                  class="block rounded bg-theme-light px-4 py-2 text-xl dark:bg-darkmode-theme-light"
                 >
                   {humanize(category)}{" "}
-                  <span class="ml-2 rounded bg-body px-2 dark:bg-darkmode-body">
+                  <span class="ml-2 rounded bg-secondary px-2 text-primary">
                     {count}
                   </span>
                 </a>

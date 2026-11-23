@@ -15,8 +15,8 @@
 .blog-row:hover h2 { color:var(--accent-text); }
 .blog-row:hover .blog-arrow { transform:translateX(4px); }
 .blog-pagination { display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:40px; }
-.blog-pagination .btn { border:1px solid var(--rule);color:var(--ink); }
-.mnav a.ml.current { color:#D4FF24; }
+.blog-pagination .btn { border:1px solid var(--rule); }
+.blog-pagination .btn:hover { border-color:var(--accent-text); }
 @media(max-width:900px) {
  .blog-page .blog-heading { padding-top:72px; }
  .blog-heading h1 { font-size:56px; }

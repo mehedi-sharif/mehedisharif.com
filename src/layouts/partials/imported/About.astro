@@ -72,10 +72,10 @@ const { about } = (await getEntry("homepage", "-index"))!.data;
     pointer-events: none;
     background: linear-gradient(
       145deg,
-      rgba(212, 255, 36, 0.16) 0%,
-      rgba(212, 255, 36, 0.04) 44%,
-      rgba(212, 255, 36, 0) 62%,
-      rgba(212, 255, 36, 0.10) 100%
+      color-mix(in srgb, var(--brand-lime) 16%, transparent) 0%,
+      color-mix(in srgb, var(--brand-lime) 4%, transparent) 44%,
+      transparent 62%,
+      color-mix(in srgb, var(--brand-lime) 10%, transparent) 100%
     );
     mix-blend-mode: soft-light;
   }

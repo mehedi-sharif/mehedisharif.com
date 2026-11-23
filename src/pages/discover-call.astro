@@ -10,7 +10,6 @@ const bookingUrl =
 <StagingHome
   content={content}
   interior
-  accentPreset="teal-lime"
   title="Book a meeting — Mehedi Sharif"
   description="Choose a convenient time to meet with Mehedi Sharif."
 >
@@ -56,12 +55,6 @@ const bookingUrl =
 </StagingHome>
 
 <style>
-  :global(:root[data-accent-preset="teal-lime"]) {
-    --accent: #033b38;
-    --on-accent: #fff;
-    --accent-2: #cde314;
-    --on-accent-2: #033b38;
-  }
   .meet-page {
     padding-block: clamp(104px, 13vw, 168px) 64px;
     min-height: 100svh;
@@ -76,7 +69,7 @@ const bookingUrl =
     padding: clamp(36px, 7vw, 88px) 24px;
     margin-bottom: 16px;
     border-radius: var(--radius-card);
-    background: #033b38;
+    background: var(--brand-teal);
     color: #fff;
     text-align: center;
   }
@@ -89,13 +82,13 @@ const bookingUrl =
     color: #fff;
   }
   .meet-intro h1 i {
-    color: #cde314;
+    color: var(--brand-lime);
   }
   .meet-intro p {
     font-size: clamp(16px, 2vw, 20px);
   }
   .booking-calendar {
-    background: #fff;
+    background: var(--surface);
     border: 1px solid var(--hairline);
     border-radius: var(--radius-card);
     overflow: hidden;

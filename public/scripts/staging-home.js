@@ -317,7 +317,7 @@ try {
     if (still) draw(PERIOD * 0.35);
   }).observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ["data-theme", "style"],
+    attributeFilter: ["data-theme"],
   });
   addEventListener("resize", () => {
     size();
@@ -403,10 +403,8 @@ document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
   let imgs = [],
     cur = "",
     want = 0;
-  const poster = document.getElementById("bustPoster");
   function load(t) {
-    poster.src = poster.dataset[t];
-    if (poster.dataset.animate !== "true") return;
+    if (fig.dataset.animate !== "true") return;
     if (!sets[t]) {
       const a = [];
       for (let i = 0; i < COUNT; i++) {
@@ -426,13 +424,9 @@ document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
     cur = "";
     draw(true);
   }
-  document.getElementById("themeBtn").addEventListener("click", () => {
-    const t = theme() === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = t;
-    try {
-      localStorage.setItem("theme", t);
-    } catch (e) {}
-    load(t);
+  new MutationObserver(() => load(theme())).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
   });
   function size() {
     const d = Math.min(devicePixelRatio || 1, 2);
