@@ -27,7 +27,8 @@ const {
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href={config.site.favicon} />
+    <link rel="icon" type="image/png" href={config.site.favicon} />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
     <link
       rel="preload"
       href="/fonts/cormorant-garamond-normal.woff2?v=d80df8ff5aec"
