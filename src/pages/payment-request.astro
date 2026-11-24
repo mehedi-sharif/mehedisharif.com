@@ -1,19 +1,115 @@
 ---
 import { getEntry } from "astro:content";
+import banks from "@/data/payment-banks.json";
+import {
+  bangladeshDistricts,
+  dhakaCities,
+  paymentMethodLabels,
+  swiftCodePattern,
+  walletAccountTypes,
+  walletNumberPattern,
+} from "@/data/payment-options.mjs";
 import StagingHome from "@/layouts/StagingHome.astro";
 import "@/styles/staging-contact.css";
 
 const content = (await getEntry("stagingHome", "-index"))!.data;
 const title = "Payment request";
 const currencies = ["USD", "BDT", "EUR", "GBP"];
-const reviewFields = [
-  ["name", "Name"],
-  ["email", "Email"],
-  ["whatFor", "Payment for"],
-  ["amount", "Amount"],
-  ["paymentDetails", "Payment details"],
-  ["notes", "Note or invoice link"],
+type PaymentMethod = keyof typeof paymentMethodLabels;
+type PaymentField = {
+  name: string;
+  label: string;
+  choices?: string[];
+  pattern?: string;
+  hint?: string;
+  placeholder?: string;
+  inputmode?: "numeric" | "text";
+  maxlength?: number;
+  rows?: number;
+  optional?: boolean;
+};
+const methods = [
+  { id: "bank", logo: "bank.svg", title: "Bangladesh bank details" },
+  { id: "bkash", logo: "bkash.webp", title: "bKash details" },
+  { id: "nagad", logo: "nagad.webp", title: "Nagad details" },
+  { id: "swift", logo: "swift.svg", title: "SWIFT bank details" },
+  { id: "other", logo: "other.svg", title: "Other payment details" },
+] as const;
+const walletFields = (id: "bkash" | "nagad"): PaymentField[] => [
+  {
+    name: `${id}Number`,
+    label: `${paymentMethodLabels[id]} account number`,
+    inputmode: "numeric",
+    pattern: walletNumberPattern,
+    hint: "Enter 11 digits starting with 01.",
+    placeholder: "01XXXXXXXXX",
+    maxlength: 11,
+  },
+  {
+    name: `${id}AccountType`,
+    label: `${paymentMethodLabels[id]} account type`,
+    choices: walletAccountTypes,
+  },
 ];
+const methodFields: Record<PaymentMethod, PaymentField[]> = {
+  bank: [
+    { name: "bankAccountName", label: "Account name" },
+    {
+      name: "bankAccountNumber",
+      label: "Account number",
+      inputmode: "numeric",
+    },
+    { name: "bankBranch", label: "Branch name" },
+    { name: "bankDistrict", label: "District", choices: bangladeshDistricts },
+    {
+      name: "bankDhakaCity",
+      label: "Dhaka North or Dhaka South",
+      choices: dhakaCities,
+    },
+  ],
+  bkash: walletFields("bkash"),
+  nagad: walletFields("nagad"),
+  swift: [
+    { name: "swiftBankName", label: "Bank name" },
+    {
+      name: "swiftCode",
+      label: "SWIFT/BIC code",
+      pattern: swiftCodePattern,
+      hint: "Enter a valid SWIFT/BIC code with 8 or 11 characters.",
+      maxlength: 11,
+    },
+    { name: "swiftAccountName", label: "Account name" },
+    { name: "swiftAccountNumber", label: "Account number or IBAN" },
+    { name: "swiftBankCountry", label: "Bank country" },
+    {
+      name: "swiftBankAddress",
+      label: "Bank address",
+      rows: 3,
+      optional: true,
+    },
+  ],
+  other: [
+    {
+      name: "paymentDetails",
+      label: "Payment details",
+      rows: 4,
+      placeholder: "Enter your Wise, PayPal, or other payment details.",
+    },
+  ],
+};
+const reviewFields: { name: string; label: string; method?: PaymentMethod }[] =
+  [
+    { name: "name", label: "Name" },
+    { name: "email", label: "Email" },
+    { name: "whatFor", label: "Payment for" },
+    { name: "amount", label: "Amount" },
+    { name: "paymentMethod", label: "Payment method" },
+    { name: "bankId", label: "Bank", method: "bank" },
+    ...methods.flatMap(({ id }) =>
+      methodFields[id].map(({ name, label }) => ({ name, label, method: id })),
+    ),
+    { name: "notes", label: "Note or invoice link" },
+  ];
 ---
 
 <StagingHome
@@ -42,6 +138,7 @@ const reviewFields = [
         class="card c-form"
         id="payment-form"
         data-payment-flow="typeform"
+        data-pay-methods="bank-bkash-nagad-swift-other"
         action="/api/payment-request"
         method="post"
       >
@@ -145,18 +242,195 @@ const reviewFields = [
           </div>
         </div>
 
-        <div class="payment-step c-field" data-question>
-          <h2 class="payment-question">
-            <label for="paymentDetails">How should we pay you?</label>
-          </h2>
-          <textarea
-            id="paymentDetails"
-            name="paymentDetails"
-            rows="4"
-            maxlength="2000"
-            placeholder="Bank name, account name, account number, and SWIFT or routing if outside Bangladesh. Or your bKash, Wise, or PayPal details."
-            required
-          ></textarea>
+        <div
+          class="payment-step c-field"
+          data-question
+          id="payment-method-step"
+        >
+          <div
+            class="payment-method-panel"
+            data-payment-panel="method"
+            role="group"
+            aria-labelledby="payment-method-title"
+          >
+            <h2 class="payment-question" id="payment-method-title">
+              How should we pay you?
+            </h2>
+            <div class="c-field payment-native-only">
+              <label for="paymentMethod">Payment method</label>
+              <select id="paymentMethod" name="paymentMethod" required>
+                <option value="">Choose a payment method</option>
+                {methods.map(({ id }) => (
+                  <option value={id}>{paymentMethodLabels[id]}</option>
+                ))}
+              </select>
+              <p>Fill in the fields for the method you choose.</p>
+            </div>
+            <div class="payment-method-choices payment-enhanced-only">
+              {methods.map(({ id, logo }) => (
+                <button
+                  class:list={[
+                    "payment-choice",
+                    id === "other" && "payment-choice-other",
+                  ]}
+                  data-method-choice={id}
+                  type="button"
+                  aria-pressed="false"
+                >
+                  <span class="payment-logo" aria-hidden="true">
+                    <img
+                      src={`/images/payments/${logo}`}
+                      alt=""
+                      width="40"
+                      height="40"
+                    />
+                  </span>
+                  <span>{paymentMethodLabels[id]}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <fieldset
+            class="payment-method-panel"
+            data-payment-panel="bank-picker"
+            data-method-fields="bank"
+            aria-labelledby="payment-bank-picker-title"
+          >
+            <h2 class="payment-question" id="payment-bank-picker-title">
+              Choose your bank
+            </h2>
+            <div class="c-field payment-native-only">
+              <label for="bankId">Bank</label>
+              <select id="bankId" name="bankId" data-payment-required>
+                <option value="">Choose a bank</option>
+                {banks.map((bank) => (
+                  <option value={bank.id}>{bank.name}</option>
+                ))}
+              </select>
+            </div>
+            <div class="c-field payment-enhanced-only">
+              <label for="payment-bank-search">Search banks</label>
+              <input
+                id="payment-bank-search"
+                type="search"
+                placeholder="Bank name"
+                autocomplete="off"
+                aria-controls="payment-bank-list"
+                aria-describedby="payment-bank-hint"
+              />
+              <p class="payment-bank-status" id="payment-bank-hint">
+                Use the arrow keys to move through the results.
+              </p>
+              <p
+                class="payment-bank-status"
+                id="payment-bank-status"
+                aria-live="polite"
+              ></p>
+              <ul
+                class="payment-bank-list"
+                id="payment-bank-list"
+                aria-label="Bangladesh banks"
+              >
+                {banks.map((bank) => (
+                  <li>
+                    <button
+                      class="payment-choice"
+                      data-bank-choice={bank.id}
+                      data-bank-search={`${bank.name} ${bank.id} ${bank.initials}`.toLowerCase()}
+                      type="button"
+                      aria-pressed="false"
+                    >
+                      <span class="payment-logo" aria-hidden="true">
+                        {bank.logo ? (
+                          <img
+                            src={bank.logo}
+                            alt=""
+                            width="32"
+                            height="32"
+                            loading="lazy"
+                          />
+                        ) : (
+                          bank.initials
+                        )}
+                      </span>
+                      <span>{bank.name}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </fieldset>
+
+          {methods.map(({ id, title }) => (
+            <fieldset
+              class="payment-method-panel"
+              data-payment-panel={id}
+              data-method-fields={id}
+              aria-labelledby={`payment-${id}-title`}
+            >
+              <h2 class="payment-question" id={`payment-${id}-title`}>
+                {title}
+              </h2>
+              {id === "bank" && (
+                <p
+                  class="payment-bank-status payment-enhanced-only"
+                  id="payment-picked-bank"
+                ></p>
+              )}
+              {methodFields[id].map((field) => (
+                <div
+                  class="c-field"
+                  data-dhaka-field={
+                    field.name === "bankDhakaCity" ? "" : undefined
+                  }
+                >
+                  <label for={field.name}>
+                    {field.label}
+                    {field.optional && " (optional)"}
+                  </label>
+                  {field.name === "bankDhakaCity" && (
+                    <p class="payment-native-only">
+                      Choose one if your district is Dhaka.
+                    </p>
+                  )}
+                  {field.choices ? (
+                    <select
+                      id={field.name}
+                      name={field.name}
+                      data-payment-required
+                    >
+                      <option value="">Choose an option</option>
+                      {field.choices.map((choice) => (
+                        <option value={choice}>{choice}</option>
+                      ))}
+                    </select>
+                  ) : field.rows ? (
+                    <textarea
+                      id={field.name}
+                      name={field.name}
+                      rows={field.rows}
+                      maxlength="2000"
+                      placeholder={field.placeholder}
+                      data-payment-required={field.optional ? undefined : ""}
+                    ></textarea>
+                  ) : (
+                    <input
+                      id={field.name}
+                      name={field.name}
+                      type="text"
+                      inputmode={field.inputmode}
+                      maxlength={field.maxlength ?? 200}
+                      pattern={field.pattern}
+                      title={field.hint}
+                      placeholder={field.placeholder}
+                      data-payment-required
+                    />
+                  )}
+                </div>
+              ))}
+            </fieldset>
+          ))}
         </div>
 
         <div class="payment-step c-field" data-question>
@@ -177,10 +451,20 @@ const reviewFields = [
             Review your request
           </h2>
           <dl>
-            {reviewFields.map(([name, label]) => (
-              <div>
+            {reviewFields.map(({ name, label, method }) => (
+              <div data-review-method={method}>
                 <dt>{label}</dt>
-                <dd data-answer={name}></dd>
+                <dd>
+                  <span data-answer={name}></span>
+                  <button
+                    class="payment-edit"
+                    type="button"
+                    aria-label={`Edit ${label.toLowerCase()}`}
+                    data-review-edit={name}
+                  >
+                    Edit
+                  </button>
+                </dd>
               </div>
             ))}
           </dl>
@@ -281,6 +565,132 @@ const reviewFields = [
     min-height: 9rem;
   }
 
+  .payment [hidden],
+  .payment .payment-enhanced-only,
+  [data-enhanced] .payment-native-only,
+  [data-enhanced] .payment-method-panel:not([data-active]) {
+    display: none;
+  }
+
+  .payment-method-panel {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  form:not([data-enhanced]) .payment-method-panel + .payment-method-panel {
+    margin-top: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  [data-enhanced] .payment-enhanced-only {
+    display: grid;
+  }
+
+  .payment-method-choices {
+    min-width: 0;
+    gap: 0.625rem;
+  }
+
+  .payment-choice {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    min-height: 3.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid
+      color-mix(in srgb, var(--foreground) 38%, var(--background));
+    border-radius: 0.75rem;
+    background: var(--background);
+    color: var(--foreground);
+    font: inherit;
+    font-weight: 500;
+    line-height: 1.25;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .payment-choice:hover,
+  .payment-choice[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, var(--background));
+  }
+
+  .payment-choice[aria-pressed="true"] {
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+
+  .payment-choice-other {
+    grid-column: 1 / -1;
+    justify-self: start;
+    min-height: 2.75rem;
+    border-color: transparent;
+    background: transparent;
+    color: var(--accent);
+    font-size: 0.9375rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .payment-logo {
+    display: grid;
+    flex: 0 0 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 0.45rem;
+    background: #fff;
+    color: var(--brand-teal);
+    font-size: 0.6875rem;
+    font-weight: 700;
+  }
+
+  .payment-logo img {
+    width: 100%;
+    height: 100%;
+    padding: 0.2rem;
+    object-fit: contain;
+  }
+
+  .payment-choice-other .payment-logo {
+    flex-basis: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .payment-bank-status {
+    min-height: 1.4em;
+    font-size: 0.875rem;
+  }
+
+  .payment-bank-list {
+    display: grid;
+    gap: 0.375rem;
+    max-height: min(20rem, 40svh);
+    margin: 0;
+    padding: 0.25rem;
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  .payment-bank-list .payment-choice {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.9375rem;
+  }
+
+  .payment-bank-list .payment-logo {
+    flex-basis: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
   .payment-amount-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 6.5rem;
@@ -353,7 +763,7 @@ const reviewFields = [
     border-top: 1px solid var(--hairline);
   }
 
-  .payment-review dl > div {
+  .payment-review dl > div:not([hidden]) {
     display: grid;
     gap: 0.125rem;
     padding-block: 0.625rem;
@@ -366,9 +776,30 @@ const reviewFields = [
   }
 
   .payment-review dd {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.75rem;
+  }
+
+  .payment-review [data-answer] {
     color: var(--foreground);
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+  }
+
+  .payment-edit {
+    min-height: 1.75rem;
+    padding-inline: 0.375rem;
+    border: 0;
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    font-size: 0.875rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
   }
 
   .payment-review h2,
@@ -392,7 +823,9 @@ const reviewFields = [
     cursor: pointer;
   }
 
-  .payment-actions button:focus-visible {
+  .payment-actions button:focus-visible,
+  .payment-edit:focus-visible,
+  .payment-choice:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
@@ -408,7 +841,8 @@ const reviewFields = [
   }
 
   .payment-next:disabled,
-  .payment-secondary:disabled {
+  .payment-secondary:disabled,
+  .payment-edit:disabled {
     opacity: 0.65;
     cursor: wait;
   }
@@ -458,6 +892,10 @@ const reviewFields = [
   }
 
   @media (min-width: 34rem) {
+    .payment-method-choices {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .payment-review dl > div {
       grid-template-columns: 9rem minmax(0, 1fr);
       gap: 1rem;
@@ -483,7 +921,11 @@ const reviewFields = [
 </style>
 
 <script>
+  import { paymentMethodLabels } from "@/data/payment-options.mjs";
+
   type Field = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+  type PaymentMethod = keyof typeof paymentMethodLabels;
+  type PaymentPanel = "method" | "bank-picker" | PaymentMethod;
 
   const form = document.querySelector<HTMLFormElement>("#payment-form")!;
   const wrapper = document.querySelector<HTMLElement>(".payment-wrap")!;
@@ -493,6 +935,8 @@ const reviewFields = [
   const review = form.querySelector<HTMLElement>("#payment-review")!;
   const panels = [...questions, review];
   const answers = review.querySelectorAll<HTMLElement>("[data-answer]");
+  const editButtons =
+    review.querySelectorAll<HTMLButtonElement>("[data-review-edit]");
   const progress =
     form.querySelector<HTMLProgressElement>("#payment-progress")!;
   const stepCount = form.querySelector<HTMLElement>("#payment-step-count")!;
@@ -503,6 +947,30 @@ const reviewFields = [
   const submitError = form.querySelector<HTMLElement>("#payment-submit-error")!;
   const sentHeading = wrapper.querySelector<HTMLElement>("#payment-sent h2")!;
   const notes = form.querySelector<HTMLTextAreaElement>("#notes")!;
+  const paymentStep = questions.findIndex(
+    (question) => question.id === "payment-method-step",
+  );
+  const paymentMethod =
+    form.querySelector<HTMLSelectElement>("#paymentMethod")!;
+  const bankId = form.querySelector<HTMLSelectElement>("#bankId")!;
+  const district = form.querySelector<HTMLSelectElement>("#bankDistrict")!;
+  const dhakaCity = form.querySelector<HTMLSelectElement>("#bankDhakaCity")!;
+  const dhakaField = form.querySelector<HTMLElement>("[data-dhaka-field]")!;
+  const methodChoices = Array.from(
+    form.querySelectorAll<HTMLButtonElement>("[data-method-choice]"),
+  );
+  const methodFieldsets = form.querySelectorAll<HTMLFieldSetElement>(
+    "[data-method-fields]",
+  );
+  const bankSearch = form.querySelector<HTMLInputElement>(
+    "#payment-bank-search",
+  )!;
+  const bankList = form.querySelector<HTMLElement>("#payment-bank-list")!;
+  const bankChoices = Array.from(
+    bankList.querySelectorAll<HTMLButtonElement>("[data-bank-choice]"),
+  );
+  const bankStatus = form.querySelector<HTMLElement>("#payment-bank-status")!;
+  const pickedBank = form.querySelector<HTMLElement>("#payment-picked-bank")!;
   const query = new URLSearchParams(location.search);
   const requiredMessages: Record<string, string> = {
     name: "Enter your name.",
@@ -510,62 +978,213 @@ const reviewFields = [
     whatFor: "Enter what the payment is for.",
     amount: "Enter an amount above zero, like 150.50.",
     currency: "Choose a currency.",
+    paymentMethod: "Choose a payment method.",
+    bankId: "Choose your bank.",
     paymentDetails: "Enter your payment details.",
   };
   let step = 0;
-  let invalidField: Field | undefined;
+  let paymentPanel: PaymentPanel = "method";
+  let activePaymentPanel: HTMLElement | undefined;
+  let edit:
+    { name: string; values: { field: Field; value: string }[] } | undefined;
+  let invalidField: HTMLElement | undefined;
+  let previousDescription: string | null = null;
+
+  function selectedBankName() {
+    return bankId.value ? (bankId.selectedOptions[0]?.textContent ?? "") : "";
+  }
+
+  function updateDhakaField() {
+    const isDhaka = district.value === "Dhaka";
+    dhakaField.hidden = dhakaCity.disabled = !isDhaka;
+    dhakaCity.required = isDhaka;
+  }
+
+  function syncPaymentFields() {
+    for (const fieldset of methodFieldsets) {
+      fieldset.disabled = fieldset.dataset.methodFields !== paymentMethod.value;
+    }
+    for (const choice of methodChoices) {
+      choice.setAttribute(
+        "aria-pressed",
+        String(choice.dataset.methodChoice === paymentMethod.value),
+      );
+    }
+    for (const choice of bankChoices) {
+      choice.setAttribute(
+        "aria-pressed",
+        String(choice.dataset.bankChoice === bankId.value),
+      );
+    }
+    pickedBank.textContent = selectedBankName();
+    updateDhakaField();
+  }
+
+  function matchingBanks() {
+    return bankChoices.filter((choice) => !choice.closest("li")!.hidden);
+  }
+
+  function filterBanks() {
+    const words = bankSearch.value
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean);
+    for (const choice of bankChoices) {
+      choice.closest("li")!.hidden = !words.every((word) =>
+        choice.dataset.bankSearch!.includes(word),
+      );
+      choice.tabIndex = -1;
+    }
+    const matches = matchingBanks();
+    const selected = selectedBankName();
+    const first =
+      matches.find((choice) => choice.dataset.bankChoice === bankId.value) ??
+      matches[0];
+    if (first) first.tabIndex = 0;
+    bankStatus.textContent = matches.length
+      ? `${matches.length} ${matches.length === 1 ? "bank" : "banks"}${!words.length && selected ? `. Selected bank is ${selected}.` : ""}`
+      : "No banks match your search.";
+  }
 
   function clearFieldError() {
     invalidField?.removeAttribute("aria-invalid");
-    invalidField?.removeAttribute("aria-describedby");
+    if (previousDescription) {
+      invalidField?.setAttribute("aria-describedby", previousDescription);
+    } else {
+      invalidField?.removeAttribute("aria-describedby");
+    }
     invalidField = undefined;
     fieldError.textContent = "";
   }
 
-  function showStep(next: number) {
+  function showFieldError(field: HTMLElement, message: string) {
+    clearFieldError();
+    invalidField = field;
+    previousDescription = field.getAttribute("aria-describedby");
+    field.setAttribute("aria-invalid", "true");
+    field.setAttribute(
+      "aria-describedby",
+      [previousDescription, fieldError.id].filter(Boolean).join(" "),
+    );
+    fieldError.textContent = message;
+    field.focus();
+  }
+
+  function showStep(
+    next: number,
+    nextPaymentPanel: PaymentPanel = "method",
+    focusField?: HTMLElement,
+  ) {
     clearFieldError();
     submitError.textContent = "";
     panels[step].removeAttribute("data-active");
+    activePaymentPanel?.removeAttribute("data-active");
     step = next;
     const panel = panels[step];
     panel.setAttribute("data-active", "");
     const reviewing = panel === review;
+    paymentPanel = nextPaymentPanel;
+    activePaymentPanel =
+      step === paymentStep
+        ? panel.querySelector<HTMLElement>(
+            `[data-payment-panel="${paymentPanel}"]`,
+          )!
+        : undefined;
+    activePaymentPanel?.setAttribute("data-active", "");
 
     progress.value = Math.min(step + 1, questions.length);
     stepCount.textContent = reviewing
       ? "All 6 steps complete"
       : `Step ${step + 1} of ${questions.length}`;
-    back.hidden = step === 0;
+    back.hidden = step === 0 && !edit;
     skip.hidden = !panel.contains(notes);
+    submit.hidden =
+      step === paymentStep &&
+      ((paymentPanel === "method" && !paymentMethod.value) ||
+        (paymentPanel === "bank-picker" && !bankId.value));
     submit.textContent = reviewing ? "Send request" : "Next";
 
+    if (step === paymentStep && paymentPanel === "method") {
+      focusField =
+        methodChoices.find(
+          (choice) => choice.dataset.methodChoice === paymentMethod.value,
+        ) ?? methodChoices[0];
+    }
+    if (step === paymentStep && paymentPanel === "bank-picker") {
+      bankSearch.value = "";
+      filterBanks();
+      focusField = bankSearch;
+    }
     if (reviewing) {
+      edit = undefined;
       const values = new FormData(form);
       for (const answer of answers) {
         const key = answer.dataset.answer!;
+        const row = answer.closest<HTMLElement>("[data-review-method]");
+        if (row) {
+          row.hidden =
+            row.dataset.reviewMethod !== paymentMethod.value ||
+            (key === "bankDhakaCity" && dhakaField.hidden);
+        }
         const value = String(values.get(key) ?? "").trim();
-        answer.textContent =
+        const displayValue =
           key === "amount"
             ? `${value} ${values.get("currency")}`
-            : value || "None";
+            : key === "paymentMethod"
+              ? paymentMethodLabels[paymentMethod.value as PaymentMethod]
+              : key === "bankId"
+                ? selectedBankName()
+                : value;
+        answer.textContent = row?.hidden ? "" : displayValue || "None";
       }
     }
 
-    const focus = panel.querySelector<HTMLElement>(
-      "input, textarea, [tabindex]",
-    );
+    const focus =
+      focusField ??
+      (activePaymentPanel ?? panel).querySelector<HTMLElement>(
+        "input, select, textarea, [tabindex]",
+      );
     focus?.focus({ preventScroll: !form.hasAttribute("data-enhanced") });
+  }
+
+  function advance() {
+    showStep(edit ? questions.length : step + 1);
+  }
+
+  function chooseMethod(method: PaymentMethod) {
+    const previous = paymentMethod.value;
+    paymentMethod.value = method;
+    syncPaymentFields();
+    if (edit?.name === "paymentMethod" && method === previous) {
+      advance();
+    } else {
+      showStep(paymentStep, method === "bank" ? "bank-picker" : method);
+    }
+  }
+
+  function chooseBank(id: string) {
+    bankId.value = id;
+    syncPaymentFields();
+    if (edit?.name === "bankId") {
+      advance();
+    } else {
+      showStep(paymentStep, "bank");
+    }
   }
 
   function validateQuestion() {
     clearFieldError();
-    for (const field of questions[step].querySelectorAll<Field>(
-      "input, select, textarea",
-    )) {
+    for (const field of (
+      activePaymentPanel ?? questions[step]
+    ).querySelectorAll<Field>("input, select, textarea")) {
+      if (field.disabled || !field.name) continue;
       const value = field.value.trim();
       let message = "";
       if (field.required && !value) {
-        message = requiredMessages[field.name];
+        const label = field.labels?.[0]?.textContent?.trim().toLowerCase();
+        const action = field instanceof HTMLSelectElement ? "Choose" : "Enter";
+        message = requiredMessages[field.name] || `${action} ${label}.`;
       } else if (
         field.name === "email" &&
         (field.validity.typeMismatch ||
@@ -580,13 +1199,22 @@ const reviewFields = [
         (!/^[0-9]*\.?[0-9]+$/.test(value) || !/[1-9]/.test(value))
       ) {
         message = requiredMessages.amount;
+      } else if (
+        field instanceof HTMLInputElement &&
+        field.pattern &&
+        !new RegExp(`^(?:${field.pattern})$`).test(value)
+      ) {
+        message = field.title;
       }
       if (message) {
-        invalidField = field;
-        field.setAttribute("aria-invalid", "true");
-        field.setAttribute("aria-describedby", fieldError.id);
-        fieldError.textContent = message;
-        field.focus();
+        showFieldError(
+          field === bankId
+            ? bankSearch
+            : field === paymentMethod
+              ? methodChoices[0]
+              : field,
+          message,
+        );
         return false;
       }
     }
@@ -604,10 +1232,89 @@ const reviewFields = [
     if (query.get("error") === "1")
       wrapper.setAttribute("data-redirect-error", "");
 
-    back.addEventListener("click", () => showStep(step - 1));
+    for (const button of editButtons) {
+      button.addEventListener("click", () => {
+        const name = button.dataset.reviewEdit!;
+        const field = form.elements.namedItem(name);
+        if (!(field instanceof HTMLElement)) return;
+        const questionStep = questions.findIndex((question) =>
+          question.contains(field),
+        );
+        if (questionStep === -1) return;
+
+        edit = {
+          name,
+          values: Array.from(
+            questions[questionStep].querySelectorAll<Field>(
+              "input[name], select[name], textarea[name]",
+            ),
+            (field) => ({ field, value: field.value }),
+          ),
+        };
+        const target = field.closest<HTMLElement>("[data-payment-panel]")
+          ?.dataset.paymentPanel as PaymentPanel | undefined;
+        showStep(questionStep, target, field);
+      });
+    }
+    back.addEventListener("click", () => {
+      if (edit) {
+        for (const { field, value } of edit.values) field.value = value;
+        syncPaymentFields();
+        showStep(questions.length);
+      } else if (step === paymentStep && paymentPanel !== "method") {
+        showStep(paymentStep);
+      } else if (step === paymentStep + 1 && paymentMethod.value) {
+        showStep(paymentStep, paymentMethod.value as PaymentMethod);
+      } else {
+        showStep(step - 1);
+      }
+    });
+    for (const choice of methodChoices) {
+      choice.addEventListener("click", () =>
+        chooseMethod(choice.dataset.methodChoice as PaymentMethod),
+      );
+    }
+    for (const choice of bankChoices) {
+      choice.addEventListener("click", () =>
+        chooseBank(choice.dataset.bankChoice!),
+      );
+    }
+    district.addEventListener("change", updateDhakaField);
+    bankSearch.addEventListener("input", filterBanks);
+    bankSearch.closest("fieldset")!.addEventListener("keydown", (event) => {
+      if (event.isComposing || event.shiftKey) return;
+      const matches = matchingBanks();
+      const current = matches.indexOf(event.target as HTMLButtonElement);
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const next =
+          event.key === "ArrowDown"
+            ? current + 1
+            : current === -1
+              ? matches.length - 1
+              : current - 1;
+        const choice = matches[next];
+        if (choice) {
+          for (const match of matches)
+            match.tabIndex = match === choice ? 0 : -1;
+          choice.focus();
+        } else if (next < 0) {
+          bankSearch.focus();
+        }
+      } else if (
+        event.key === "Enter" &&
+        event.target === bankSearch &&
+        bankSearch.value.trim()
+      ) {
+        event.preventDefault();
+        if (event.repeat) return;
+        if (matches[0]) chooseBank(matches[0].dataset.bankChoice!);
+        else showFieldError(bankSearch, "No banks match your search.");
+      }
+    });
     skip.addEventListener("click", () => {
       notes.value = "";
-      showStep(step + 1);
+      advance();
     });
     form.addEventListener("input", (event) => {
       if (event.target === invalidField) clearFieldError();
@@ -615,9 +1322,12 @@ const reviewFields = [
     form.addEventListener("keydown", (event) => {
       if (
         event.key === "Enter" &&
+        !event.defaultPrevented &&
         !event.isComposing &&
         !event.shiftKey &&
-        event.target instanceof HTMLTextAreaElement
+        (event.target instanceof HTMLInputElement ||
+          event.target instanceof HTMLSelectElement ||
+          event.target instanceof HTMLTextAreaElement)
       ) {
         event.preventDefault();
         if (!event.repeat) form.requestSubmit();
@@ -628,12 +1338,20 @@ const reviewFields = [
       event.preventDefault();
       if (submit.disabled) return;
       if (step < questions.length) {
-        if (validateQuestion()) showStep(step + 1);
+        if (!validateQuestion()) return;
+        if (step === paymentStep && paymentPanel === "method") {
+          chooseMethod(paymentMethod.value as PaymentMethod);
+        } else if (step === paymentStep && paymentPanel === "bank-picker") {
+          chooseBank(bankId.value);
+        } else {
+          advance();
+        }
         return;
       }
 
       submitError.textContent = "";
       submit.disabled = back.disabled = true;
+      for (const button of editButtons) button.disabled = true;
       submit.textContent = "Sending…";
       form.setAttribute("aria-busy", "true");
 
@@ -655,12 +1373,16 @@ const reviewFields = [
           "We couldn’t send your request. Please try again.";
       } finally {
         submit.disabled = back.disabled = false;
+        for (const button of editButtons) button.disabled = false;
         form.removeAttribute("aria-busy");
         submit.textContent = "Send request";
         if (!wrapper.hasAttribute("data-sent")) submit.focus();
       }
     });
 
+    for (const field of form.querySelectorAll<Field>("[data-payment-required]"))
+      field.required = true;
+    syncPaymentFields();
     showStep(0);
     form.noValidate = true;
     form.setAttribute("data-enhanced", "");
