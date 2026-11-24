@@ -1,5 +1,6 @@
 ---
 import { getEntry } from "astro:content";
+import ContentImage from "@/components/ContentImage.astro";
 import StagingHome from "@/layouts/StagingHome.astro";
 
 const content = (await getEntry("stagingHome", "-index"))!.data;
@@ -12,93 +13,541 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
   title="Join a instant call with Me (Mehedi Sharif)"
   description="Join Mehedi Sharif on Google Meet."
 >
-  <section class="join wrap" aria-labelledby="join-heading">
-    <div class="join-card">
-      <div class="join-photo">
-        <img
+  <section class="meet" aria-labelledby="meet-heading" data-meet>
+    <div class="meet-intro">
+      <div class="meet-portrait">
+        <ContentImage
           src="/images/personal/mehedi-sharif.png"
+          sizes="(min-width: 44rem) 190px, 76px"
           alt="Mehedi Sharif"
-          width="1165"
-          height="1350"
+          width={1165}
+          height={1350}
         />
       </div>
-      <h1 id="join-heading">
-        Join a instant call with Me<br />
-        (<i>Mehedi Sharif</i>)
+      <h1 id="meet-heading">
+        Meet with <i>Mehedi Sharif</i>
       </h1>
-      <p class="join-line">You’re joining a Google Meet.</p>
-      <a class="cta" href={meetUrl} target="_blank" rel="noopener noreferrer">
-        <span class="label">Join Google Meet</span>
-        <span class="arrow" aria-hidden="true">
-          <span>
-            <i class="barrow"></i>
-          </span>
-        </span>
+    </div>
+
+    <div class="card meet-card">
+      <div data-step="welcome" hidden>
+        <h2>Welcome back</h2>
+        <p>Take three breaths, then check your agenda.</p>
+        <button class="meet-button" type="button" data-short>
+          Short version
+        </button>
+      </div>
+
+      <div data-step="breathing" hidden>
+        <h2 tabindex="-1" data-focus>
+          Breathe at a steady pace
+        </h2>
+        <div class="meet-orbit" aria-hidden="true">
+          <div class="meet-circle"></div>
+        </div>
+        <div class="meet-cue" role="status" aria-atomic="true">
+          <strong data-phase>Inhale</strong>
+          <span data-count>Breath 1 of 6</span>
+        </div>
+        <div class="meet-progress" aria-hidden="true"></div>
+        <button class="meet-button" type="button" data-breath-next hidden>
+          Continue
+        </button>
+      </div>
+
+      <div data-step="value" hidden>
+        <h2 tabindex="-1" data-focus>
+          Please keep to the topic
+        </h2>
+        <p>This helps us make good use of our time.</p>
+        <button class="meet-button" type="button" data-value-next>
+          Continue
+        </button>
+      </div>
+
+      <div data-step="agenda" hidden>
+        <h2 tabindex="-1" data-focus>
+          <label for="meet-agenda">What do you want to cover?</label>
+        </h2>
+        <p id="meet-agenda-note">Optional. Your notes stay in this browser.</p>
+        <textarea
+          id="meet-agenda"
+          rows="4"
+          aria-describedby="meet-agenda-note"
+        ></textarea>
+        <div class="meet-tools">
+          <button type="button" data-copy disabled>
+            Copy
+          </button>
+          <button type="button" data-download disabled>
+            Download .txt
+          </button>
+        </div>
+        <p class="meet-feedback" role="status"></p>
+        <button class="meet-button" type="button" data-agenda-next>
+          Continue
+        </button>
+      </div>
+
+      <div data-step="join">
+        <h2>Ready to join?</h2>
+        <a
+          class="meet-button meet-join"
+          href={meetUrl}
+          target="_blank"
+          rel="noopener"
+          data-focus
+        >
+          Join Google Meet
+        </a>
+      </div>
+
+      <a
+        class="meet-skip"
+        href={meetUrl}
+        target="_blank"
+        rel="noopener"
+        data-skip
+        hidden
+      >
+        <span data-hurry>In a hurry? </span>Skip and join now
       </a>
-      <p class="join-alt">
-        <a href="/discover-call">Need a time instead? Book a call</a>
-      </p>
     </div>
   </section>
+
+  <script is:inline>
+    (() => {
+      const page = document.querySelector("[data-meet]");
+      const find = (selector) => page.querySelector(selector);
+      const steps = [...page.querySelectorAll("[data-step]")];
+      const completedKey = "meet-completed";
+      const agendaKey = "meet-agenda";
+      const agenda = find("#meet-agenda");
+      const copy = find("[data-copy]");
+      const download = find("[data-download]");
+      const feedback = find(".meet-feedback");
+      const skip = find("[data-skip]");
+
+      const hour = new Date().getHours();
+      let time = "night";
+      if (hour >= 5 && hour < 20) {
+        time = hour < 11 ? "morning" : hour < 17 ? "day" : "evening";
+      }
+      document.body.dataset.meetTime = time;
+
+      function read(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch {
+          return null;
+        }
+      }
+
+      function save(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch {}
+      }
+
+      function show(step, focus = false) {
+        for (const panel of steps) {
+          panel.hidden = panel.dataset.step !== step;
+          if (focus && !panel.hidden)
+            panel.querySelector("[data-focus]").focus();
+        }
+        find("[data-hurry]").hidden = step === "welcome";
+        skip.hidden = false;
+      }
+
+      const returning = read(completedKey) === "1";
+      function startBreathing(breaths, focus = false) {
+        const panel = find('[data-step="breathing"]');
+        const phaseText = find("[data-phase]");
+        const count = find("[data-count]");
+        const next = find("[data-breath-next]");
+        const phases = ["Inhale", "Hold", "Exhale"];
+        const phaseEnds = [4000, 8000, 14000];
+        const cycle = phaseEnds[2];
+        const duration = cycle * breaths;
+
+        panel.style.setProperty("--breath-duration", duration + "ms");
+        count.textContent = "Breath 1 of " + breaths;
+        show("breathing", focus);
+        panel.dataset.running = "";
+        const started = performance.now();
+
+        function cue() {
+          const elapsed = performance.now() - started;
+          if (elapsed >= duration) {
+            delete panel.dataset.running;
+            phaseText.textContent = "Breathing complete";
+            next.hidden = false;
+            return;
+          }
+
+          const breath = Math.floor(elapsed / cycle) + 1;
+          const withinBreath = elapsed % cycle;
+          const phase = phaseEnds.findIndex((end) => withinBreath < end);
+          const counter = "Breath " + breath + " of " + breaths;
+          if (phaseText.textContent !== phases[phase])
+            phaseText.textContent = phases[phase];
+          if (count.textContent !== counter) count.textContent = counter;
+          setTimeout(cue, phaseEnds[phase] - withinBreath);
+        }
+        cue();
+      }
+
+      function updateAgendaTools() {
+        copy.disabled = download.disabled = !agenda.value.trim();
+        feedback.textContent = "";
+      }
+
+      agenda.value = read(agendaKey) ?? "";
+      updateAgendaTools();
+      agenda.addEventListener("input", () => {
+        save(agendaKey, agenda.value);
+        updateAgendaTools();
+      });
+
+      copy.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(agenda.value);
+          feedback.textContent = "Copied.";
+        } catch {
+          agenda.focus();
+          agenda.select();
+          feedback.textContent = document.execCommand?.("copy")
+            ? "Copied."
+            : "Text selected. You can copy it now.";
+        }
+      });
+
+      download.addEventListener("click", () => {
+        const url = URL.createObjectURL(
+          new Blob([agenda.value], { type: "text/plain;charset=utf-8" }),
+        );
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "meeting-agenda.txt";
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+
+      const complete = () => save(completedKey, "1");
+      for (const link of [skip, find(".meet-join")]) {
+        link.addEventListener("click", complete);
+        link.addEventListener("auxclick", (event) => {
+          if (event.button === 1) complete();
+        });
+      }
+
+      find("[data-short]").addEventListener("click", () =>
+        startBreathing(3, true),
+      );
+      find("[data-breath-next]").addEventListener("click", () =>
+        show(returning ? "agenda" : "value", true),
+      );
+      find("[data-value-next]").addEventListener("click", () =>
+        show("agenda", true),
+      );
+      find("[data-agenda-next]").addEventListener("click", () => {
+        complete();
+        show("join", true);
+      });
+
+      if (returning) show("welcome");
+      else startBreathing(6);
+    })();
+  </script>
 </StagingHome>
 
 <style>
-  .join {
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: clamp(112px, 16vw, 168px) 0 clamp(72px, 10vw, 120px);
-  }
-  .join-card {
-    width: min(100%, 48rem);
-    margin-inline: auto;
+  :global(body:has(.meet)) {
+    --meet-sky: #e5eee8;
+    --meet-horizon: #f2f4e8;
+    --meet-glow: #f7f8e8;
+    --meet-shade: transparent;
     display: flex;
     flex-direction: column;
+    min-height: 100svh;
+    background:
+      linear-gradient(var(--meet-shade), var(--meet-shade)),
+      radial-gradient(ellipse at 20% 55%, var(--meet-glow), transparent 58%),
+      linear-gradient(165deg, var(--meet-sky), var(--meet-horizon));
+  }
+  :global(body[data-meet-time="morning"]) {
+    --meet-sky: #c5dbe9;
+    --meet-horizon: #f6d6bf;
+    --meet-glow: #fff1c6;
+  }
+  :global(body[data-meet-time="day"]) {
+    --meet-sky: #aed8e9;
+    --meet-horizon: #e7f5ee;
+    --meet-glow: #f6fcff;
+  }
+  :global(body[data-meet-time="evening"]) {
+    --meet-sky: #efba9c;
+    --meet-horizon: #e5b793;
+    --meet-glow: #ffebaf;
+  }
+  :global(body[data-meet-time="night"]) {
+    --meet-sky: #c7dbd9;
+    --meet-horizon: #9ebfa6;
+    --meet-glow: #dfebe2;
+  }
+  :global(html.dark body:has(.meet)) {
+    --meet-shade: #021f1dd9;
+  }
+  :global(body:has(.meet) main) {
+    display: grid;
     align-items: center;
-    text-align: center;
+    flex: 1;
   }
-  .join-photo {
-    width: min(220px, 62vw);
-    margin-bottom: 28px;
+
+  .meet {
+    display: grid;
+    gap: 1.25rem;
+    width: min(100%, 56rem);
+    margin-inline: auto;
+    padding: 5rem 1rem 1.5rem;
+    color: var(--theme-ink);
   }
-  .join-photo img {
-    display: block;
+  .meet [hidden] {
+    display: none;
+  }
+  .meet-intro {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .meet-portrait {
+    flex: none;
+    width: 76px;
+  }
+  .meet-portrait :global(img) {
     width: 100%;
     height: auto;
-    object-fit: contain;
   }
-  .join h1 {
-    margin: 0 0 12px;
-    color: var(--heading);
-    font-weight: 300;
-    font-size: clamp(1.25rem, 6.5vw, 4rem);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
+  .meet-intro h1 {
+    font-size: clamp(1.75rem, 4.6vw, 3rem);
+    line-height: 1.05;
   }
-  .join-line {
-    margin: 0 0 28px;
-    font-size: clamp(16px, 2.4vw, 18px);
+  .meet-intro i {
+    display: block;
+    color: var(--theme-primary);
   }
-  .join-alt {
-    margin: 22px 0 0;
-    font-size: 14px;
+  .meet-card {
+    --radius-card: 1.5rem;
+    display: grid;
+    align-content: center;
+    gap: 1rem;
+    min-height: 22rem;
+    min-width: 0;
+    padding: clamp(1rem, 4vw, 2rem);
+    box-shadow: 0 12px 36px #033b381a;
+    text-align: center;
   }
-  .join-alt a {
-    color: var(--accent);
+  .meet-card h2 {
+    font-size: clamp(1.4rem, 4vw, 1.875rem);
+    font-weight: 500;
+    line-height: 1.15;
+  }
+  .meet-card p {
+    margin-top: 0.625rem;
+    color: var(--muted);
+  }
+  .meet-card :is(a, button, textarea, h2):focus-visible {
+    outline: 2px solid var(--theme-primary);
+    outline-offset: 4px;
+  }
+  .meet-card button,
+  .meet-button {
+    font: inherit;
+    cursor: pointer;
+  }
+  .meet-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin-top: 1rem;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: var(--theme-primary);
+    color: var(--theme-on-primary);
+  }
+  .meet-button:hover {
+    background: var(--theme-primary-hover);
+  }
+  .meet-join {
+    min-height: 56px;
+    padding-inline: 1.5rem;
+    background: var(--brand-lime);
+    color: var(--brand-teal);
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .meet-join:hover {
+    background: color-mix(in srgb, var(--brand-lime) 85%, white);
+  }
+  .meet-skip {
+    width: fit-content;
+    margin-inline: auto;
+    padding: 0.625rem 0;
+    color: var(--theme-primary);
     text-decoration: underline;
-    text-underline-offset: 4px;
+    text-underline-offset: 0.2em;
   }
-  .join-alt a:hover {
-    color: var(--foreground);
+
+  .meet-orbit {
+    display: grid;
+    place-items: center;
+    width: 7.75rem;
+    aspect-ratio: 1;
+    margin: 1rem auto 0.75rem;
+    border: 1px solid var(--theme-border);
+    border-radius: 50%;
   }
-  @media (max-width: 600px) {
-    .join-photo {
-      width: min(180px, 52vw);
-      margin-bottom: 22px;
+  .meet-circle {
+    width: 86%;
+    aspect-ratio: 1;
+    border: 1px solid
+      color-mix(in srgb, var(--brand-teal) 32%, var(--brand-lime));
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 36% 28%,
+      #f1f9ab,
+      var(--brand-lime) 75%
+    );
+    transform: scale(0.65);
+  }
+  [data-running] .meet-circle {
+    animation: meet-breathe 14s ease-in-out infinite;
+  }
+  @keyframes meet-breathe {
+    0%,
+    100% {
+      transform: scale(0.65);
     }
-    .join-line {
-      margin-bottom: 24px;
+    /* Hold from 4s to 8s of the 14s breath. */
+    28.571%,
+    57.143% {
+      transform: scale(1);
+    }
+  }
+  .meet-cue {
+    display: grid;
+    gap: 0.125rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .meet-cue strong {
+    color: var(--theme-primary);
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .meet-progress {
+    width: min(100%, 14rem);
+    height: 4px;
+    margin: 0.875rem auto 0;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--theme-border);
+  }
+  .meet-progress::before {
+    content: "";
+    display: block;
+    height: 100%;
+    background: var(--theme-primary);
+    transform-origin: left;
+  }
+  [data-running] .meet-progress::before {
+    animation: meet-progress var(--breath-duration) linear both;
+  }
+  @keyframes meet-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .meet-card textarea {
+    display: block;
+    width: 100%;
+    margin-top: 0.875rem;
+    padding: 0.75rem;
+    resize: vertical;
+    border: 1px solid var(--theme-border);
+    border-radius: 0.75rem;
+    background: var(--background);
+    color: var(--theme-ink);
+    font: inherit;
+  }
+  .meet-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.625rem;
+  }
+  .meet-tools button {
+    min-height: 44px;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--theme-border);
+    border-radius: 0.625rem;
+    background: var(--background);
+    color: var(--theme-primary);
+  }
+  .meet-tools button:disabled {
+    color: var(--muted);
+    cursor: default;
+  }
+  .meet-card .meet-feedback {
+    min-height: 1.5em;
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
+    text-align: left;
+  }
+
+  @media (min-width: 44rem) {
+    .meet {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 5fr);
+      align-items: center;
+      gap: clamp(2rem, 6vw, 5rem);
+      padding: 6rem 1.5rem 2rem;
+    }
+    .meet-intro {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .meet-portrait {
+      width: 190px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .meet-circle {
+      width: 70%;
+      opacity: 0.65;
+      transform: none;
+    }
+    [data-running] .meet-circle {
+      animation-name: meet-breathe-fade;
+    }
+    [data-running] .meet-progress::before {
+      animation-timing-function: steps(12, end);
+    }
+    @keyframes meet-breathe-fade {
+      0%,
+      100% {
+        opacity: 0.65;
+      }
+      28.571%,
+      57.143% {
+        opacity: 1;
+      }
     }
   }
 </style>
