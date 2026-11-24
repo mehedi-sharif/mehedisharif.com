@@ -103,6 +103,9 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
       </div>
 
       <div class="meet-links">
+        <a class="meet-booking" href="/discover-call">
+          Need a time instead? Book a call
+        </a>
         <a
           class="meet-skip"
           href={meetUrl}
@@ -112,9 +115,6 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
           hidden
         >
           <span data-hurry>In a hurry? </span>Skip and join now
-        </a>
-        <a class="meet-booking" href="/discover-call">
-          Need a time instead? Book a call
         </a>
       </div>
     </div>
@@ -412,21 +412,24 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
     background: color-mix(in srgb, var(--brand-lime) 85%, white);
   }
   .meet-links {
-    display: grid;
-    justify-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
   }
   .meet-links a {
+    min-height: 44px;
+    padding: 0.75rem 0;
+    font-size: 0.8125rem;
+    overflow-wrap: anywhere;
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
   .meet-skip {
-    padding: 0.625rem 0;
     color: var(--theme-primary);
   }
   .meet-booking {
-    padding: 0.375rem 0;
     color: var(--muted);
-    font-size: 0.9375rem;
   }
   .meet-booking:hover {
     color: var(--theme-ink);
