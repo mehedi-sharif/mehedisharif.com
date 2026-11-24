@@ -1,18 +1,99 @@
+import banks from "../../src/data/payment-banks.json" with { type: "json" };
+import {
+  bangladeshDistricts,
+  dhakaCities,
+  paymentMethodLabels,
+  swiftCodePattern,
+  walletAccountTypes,
+  walletNumberPattern,
+} from "../../src/data/payment-options.mjs";
+
 const GHL = "https://services.leadconnectorhq.com";
 const EMAIL_RE =
   /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i;
 const CURRENCIES = ["USD", "BDT", "EUR", "GBP"];
+const BANK_NAMES = new Map(banks.map(({ id, name }) => [id, name]));
+const WALLET_NUMBER_RE = new RegExp(`^${walletNumberPattern}$`);
+const SWIFT_CODE_RE = new RegExp(`^${swiftCodePattern}$`);
 
-// Field name, email label, maximum length, and whether the value is required.
-const PAYMENT_FIELDS = [
+// Field name, email label, maximum length, required, and extra validation.
+const REQUEST_FIELDS = [
   ["name", "Name", 200],
   ["email", "Email", 254],
   ["whatFor", "What the payment is for", 200],
   ["amount", "Amount", 40],
   ["currency", "Currency", 3],
-  ["paymentDetails", "Payment details", 2000],
-  ["notes", "Notes", 2000, false],
 ];
+const METHOD_FIELDS = {
+  bank: [
+    ["bankId", "Bank", 200, true, (id) => BANK_NAMES.has(id)],
+    ["bankAccountName", "Account name", 200],
+    ["bankAccountNumber", "Account number", 200],
+    ["bankBranch", "Branch name", 200],
+    [
+      "bankDistrict",
+      "District",
+      200,
+      true,
+      (district) => bangladeshDistricts.includes(district),
+    ],
+  ],
+  bkash: [
+    [
+      "bkashNumber",
+      "bKash number",
+      11,
+      true,
+      (number) => WALLET_NUMBER_RE.test(number),
+    ],
+    [
+      "bkashAccountType",
+      "bKash account type",
+      200,
+      true,
+      (type) => walletAccountTypes.includes(type),
+    ],
+  ],
+  nagad: [
+    [
+      "nagadNumber",
+      "Nagad number",
+      11,
+      true,
+      (number) => WALLET_NUMBER_RE.test(number),
+    ],
+    [
+      "nagadAccountType",
+      "Nagad account type",
+      200,
+      true,
+      (type) => walletAccountTypes.includes(type),
+    ],
+  ],
+  swift: [
+    ["swiftBankName", "Bank name", 200],
+    [
+      "swiftCode",
+      "SWIFT/BIC code",
+      11,
+      true,
+      (code) => SWIFT_CODE_RE.test(code),
+    ],
+    ["swiftAccountName", "Account name", 200],
+    ["swiftAccountNumber", "Account number or IBAN", 200],
+    ["swiftBankCountry", "Bank country", 200],
+    ["swiftBankAddress", "Bank address", 2000, false],
+  ],
+  other: [["paymentDetails", "Payment details", 2000]],
+};
+const DHAKA_CITY_FIELD = [
+  "bankDhakaCity",
+  "Dhaka North or Dhaka South",
+  200,
+  true,
+  (city) => dhakaCities.includes(city),
+];
+const NOTES_FIELD = ["notes", "Notes", 2000, false];
 const TIME_ZONE = "Asia/Dhaka";
 const submittedDate = new Intl.DateTimeFormat("en-GB", {
   timeZone: TIME_ZONE,
@@ -60,9 +141,15 @@ const HTML_ENTITIES = {
 const escapeHtml = (value) =>
   value.replace(/[&<>"']/g, (char) => HTML_ENTITIES[char]);
 
-function emailHtml(fields, submittedAt) {
+function emailHtml(fields, paymentMethod, methodFields, submittedAt) {
   const rows = [
-    ...PAYMENT_FIELDS.map(([key, label]) => [label, fields[key]]),
+    ...REQUEST_FIELDS.map(([key, label]) => [label, fields[key]]),
+    ["Payment method", paymentMethodLabels[paymentMethod]],
+    ...methodFields.map(([key, label]) => [
+      label,
+      key === "bankId" ? BANK_NAMES.get(fields[key]) : fields[key],
+    ]),
+    [NOTES_FIELD[1], fields.notes],
     [
       `Submitted time (${TIME_ZONE})`,
       `${submittedDate.format(submittedAt)}, ${submittedTime.format(submittedAt)}`,
@@ -116,16 +203,26 @@ async function handlePost({ request, env }, isJson) {
   // Honeypot: pretend success without sending anything.
   if (trim(data.website)) return json({ ok: true });
 
+  const paymentMethod = trim(data.paymentMethod);
+  if (!Object.hasOwn(METHOD_FIELDS, paymentMethod)) {
+    return json({ ok: false, error: "Invalid request" }, 400);
+  }
+  const methodFields = [...METHOD_FIELDS[paymentMethod]];
+  if (paymentMethod === "bank" && trim(data.bankDistrict) === "Dhaka") {
+    methodFields.push(DHAKA_CITY_FIELD);
+  }
+  const expectedFields = [...REQUEST_FIELDS, ...methodFields, NOTES_FIELD];
   const fields = Object.fromEntries(
-    PAYMENT_FIELDS.map(([key]) => [key, trim(data[key])]),
+    expectedFields.map(([key]) => [key, trim(data[key])]),
   );
   const { name, email, whatFor, amount, currency } = fields;
   if (
-    PAYMENT_FIELDS.some(
-      ([key, , max, required = true]) =>
+    expectedFields.some(
+      ([key, , max, required = true, validate]) =>
         (data[key] !== undefined && typeof data[key] !== "string") ||
         (required && !fields[key]) ||
-        fields[key].length > max,
+        fields[key].length > max ||
+        (validate && !validate(fields[key])),
     ) ||
     !EMAIL_RE.test(email) ||
     /^\.|\.\.|\.@/.test(email) ||
@@ -161,7 +258,7 @@ async function handlePost({ request, env }, isJson) {
         /[\r\n\u2028\u2029]+/g,
         " ",
       ),
-      html: emailHtml(fields, submittedAt),
+      html: emailHtml(fields, paymentMethod, methodFields, submittedAt),
     };
     if (emailFrom) message.emailFrom = emailFrom;
 
