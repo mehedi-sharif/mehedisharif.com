@@ -1,4 +1,4 @@
-[
+export default [
   {
     "id": "ab-bank",
     "name": "AB Bank PLC",
@@ -441,4 +441,4 @@
     "logo": "/images/payments/banks/woori-bank.webp",
     "initials": "WB"
   }
-]
+];

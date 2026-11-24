@@ -1,4 +1,4 @@
-import banks from "../../src/data/payment-banks.json" with { type: "json" };
+import banks from "../../src/data/payment-banks.mjs";
 import {
   bangladeshDistricts,
   dhakaCities,
