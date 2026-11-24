@@ -102,16 +102,21 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
         </a>
       </div>
 
-      <a
-        class="meet-skip"
-        href={meetUrl}
-        target="_blank"
-        rel="noopener"
-        data-skip
-        hidden
-      >
-        <span data-hurry>In a hurry? </span>Skip and join now
-      </a>
+      <div class="meet-links">
+        <a
+          class="meet-skip"
+          href={meetUrl}
+          target="_blank"
+          rel="noopener"
+          data-skip
+          hidden
+        >
+          <span data-hurry>In a hurry? </span>Skip and join now
+        </a>
+        <a class="meet-booking" href="/discover-call">
+          Need a time instead? Book a call
+        </a>
+      </div>
     </div>
   </section>
 
@@ -266,12 +271,10 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
     --meet-sky: #e5eee8;
     --meet-horizon: #f2f4e8;
     --meet-glow: #f7f8e8;
-    --meet-shade: transparent;
     display: flex;
     flex-direction: column;
     min-height: 100svh;
     background:
-      linear-gradient(var(--meet-shade), var(--meet-shade)),
       radial-gradient(ellipse at 20% 55%, var(--meet-glow), transparent 58%),
       linear-gradient(165deg, var(--meet-sky), var(--meet-horizon));
   }
@@ -296,7 +299,24 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
     --meet-glow: #dfebe2;
   }
   :global(html.dark body:has(.meet)) {
-    --meet-shade: #021f1dd9;
+    --meet-sky: #102a23;
+    --meet-horizon: #233d25;
+    --meet-glow: #355337;
+  }
+  :global(html.dark body[data-meet-time="morning"]) {
+    --meet-sky: #2b2838;
+    --meet-horizon: #583b3d;
+    --meet-glow: #785047;
+  }
+  :global(html.dark body[data-meet-time="day"]) {
+    --meet-sky: #102b48;
+    --meet-horizon: #204e71;
+    --meet-glow: #305b78;
+  }
+  :global(html.dark body[data-meet-time="evening"]) {
+    --meet-sky: #432d1e;
+    --meet-horizon: #614316;
+    --meet-glow: #765227;
   }
   :global(body:has(.meet) main) {
     display: grid;
@@ -391,13 +411,25 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
   .meet-join:hover {
     background: color-mix(in srgb, var(--brand-lime) 85%, white);
   }
-  .meet-skip {
-    width: fit-content;
-    margin-inline: auto;
-    padding: 0.625rem 0;
-    color: var(--theme-primary);
+  .meet-links {
+    display: grid;
+    justify-items: center;
+  }
+  .meet-links a {
     text-decoration: underline;
     text-underline-offset: 0.2em;
+  }
+  .meet-skip {
+    padding: 0.625rem 0;
+    color: var(--theme-primary);
+  }
+  .meet-booking {
+    padding: 0.375rem 0;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .meet-booking:hover {
+    color: var(--theme-ink);
   }
 
   .meet-orbit {
