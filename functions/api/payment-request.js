@@ -117,18 +117,36 @@ const json = (body, status = 200) =>
     },
   });
 
-const ghl = (env, path, body) =>
-  fetch(GHL + path, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.GHL_TOKEN}`,
-      Version: "2021-07-28",
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(15000),
-  });
+class GhlRequestError extends Error {
+  constructor(step, upstreamStatus) {
+    super("GoHighLevel request failed");
+    this.step = step;
+    this.upstreamStatus = upstreamStatus;
+  }
+}
+
+async function ghl(token, step, path, body, readResult) {
+  let upstreamStatus = null;
+  try {
+    const response = await fetch(GHL + path, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Version: "2021-07-28",
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(15000),
+    });
+    upstreamStatus = response.status;
+    if (!response.ok) throw new Error("GoHighLevel returned an error");
+    if (readResult) return await readResult(response);
+  } catch {
+    console.error({ step, upstreamStatus });
+    throw new GhlRequestError(step, upstreamStatus);
+  }
+}
 
 const trim = (value) => (typeof value === "string" ? value.trim() : "");
 const HTML_ENTITIES = {
@@ -165,28 +183,32 @@ function emailHtml(fields, paymentMethod, methodFields, submittedAt) {
 <table style="border-collapse:collapse"><tbody>${rows}</tbody></table>`;
 }
 
-async function upsertTaggedContact(env, contact, tag) {
-  const res = await ghl(env, "/contacts/upsert", {
-    locationId: env.GHL_LOCATION_ID,
-    ...contact,
-  });
-  if (!res.ok) throw new Error("Contact upsert failed");
-  const result = await res.json();
-  const id = result?.contact?.id;
-  if (!id) throw new Error("Contact ID missing");
+async function upsertTaggedContact(token, locationId, contact, tag) {
+  const { id, tagPath } = await ghl(
+    token,
+    "contact upsert",
+    "/contacts/upsert",
+    { locationId, ...contact },
+    async (response) => {
+      const result = await response.json();
+      const id = result?.contact?.id;
+      if (typeof id !== "string" || !id) throw new Error("Invalid contact ID");
+      return { id, tagPath: `/contacts/${encodeURIComponent(id)}/tags` };
+    },
+  );
 
   // The upsert endpoint replaces existing tags when tags are passed to it.
-  const tagged = await ghl(env, `/contacts/${encodeURIComponent(id)}/tags`, {
-    tags: [tag],
-  });
-  if (!tagged.ok) throw new Error("Could not add contact tag");
+  await ghl(token, "contact tags", tagPath, { tags: [tag] });
   return id;
 }
 
 async function handlePost({ request, env }, isJson) {
+  const token = trim(env.GHL_TOKEN);
+  const locationId = trim(env.GHL_LOCATION_ID);
   const accountantEmail = trim(env.ACCOUNTANT_EMAIL);
   const ownerEmail = trim(env.OWNER_EMAIL);
-  if (!env.GHL_TOKEN || !env.GHL_LOCATION_ID || !accountantEmail || !ownerEmail)
+  const emailFrom = trim(env.EMAIL_FROM);
+  if (!token || !locationId || !accountantEmail || !ownerEmail)
     return json({ ok: false, error: "Server not configured" }, 500);
 
   let data;
@@ -235,59 +257,67 @@ async function handlePost({ request, env }, isJson) {
   }
 
   const submittedAt = new Date();
-  try {
-    const [firstName, ...rest] = name.split(/\s+/);
-    const contact = { firstName, email };
-    if (rest.length) contact.lastName = rest.join(" ");
-    await upsertTaggedContact(env, contact, "payment-request");
-    const contactId = await upsertTaggedContact(
-      env,
-      { email: accountantEmail },
-      "accountant",
-    );
+  const [firstName, ...rest] = name.split(/\s+/);
+  const contact = { firstName, email };
+  if (rest.length) contact.lastName = rest.join(" ");
+  await upsertTaggedContact(token, locationId, contact, "payment-request");
+  const contactId = await upsertTaggedContact(
+    token,
+    locationId,
+    { email: accountantEmail },
+    "accountant",
+  );
 
-    const emailFrom = trim(env.EMAIL_FROM);
-    const message = {
-      type: "Email",
-      status: "pending",
-      contactId,
-      emailTo: accountantEmail,
-      emailCc: [ownerEmail, email],
-      emailReplyMode: "reply_all",
-      subject: `Payment request: ${name} - ${amount} ${currency}`.replace(
-        /[\r\n\u2028\u2029]+/g,
-        " ",
-      ),
-      html: emailHtml(fields, paymentMethod, methodFields, submittedAt),
-    };
-    if (emailFrom) message.emailFrom = emailFrom;
+  const message = {
+    type: "Email",
+    status: "pending",
+    contactId,
+    emailTo: accountantEmail,
+    emailCc: [ownerEmail, email],
+    emailReplyMode: "reply_all",
+    subject: `Payment request: ${name} - ${amount} ${currency}`.replace(
+      /[\r\n\u2028\u2029]+/g,
+      " ",
+    ),
+    html: emailHtml(fields, paymentMethod, methodFields, submittedAt),
+  };
+  if (emailFrom) message.emailFrom = emailFrom;
 
-    const result = await ghl(env, "/conversations/messages", message);
-    if (!result.ok) throw new Error("Could not send email");
-    return json({ ok: true });
-  } catch {
-    return json({ ok: false, error: "Could not submit" }, 502);
-  }
+  await ghl(token, "send email", "/conversations/messages", message);
+  return json({ ok: true });
 }
 
 export async function onRequest(context) {
-  const { request } = context;
-  if (request.method !== "POST") {
-    const response = json({ ok: false, error: "Method not allowed" }, 405);
-    response.headers.set("Allow", "POST");
-    return response;
+  try {
+    const { request } = context;
+    if (request.method !== "POST") {
+      const response = json({ ok: false, error: "Method not allowed" }, 405);
+      response.headers.set("Allow", "POST");
+      return response;
+    }
+
+    const isJson = (request.headers.get("Content-Type") || "").includes(
+      "application/json",
+    );
+    const response = await handlePost(context, isJson);
+    if (isJson) return response;
+
+    // A fragment lets the static page show the result even without JavaScript.
+    const next = response.ok
+      ? "?sent=1#payment-sent"
+      : "?error=1#payment-error";
+    return Response.redirect(
+      new URL(`/payment-request/${next}`, request.url),
+      303,
+    );
+  } catch (error) {
+    const { step, upstreamStatus } =
+      error instanceof GhlRequestError
+        ? error
+        : { step: null, upstreamStatus: null };
+    return json(
+      { ok: false, error: "Could not submit", step, upstreamStatus },
+      500,
+    );
   }
-
-  const isJson = (request.headers.get("Content-Type") || "").includes(
-    "application/json",
-  );
-  const response = await handlePost(context, isJson);
-  if (isJson) return response;
-
-  // A fragment lets the static page show the result even without JavaScript.
-  const next = response.ok ? "?sent=1#payment-sent" : "?error=1#payment-error";
-  return Response.redirect(
-    new URL(`/payment-request/${next}`, request.url),
-    303,
-  );
 }
