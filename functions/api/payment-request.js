@@ -1,38 +1,31 @@
 const GHL = "https://services.leadconnectorhq.com";
 const EMAIL_RE =
   /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i;
-const CURRENCIES = ["USD", "BDT", "EUR", "GBP", "other"];
-const METHODS = [
-  "Bank transfer",
-  "Wise",
-  "Payoneer",
-  "PayPal",
-  "bKash",
-  "Other",
-];
+const CURRENCIES = ["USD", "BDT", "EUR", "GBP"];
 
 // Field name, email label, maximum length, and whether the value is required.
-const FIELDS = [
-  ["name", "Full name", 200, true],
-  ["email", "Email", 254, true],
-  ["phone", "Phone", 40],
-  ["project", "Project name", 200, true],
-  ["description", "Short description of work done", 2000],
-  ["invoice", "Invoice/reference number", 120],
-  ["amount", "Amount", 40, true],
-  ["currency", "Currency", 5, true],
-  ["dueDate", "Due date", 10],
-  ["paymentMethod", "Payment method", 20, true],
-  ["accountHolder", "Account holder name", 200, true],
-  ["bankName", "Bank name", 200],
-  ["accountNumber", "Account number or IBAN", 120, true],
-  ["swift", "SWIFT/BIC", 32],
-  ["routing", "Routing/branch", 80],
-  ["bankCountry", "Bank country", 120, true],
-  ["bankAddress", "Bank address", 1000],
-  ["notes", "Notes", 2000],
-  ["confirm", "I confirm these details are correct.", 3, true],
+const PAYMENT_FIELDS = [
+  ["name", "Name", 200],
+  ["email", "Email", 254],
+  ["whatFor", "What the payment is for", 200],
+  ["amount", "Amount", 40],
+  ["currency", "Currency", 3],
+  ["paymentDetails", "Payment details", 2000],
+  ["notes", "Notes", 2000, false],
 ];
+const TIME_ZONE = "Asia/Dhaka";
+const submittedDate = new Intl.DateTimeFormat("en-GB", {
+  timeZone: TIME_ZONE,
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+const submittedTime = new Intl.DateTimeFormat("en-US", {
+  timeZone: TIME_ZONE,
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
+});
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -67,14 +60,21 @@ const HTML_ENTITIES = {
 const escapeHtml = (value) =>
   value.replace(/[&<>"']/g, (char) => HTML_ENTITIES[char]);
 
-function emailHtml(fields) {
-  const rows = FIELDS.map(([key, label]) => {
-    const value = key === "confirm" ? "Yes" : fields[key];
-    const cell = escapeHtml(value).replace(/\r\n?|\n/g, "<br>") || "&mdash;";
-    return `<tr><th scope="row" style="padding:8px;border:1px solid #ccc;text-align:left;vertical-align:top">${label}</th><td style="padding:8px;border:1px solid #ccc;overflow-wrap:anywhere">${cell}</td></tr>`;
-  }).join("");
+function emailHtml(fields, submittedAt) {
+  const rows = [
+    ...PAYMENT_FIELDS.map(([key, label]) => [label, fields[key]]),
+    [
+      `Submitted time (${TIME_ZONE})`,
+      `${submittedDate.format(submittedAt)}, ${submittedTime.format(submittedAt)}`,
+    ],
+  ]
+    .map(([label, value]) => {
+      const cell = escapeHtml(value).replace(/\r\n?|\n/g, "<br>") || "&mdash;";
+      return `<tr><th scope="row" style="padding:8px;border:1px solid #ccc;text-align:left;vertical-align:top">${label}</th><td style="padding:8px;border:1px solid #ccc;overflow-wrap:anywhere">${cell}</td></tr>`;
+    })
+    .join("");
 
-  return `<p>Accountant: after paying, reply all with the payment confirmation so Mehedi and ${escapeHtml(fields.name)} both get it.</p>
+  return `<p>After you pay, reply all with the payment confirmation so Mehedi and the payee both get it.</p>
 <table style="border-collapse:collapse"><tbody>${rows}</tbody></table>`;
 }
 
@@ -117,26 +117,27 @@ async function handlePost({ request, env }, isJson) {
   if (trim(data.website)) return json({ ok: true });
 
   const fields = Object.fromEntries(
-    FIELDS.map(([key]) => [key, trim(data[key])]),
+    PAYMENT_FIELDS.map(([key]) => [key, trim(data[key])]),
   );
-  const { name, email, project, amount, currency, paymentMethod, confirm } =
-    fields;
+  const { name, email, whatFor, amount, currency } = fields;
   if (
-    FIELDS.some(
-      ([key, , max, required]) =>
-        (required && !fields[key]) || fields[key].length > max,
+    PAYMENT_FIELDS.some(
+      ([key, , max, required = true]) =>
+        (data[key] !== undefined && typeof data[key] !== "string") ||
+        (required && !fields[key]) ||
+        fields[key].length > max,
     ) ||
     !EMAIL_RE.test(email) ||
     /^\.|\.\.|\.@/.test(email) ||
+    /[\r\n\u2028\u2029]/.test(whatFor) ||
     !/^[0-9]*\.?[0-9]+$/.test(amount) ||
     !/[1-9]/.test(amount) ||
-    !CURRENCIES.includes(currency) ||
-    !METHODS.includes(paymentMethod) ||
-    confirm !== "yes"
+    !CURRENCIES.includes(currency)
   ) {
     return json({ ok: false, error: "Invalid request" }, 400);
   }
 
+  const submittedAt = new Date();
   try {
     const [firstName, ...rest] = name.split(/\s+/);
     const contact = { firstName, email };
@@ -156,12 +157,11 @@ async function handlePost({ request, env }, isJson) {
       emailTo: accountantEmail,
       emailCc: [ownerEmail, email],
       emailReplyMode: "reply_all",
-      subject:
-        `Payment request: ${name} · ${amount} ${currency} · ${project}`.replace(
-          /[\r\n]+/g,
-          " ",
-        ),
-      html: emailHtml(fields),
+      subject: `Payment request: ${name} - ${amount} ${currency}`.replace(
+        /[\r\n\u2028\u2029]+/g,
+        " ",
+      ),
+      html: emailHtml(fields, submittedAt),
     };
     if (emailFrom) message.emailFrom = emailFrom;
 
