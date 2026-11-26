@@ -3,13 +3,32 @@ import { getEntry } from "astro:content";
 import ContentImage from "@/components/ContentImage.astro";
 import StagingHome from "@/layouts/StagingHome.astro";
 
-const content = (await getEntry("stagingHome", "-index"))!.data;
+const home = (await getEntry("stagingHome", "-index"))!.data;
+function mainSiteLink<T extends { link: string }>(item: T) {
+  return { ...item, link: new URL(item.link, Astro.site).href };
+}
+
+const content = {
+  ...home,
+  navigation: {
+    brand: mainSiteLink(home.navigation.brand),
+    items: home.navigation.items.map(mainSiteLink),
+    contact: mainSiteLink(home.navigation.contact),
+  },
+  footer: {
+    ...home.footer,
+    brand: mainSiteLink(home.footer.brand),
+    socials: home.footer.socials.map(mainSiteLink),
+    booking: mainSiteLink(home.footer.booking),
+  },
+};
 const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
 ---
 
 <StagingHome
   content={content}
   interior
+  canonical="https://meet.mehedisharif.com/"
   title="Join a instant call with Me (Mehedi Sharif)"
   description="Join Mehedi Sharif on Google Meet."
 >
@@ -103,7 +122,7 @@ const meetUrl = "https://meet.google.com/vsz-qbbz-fxf";
       </div>
 
       <div class="meet-links">
-        <a class="meet-booking" href="/discover-call">
+        <a class="meet-booking" href={content.footer.booking.link}>
           Need a time instead? Book a call
         </a>
         <a

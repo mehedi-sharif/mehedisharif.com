@@ -11,6 +11,8 @@ Run `npm ci`, `npm run typecheck`, and `npm run build` before deployment. Run `n
 
 The project name and build directory are defined in `wrangler.jsonc`. Attach the apex and www domains through the Pages custom-domain settings. Keep mail and verification DNS records unchanged.
 
+The meeting page lives at `https://meet.mehedisharif.com/`. This hostname is a custom domain on the same Pages project, with a proxied CNAME to `mehedisharif-com.pages.dev`. A zone URL Rewrite Rule serves `/meet/` at the subdomain root. A Single Redirect sends visitors from the old `/meet` and `/meet/` addresses to the subdomain and preserves the query string. Edit `src/pages/meet.astro` to update the page.
+
 ## Environment variables (contact form)
 
 Set these in Pages > Settings > Environment variables (Production and Preview):

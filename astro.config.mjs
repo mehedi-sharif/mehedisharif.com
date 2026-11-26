@@ -23,7 +23,7 @@ export default defineConfig({
     react(),
     sitemap({
       filter: (page) =>
-        !/\/(posts\/sample-post|payment-request)\/?$/.test(
+        !/\/(posts\/sample-post|payment-request|meet)\/?$/.test(
           new URL(page).pathname,
         ),
     }),

@@ -10,6 +10,7 @@ import Footer from "@/partials/staging/Footer.astro";
 type Props = {
   content: CollectionEntry<"stagingHome">["data"];
   interior?: boolean;
+  canonical?: string;
   title?: string;
   description?: string;
   robots?: string;
@@ -17,6 +18,7 @@ type Props = {
 const {
   content,
   interior = false,
+  canonical = new URL(Astro.url.pathname, config.site.base_url).href,
   title = content.title,
   description = content.description,
   robots = process.env.CF_PAGES_BRANCH === "staging" ? "noindex" : undefined,
@@ -32,10 +34,7 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     {robots && <meta name="robots" content={robots} />}
-    <link
-      rel="canonical"
-      href={new URL(Astro.url.pathname, config.site.base_url).href}
-    />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/png" href={config.site.favicon} />
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
